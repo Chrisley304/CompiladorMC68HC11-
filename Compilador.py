@@ -42,7 +42,8 @@ def EliminarComentarios(codigo:list): # Regresara una lista sin los comentarios
                         bit.pop(1) '''
 
 
-# Error: Constante / varibale no existe
+
+# Error: mnemónico no existe | Constante / varibale no existe
 # Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (en operandos van las direcciones en hexadecimal (cambiar de decimal a hexadecimal o escribir la dirección  
 #                                                                                de constantes o variables en hexadecimal) o el nombre de la etiqueta)
 # Si es error de constante inexistente -> ['Error', 'mensajeDeError',[]]
@@ -64,13 +65,27 @@ def Identificador(linea,Mnemonicos): #Recibe una lista con cadenas correspondien
             print("Es INH")
         
         if parametros >1: # Es una instruccion en otro tipo de direccionamiento
-            direccionMem = codigo[1]
+            #direccionMem = codigo[1]
             # VerificarDirecciona(direccionMem)
-        
+            pass
         
 
 
     # else:
+
+        
+#  Error: mnemónico no lleva operandos | mnemónico faltan operandos | magnitud errónea de operandos
+#  Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (La misma de identificador si no hay errores)
+#  De otra manera devuelve ['Error', 'mensajeDeError', []]
+def verificador(linea, Mnemonicos , writer):
+    pass        
+
+
+
+#  Procesa la instrucción y la retorna compilada (string que se escribirá en temp.txt)
+def procesador(linea, org):
+    pass        
+
 
 #Funcionamiento de isEmpty
 #Si encuentra una palabra no antecedida por * la línea se debe trabajar
@@ -85,8 +100,9 @@ def isEmpty(line):
 #Funcionamiento de formater
 # 0 -> No hay espacio inicial
 # 1 -> Hay espacio inicial
+# pone en minúsculas las palabras
 #'          ldca       $1243  * comentario'->formater-> [1,'ldca','$1243']
-#'ADR2   EQU   $1032'->formater-> [0,'ADR2','EQU','$1032']
+#'ADR2   EQU   $1032'->formater-> [0,'adr2','equ','$1032']
 def formater(line):
     formatedLine = []
     if(line[0] == ' ' or line[0] == '\t'):
@@ -97,16 +113,23 @@ def formater(line):
     for word in line.split():
         if(word.startswith('*')):
             break
-        formatedLine.append(word)
+        formatedLine.append(word.lower())
     return formatedLine
 
 
 def Main():
+    
     Mnemonicos = getJSON()
     lineas = getPrograma("ProgramasEjemplo/prueba.txt")
+    
     Variables = {}  # {'variable/constante' : direcciónDememoria}
     Etiquetas = {}  # {'Etiqueta' : True} || {'Etiqueta' : direcciónDeMemoria}
+    
+    org = hex(0)
     flagDeEnd = True
+    
+    writer = open("temp.txt","w")
+    
     for linea in lineas:
         
         if not isEmpty(linea):   # Que la línea no este vacía
@@ -115,28 +138,76 @@ def Main():
             # Si comienza con espacio -> es directiva (ORG, END, FCB) o instrucción (EQU no, porque es la declaración de constantes/varibales y no lleva espacio)
             if(formatedLine[0] == 1):
                 
-                pass
+                # Directiva END, dejar de compilar
+                if formatedLine[1] == 'end':
+                    writer.write("Vacío")
+                    flagDeEnd = False
+                    break
+                
+                # Directiva FCB, no hace nada el compilador
+                elif formatedLine[1] == 'fcb':
+                    writer.write("Vacío")
+                    break
+                
+                # Directiva ORG, inicializar contador de dirección de memoria
+                elif formatedLine[1] == 'org':
+                    writer.write("Vacío")
+                    
+                    # Es una constante/variable definida?
+                    if formatedLine[2] in Variables:
+                        org = hex(int(Variables[formatedLine[2]],16))
+                        
+                    # El valor se encuentra en hexadecimal?
+                    elif formatedLine[2][0] == '$':
+                        org = hex(int(formatedLine[2][1:],16))
+                    
+                    # El valor es decimal, se transforma a hexadecimal
+                    else:
+                        org = hex(int(formatedLine[2],10))
+                
+                # Es un mnemónico
+                else:
+                    # Identifica el modo de direccionamiento y enlista operandos en hexadecimal o etiquetas
+                    formatedLine = Identificador(formatedLine, Mnemonicos)
+                    
+                    # Si el mnemónico o constante/variable no existe
+                    if(formatedLine[0] == 'Error'):
+                        writer.write(formatedLine[1])
+                        
+                    else:
+                        # Se verifica errores de magnitud/cantidad de operandos
+                        formatedLine = verificador(formatedLine, Mnemonicos, writer)
+                        
+                        # magnitud errónea, faltan operandos, no lleva operandos
+                        if(formatedLine[0] == 'Error'):
+                            writer.write(formatedLine[1])
+                        
+                        # La información es correcta, se procesa la instrucción
+                        else:
+                            writer.write(procesador(formatedLine, org))
 
             # No tiene espacio
             else:
-                if(formatedLine[1] in Mnemonicos):  # or (formatedline[1] in DirectivasDeEnsamblador) <- falta agregar este caso
-                    #temporal.write('Error instrucción carece de espacios')
-                    pass
+                if (formatedLine[1].lower() in Mnemonicos) or (formatedLine[1] == 'org' or formatedLine[1] == 'end' or formatedLine[1] == 'fcb'):
+                    writer.write('009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN')
                 else:
                     # Comprueba si es constante/variable o etiqueta
                     # Se añade al mapa de constantes/variable o etiquetas
                     # temporal.write('vacio')
                     pass
             
-        # La línea está vacía o solo tiene comentario   
+        # La línea está vacía o solo tiene comentarios  
         else:
-            #temporal.write('vacio')
-            pass
+            writer.write("Vacío")
+    
             
     if(flagDeEnd):
-        pass
-        #temporal.write('Error, se llegó al final sin encontrar end')
+        writer.write("010 NO SE ENCUENTRA END")
+        
+    writer.close()
 
+
+    # Proceso de cálculo de saltos y elaboración de archivos finales ...
 
 
 
