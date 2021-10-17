@@ -39,18 +39,20 @@ def EliminarComentarios(codigo:list): # Regresara una lista sin los comentarios
                     for y in bit:
                         rl.append(bit[0]+bit[1])
                         bit.pop(0)
-                        bit.pop'''
+                        bit.pop(1) '''
 
-            
-        
 
-    
-def TipodeInstruccion(codigoConComentarios,Mnemonicos): #Recibe una lista con cadenas correspondientes a una linea del codigo y devuelve que tipo de instruccion es
+# Error: Constante / varibale no existe
+# Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (en operandos van las direcciones en hexadecimal (cambiar de decimal a hexadecimal o escribir la dirección  
+#                                                                                de constantes o variables en hexadecimal) o el nombre de la etiqueta)
+# Si es error de constante inexistente -> ['Error', 'mensajeDeError',[]]
+def Identificador(linea,Mnemonicos): #Recibe una lista con cadenas correspondientes a una linea del codigo y devuelve que tipo de instruccion es
     # Puede haber: Variables, funciones/etiquetas (MAIN ETC) y parametros con MNEMONICOS
-    codigo = EliminarComentarios(codigoConComentarios)
-    parametros = len(codigo)
-        
-    inicial = codigo[0]
+    
+    parametros = linea[1:] # lista[desdeDondeInclusive:HastaDondeExclusiv] es == lista.copy de intervalo
+    
+    inicial = linea[1] # es 1, debido a que en 0 se encuentra el indicador si lleva espacio o no.
+    
     if Mnemonicos[inicial.lower()]: # Busca si esta en la lista de Mnemonicos del Excel
         # Si entra en la condicion sabemos que es una instruccion
         # Una instruccion correctamente escrita tiene la siguiente forma: 
@@ -70,7 +72,8 @@ def TipodeInstruccion(codigoConComentarios,Mnemonicos): #Recibe una lista con ca
 
     # else:
 
-
+#Funcionamiento de isEmpty
+#Si encuentra una palabra no antecedida por * la línea se debe trabajar
 def isEmpty(line):
     for word in line.split():
         if(word.startswith('*')):
@@ -100,20 +103,21 @@ def formater(line):
 
 def Main():
     Mnemonicos = getJSON()
-    # print(Mnemonicos['aba'])
     lineas = getPrograma("ProgramasEjemplo/prueba.txt")
     Variables = {}  # {'variable/constante' : direcciónDememoria}
     Etiquetas = {}  # {'Etiqueta' : True} || {'Etiqueta' : direcciónDeMemoria}
+    flagDeEnd = True
     for linea in lineas:
         
         if not isEmpty(linea):   # Que la línea no este vacía
             formatedLine = formater(linea)
     
-            # Si comienza con espacio -> es directiva o instrucción
+            # Si comienza con espacio -> es directiva (ORG, END, FCB) o instrucción (EQU no, porque es la declaración de constantes/varibales y no lleva espacio)
             if(formatedLine[0] == 1):
+                
                 pass
 
-            # Si comienza con espacio -> es directiva o instrucción
+            # No tiene espacio
             else:
                 if(formatedLine[1] in Mnemonicos):  # or (formatedline[1] in DirectivasDeEnsamblador) <- falta agregar este caso
                     #temporal.write('Error instrucción carece de espacios')
@@ -121,14 +125,17 @@ def Main():
                 else:
                     # Comprueba si es constante/variable o etiqueta
                     # Se añade al mapa de constantes/variable o etiquetas
-                    # temporal.write('Lo que pasó')
+                    # temporal.write('vacio')
                     pass
             
         # La línea está vacía o solo tiene comentario   
         else:
             #temporal.write('vacio')
             pass
-
+            
+    if(flagDeEnd):
+        pass
+        #temporal.write('Error, se llegó al final sin encontrar end')
 
 
 
@@ -137,24 +144,16 @@ def Main():
 
 
 """ 
+    Organización:
+    ✓   - Leer línea 
+    ✓   - FormatoQuitaEspaciosYComentarios -> Finalizado
+        - Identificador -> FALTA (hay lógica para identificar espacio (inicial) y si es mnemónico sin espacio)
+        - Verificador -> FALTA
+        - Procesador -> FALTA
+        - Escritor -> FALTA
+    
+    NOTAS:
     Constantes deben estar siempre pegadas,
     directivas deben tener al menos uno.
     
-    NOTAS:
-
-    La salida del programa es de este tipo:
-    1 A                 ********************************** 
-    2 A                 *PROGRAMA DE EJEMPLO 
-    3 A                 ********************************** 
-    4 A      1026       PACTL     EQU       $1026                 
-    5 A      1027       PACNT     EQU       $1027                 
-    6 A      1030       ADCTL     EQU       $1030                 
-    7 A      1031       ADR1      EQU       $1031                 
-    8 A      1032       ADR2      EQU       $1032
-    
-    Donde: 
-    [Numero de linea] [EL A no c que es jajaja] [OPCODE+DireccionMemoria] [Lo que estaba en el codigo de entrada]
-
-
-
 """
