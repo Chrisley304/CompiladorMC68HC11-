@@ -1,0 +1,12 @@
+ORG                             $8000
+
+LDAA    $45
+LDAB    11
+LDAB
+ldd     $17
+LDX     15  * NO se que hace
+ADDA    $7C
+ANDA    $F0
+LDY     $AB
+
+END     * Fin del programa
