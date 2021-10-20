@@ -235,7 +235,7 @@ def Main():
                         Etiquetas.add(formatedLine[1])
                     # Se declara una variable o constante
                     else:
-                        Variables[formatedLine[1]] = hex(int(formatedLine[-1], 16))
+                        Variables[formatedLine[1]] = hex(int(formatedLine[-1][1:], 16))
             
         # La línea está vacía o solo tiene comentarios  
         else:
