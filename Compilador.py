@@ -72,13 +72,52 @@ def Identificador(linea,Mnemonicos): #Recibe una lista con cadenas correspondien
 
 
     # else:
-
-        
+    
 #  Error: mnemónico no lleva operandos | mnemónico faltan operandos | magnitud errónea de operandos
 #  Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (La misma de identificador si no hay errores)
 #  De otra manera devuelve ['Error', 'mensajeDeError', []]
-def verificador(linea, Mnemonicos , writer):
-    pass        
+def verificador(linea,Mnemonicos):
+    # No lleva operandos
+    if linea[1] == 'INH':
+        if len(linea[2]) > 0:
+            return ['Error', '006 INSTRUCCIÓN NO LLEVA OPERANDO(S)', []]
+
+    else:
+        # Todas los demas modos llevan 1 operando
+        if len(linea[2]) == 0:
+            return ['Error', '005 CARECE DE OPERANDO(S)', []]
+
+        # Puede tener operando de 1 o 2 bytes, se analiza cada caso
+        if linea[1] == 'IMM':
+
+            bytesDeOPCODE = 1 if len(Mnemonicos[linea[0]][linea[1]][0] <= 2) else 2
+
+            # Operando de 1 byte
+            if len(linea[2][0]) - 2 == 2 and Mnemonicos[linea[0]][linea[1]][1] != bytesDeOPCODE + 1:
+                return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
+
+            # Operando de 2 bytes
+            else:
+                if Mnemonicos[linea[0]][linea[1]][1] != bytesDeOPCODE + 2:
+                    return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
+            
+        # Los modos DIR e IND llevan operando de 1 byte
+        if len(linea[2][0]) - 2 >= 2:
+            if linea[1] == 'DIR' or linea[1] == 'IND,X' or linea[1] == 'IND,Y':
+                return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
+
+        # El modo EXT Lleva operando de 2 bytes
+        else:
+            if linea[1] == 'EXT':
+                return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
+
+            # Modo REL
+            else:
+                if len(linea[2]) > 1:
+                    return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
+
+    return linea
+
 
 
 
@@ -123,7 +162,7 @@ def Main():
     lineas = getPrograma("ProgramasEjemplo/prueba.txt")
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
-    Etiquetas = {}  # {'Etiqueta' : True} || {'Etiqueta' : direcciónDeMemoria}
+    Etiquetas = set()  # {'Etiqueta' : True}
     
     org = hex(0)
     flagDeEnd = True
@@ -176,7 +215,7 @@ def Main():
                         
                     else:
                         # Se verifica errores de magnitud/cantidad de operandos
-                        formatedLine = verificador(formatedLine, Mnemonicos, writer)
+                        formatedLine = verificador(formatedLine, Mnemonicos)
                         
                         # magnitud errónea, faltan operandos, no lleva operandos
                         if(formatedLine[0] == 'Error'):
@@ -191,10 +230,12 @@ def Main():
                 if (formatedLine[1].lower() in Mnemonicos) or (formatedLine[1] == 'org' or formatedLine[1] == 'end' or formatedLine[1] == 'fcb'):
                     writer.write('009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN')
                 else:
-                    # Comprueba si es constante/variable o etiqueta
-                    # Se añade al mapa de constantes/variable o etiquetas
-                    # temporal.write('vacio')
-                    pass
+                    # Se trata de una etiqueta [0,etiqueta]
+                    if(len(formatedLine) == 2):
+                        Etiquetas.add(formatedLine[1])
+                    # Se declara una variable o constante
+                    else:
+                        Variables[formatedLine[1]] = hex(int(formatedLine[-1], 16))
             
         # La línea está vacía o solo tiene comentarios  
         else:
