@@ -41,38 +41,151 @@ def EliminarComentarios(codigo:list): # Regresara una lista sin los comentarios
                         bit.pop(0)
                         bit.pop(1) '''
 
+def getHex(number):
+    hex_dec = hex(number)
+    return str(hex_dec.replace('0x', ''))
 
 
-# Error: mnemónico no existe | Constante / varibale no existe
+#Entrada es la salida de formater:
+#       ldca       $1243  * comentario'->formater-> [1,'ldca','$1243']
+#       ADR2   EQU   $1032'->formater-> [0,'adr2','equ','$1032']
 # Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (en operandos van las direcciones en hexadecimal (cambiar de decimal a hexadecimal o escribir la dirección  
 #                                                                                de constantes o variables en hexadecimal) o el nombre de la etiqueta)
-# Si es error de constante inexistente -> ['Error', 'mensajeDeError',[]]
+# Errores: mnemónico no existe | Constante / variable no existe
+# Salida error -> ['Error', 'mensajeDeError',[]]
 def Identificador(linea,Mnemonicos): #Recibe una lista con cadenas correspondientes a una linea del codigo y devuelve que tipo de instruccion es
     # Puede haber: Variables, funciones/etiquetas (MAIN ETC) y parametros con MNEMONICOS
     
-    parametros = linea[1:] # lista[desdeDondeInclusive:HastaDondeExclusiv] es == lista.copy de intervalo
+    if linea[0] == 1: # Si hay espacio debe ser una instruccion
     
-    inicial = linea[1] # es 1, debido a que en 0 se encuentra el indicador si lleva espacio o no.
-    
-    if Mnemonicos[inicial.lower()]: # Busca si esta en la lista de Mnemonicos del Excel
-        # Si entra en la condicion sabemos que es una instruccion
-        # Una instruccion correctamente escrita tiene la siguiente forma: 
-        #       LDS   #$00FF *COMENTARIO
-        #       [mnemonico]  [Direccion/Valor * Excepcion INH] [Comentario OPCIONAL]
-        # Por tanto se buscara a estos atributos para ver si son correctos
-        mnemoni = Mnemonicos[inicial.lower()]
-        if parametros == 1 and mnemoni['INH']: # Es una intruccion en INH
-            print("Es INH")
+        parametros = linea[1:] # lista[desdeDondeInclusive:HastaDondeExclusiv] es == lista.copy de intervalo
+                            # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+        nombre_mnemo = parametros[0].lower() # Se obtiene el nombre del mnemonico en minuscula ya que en el map asi se encuentran.
         
-        if parametros >1: # Es una instruccion en otro tipo de direccionamiento
-            #direccionMem = codigo[1]
-            # VerificarDirecciona(direccionMem)
-            pass
+        if Mnemonicos[nombre_mnemo]:  # Busca si esta en la lista de Mnemonicos del Excel
+            # Si entra en la condicion sabemos que es una instruccion
+            # Una instruccion correctamente escrita tiene la siguiente forma: 
+            #       LDS   #$00FF
+            #       [mnemonico]  [Direccion/Valor * Excepcion INH]
+            # Por tanto se buscara a estos atributos para ver si son correctos
+            mnemoni = Mnemonicos[nombre_mnemo]
+            if parametros == 1 and mnemoni['INH']: # Es una intruccion en INH
+                salida = [nombre_mnemo, 'INH', ]
+                return salida
+            
+            elif len(parametros) >1: # Es una instruccion en otro tipo de direccionamiento
+                #direccionMem = codigo[1]
+                # VerificarDirecciona(direccionMem)
+                operando = parametros[1]
+                
+                if operando[0] == "#":  # Si inicia con '#' es IMM 
+                    if mnemoni['IMM']:  # se verifica que el mnemonico sea IMM
+                        if operando[1] == "$": #Si el operando lleva "$" ya esta en hexadecimal
+                            return [nombre_mnemo,"IMM",operando[1:]]
+                        elif operando[1] == "'": # es un caracter ASCII
+                            dec = ord(operando[2])
+                            return [nombre_mnemo,"IMM",getHex(int(dec))]
+                        else: #Esta en dec
+                            dec = operando[1:] #Obtiene el numero decimal para convertirlo a hexadecimal despues
+                            if len(dec) == 2 or len(dec) == 4: #Debe de ser de 8 ó 16 bits
+                                return [nombre_mnemo, "IMM", getHex(int(dec))]
+                            else:
+                                return ['Error', 'el operando de "{}" no es de 8 ó 16 bits.'.format(
+                                    nombre_mnemo), []]
+                    else:
+                        return ['Error', 'el mnemonico "{}" no es de IMM y su operando comienza con "#".'.format(
+                            nombre_mnemo), []]
+
+                elif ",X" in operando or ",x" in operando:  # Es IND,X
+                    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+                        if len(operando[1:]) == 2:
+                            return [nombre_mnemo, "IND,X", operando[1:]]
+                        else:
+                            return ['Error', 'el mnemonico "{}" es IND,X pero su operando no es de 8 bits.'.format(
+                                nombre_mnemo), []]
+                    elif operando[0] == "'": # es un caracter ASCII
+                        dec = ord(operando[1])
+                        return [nombre_mnemo,"IND,X",getHex(dec)]
+                    else: #Esta en dec
+                        dec = operando[1:] #Obtiene el numero decimal para convertirlo a hexadecimal despues
+                        if len(dec) == 2: #Debe de ser de 8 bits
+                            return [nombre_mnemo, "IND,X", getHex(int(dec))]
+                        else:
+                            return ['Error', 'el operando de "{}" no es de 8 bits.'.format(
+                                nombre_mnemo), []]
+                
+                elif ",Y" in operando or ",y" in operando:  # Es IND,X
+                    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+                        if len(operando[1:]) == 2:
+                            return [nombre_mnemo, "IND,Y", operando[1:]]
+                        else:
+                            return ['Error', 'el mnemonico "{}" es IND,Y pero su operando no es de 8 bits.'.format(
+                                nombre_mnemo), []]
+                    elif operando[0] == "'":  # es un caracter ASCII
+                        dec = ord(operando[1])
+                        return [nombre_mnemo, "IND,Y", getHex(int(dec))]
+                    else:  # Esta en dec
+                        # Obtiene el numero decimal para convertirlo a hexadecimal despues
+                        dec = operando[1:]
+                        if len(dec) == 2:  # Debe de ser de 8 bits
+                            return [nombre_mnemo, "IND,Y", getHex(int(dec))]
+                        else:
+                            return ['Error', 'el operando de "{}" no es de 8 bits.'.format(
+                                nombre_mnemo), []]
+
+                else: # Puede ser DIR o EXT o REL
+                    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+                        if len(operando[1:]) == 2:  # Si es de 8 bits es DIR
+                            return [nombre_mnemo, "DIR", operando[1:]]
+                        elif len(operando[1:]) == 4:  # Si es de 16 bits es EXT
+                            return [nombre_mnemo, "EXT", operando[1:]]
+                        else:
+                            return ['Error', 'el mnemonico "{}" su operando no es ni de 8 o 16 bits.'.format(
+                                nombre_mnemo), []]
+                    elif operando[0] == "'":  # es un caracter ASCII
+                        dec = ord(operando[1])
+                        hex_op = getHex(dec)
+                        if len(hex_op) >= 1 and len(hex_op) <= 2: # es de 8 bits (DIR)
+                            return [nombre_mnemo, "DIR", hex_op]
+                        elif len(hex_op) >= 3 and len(hex_op) <= 4: # es de 16 bits (EXT)
+                            return [nombre_mnemo, "EXT", hex_op]
+                        else: #ERROR
+                            return ['Error', 'el mnemonico "{}" su operando no es ni de 8 o 16 bits.'.format(
+                                nombre_mnemo), []]
+
+                    elif operando.isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
+                        # Obtiene el numero decimal para convertirlo a hexadecimal despues
+                        hex_num = getHex(int(operando))
+                        if len(hex_num) == 2:  # Debe de ser de 8 bits para DIR
+                            return [nombre_mnemo, "IND,Y", hex_num]
+                        elif len(hex_num) == 4:  # Debe de ser de 16 bits para EXT
+                            return [nombre_mnemo, "IND,Y", hex_num]
+                        
+                        else:
+                            return ['Error', 'el operando de "{}" no es de 8 o 16 bits.'.format(
+                                nombre_mnemo), []]
+                    
+                    else: #Si incluye letras significa que es una etiqueta y es REL
+                        # Aquí es lo que no supe que onda xd
+                        return [nombre_mnemo, "REL", operando]
+
+
+
+            
+            else:
+                return ['Error', 'el mnemonico "{}" no es INH y carece de operandos.'.format(
+                    nombre_mnemo), []]
+
+        else: #error mnemonico inexistente
+            ['Error', 'el mnemonico "{}" no existe.'.format(nombre_mnemo), []]
+
+    else: # Si no hay espacio es una variable o una etiqueta
+        parametros = linea[1:]
+        parametros[0]
         
 
 
-    # else:
-    
+
 #  Error: mnemónico no lleva operandos | mnemónico faltan operandos | magnitud errónea de operandos
 #  Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (La misma de identificador si no hay errores)
 #  De otra manera devuelve ['Error', 'mensajeDeError', []]
@@ -269,3 +382,30 @@ def Main():
     directivas deben tener al menos uno.
     
 """
+
+
+# ==== PRUEBAS =====
+
+""" def Prueba(diccionario:dict, lista:list):
+    diccionario['nuevo'] = "Hola"
+    lista.append("Que pedo")
+
+
+dicc1 = {"prueba":5}
+lista1 =[1,2]
+
+Prueba(dicc1,lista1)
+Prueba(dicc1,lista1)
+
+print(dicc1)
+print(lista1)
+"""
+# operando = "65"
+# dec = operando
+# print(dec)
+# hex_dec = hex(int(dec))
+# print(getHex(1531))
+# print(hex_dec)
+# print(hex_dec.replace('x', ''))
+
+print("45785748574".isnumeric())
