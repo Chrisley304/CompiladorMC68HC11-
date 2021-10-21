@@ -3,7 +3,7 @@ from os import error, remove, waitpid
 
 def getJSON():
     mnemonicos = None
-    with open('mnemonicos.txt') as json_file:
+    with open('mnemonicos.json') as json_file:
         mnemonicos = json.load(json_file)
     
     return mnemonicos
@@ -25,26 +25,15 @@ def EliminarComentarios(codigo:list): # Regresara una lista sin los comentarios
 
     return lista_sincomments
 
-'''def datosLinea(linea,mnemonicos):
-    CNA=[$,#]
-    token=linea.split()
-    if token[0] in mnemonicos:
-        for instruction in token[1:len(token)-1]):
-            characters=list(instruction)
-            bit=characters-CNA
-            size=len(bit)/2
-            bytes=[]
-            rl=[]
-                for i in size:
-                    for y in bit:
-                        rl.append(bit[0]+bit[1])
-                        bit.pop(0)
-                        bit.pop(1) '''
-
 def getHex(number):
     hex_dec = hex(number)
-    return str(hex_dec.replace('0x', ''))
+    hex_str = str(hex_dec.replace('0x', ''))
+    if len(hex_str) == 3 or len(hex_str) == 1:
+        hex_str = '0' + hex_str
+    return hex_str.upper()
 
+#if(len(numero)==3 or len(numero == 1)):
+    #return '0' + numero
 
 #Entrada es la salida de formater:
 #       ldca       $1243  * comentario'->formater-> [1,'ldca','$1243']
@@ -55,133 +44,105 @@ def getHex(number):
 # Salida error -> ['Error', 'mensajeDeError',[]]
 def Identificador(linea,Mnemonicos): #Recibe una lista con cadenas correspondientes a una linea del codigo y devuelve que tipo de instruccion es
     # Puede haber: Variables, funciones/etiquetas (MAIN ETC) y parametros con MNEMONICOS
+
+    parametros = linea[1:] # lista[desdeDondeInclusive:HastaDondeExclusiv] es == lista.copy de intervalo
+                        # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+    nombre_mnemo = parametros[0] # Se obtiene el nombre del mnemonico
     
-    if linea[0] == 1: # Si hay espacio debe ser una instruccion
-    
-        parametros = linea[1:] # lista[desdeDondeInclusive:HastaDondeExclusiv] es == lista.copy de intervalo
-                            # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
-        nombre_mnemo = parametros[0].lower() # Se obtiene el nombre del mnemonico en minuscula ya que en el map asi se encuentran.
+    if nombre_mnemo in Mnemonicos:  # Busca si esta en la lista de Mnemonicos del Excel
+        # Si entra en la condicion sabemos que es una instruccion
+        # Una instruccion correctamente escrita tiene la siguiente forma: 
+        #       LDS   #$00FF
+        #       [mnemonico]  [Direccion/Valor * Excepcion INH]
+        # Por tanto se buscara a estos atributos para ver si son correctos
+        mnemoni = Mnemonicos[nombre_mnemo]
         
-        if Mnemonicos[nombre_mnemo]:  # Busca si esta en la lista de Mnemonicos del Excel
-            # Si entra en la condicion sabemos que es una instruccion
-            # Una instruccion correctamente escrita tiene la siguiente forma: 
-            #       LDS   #$00FF
-            #       [mnemonico]  [Direccion/Valor * Excepcion INH]
-            # Por tanto se buscara a estos atributos para ver si son correctos
-            mnemoni = Mnemonicos[nombre_mnemo]
-            if parametros == 1 and mnemoni['INH']: # Es una intruccion en INH
-                salida = [nombre_mnemo, 'INH', ]
-                return salida
+        if "INH" in mnemoni: # Es una intruccion en INH
+            if len(parametros) > 1: # ["mnemonico","OPERANDOS"]
+                return [nombre_mnemo, 'INH', ["ERROR"]]
+            else:
+                return [nombre_mnemo, 'INH', []]
+        
+        if "REL" in mnemoni:
+            if len(parametros) > 1: # ["mnemonico","OPERANDOS"]
+                return [nombre_mnemo, 'REL', [parametros[1]]]
+            else:
+                return [nombre_mnemo, 'REL', []]
+
+        else: # Es una instruccion en otro tipo de direccionamiento (NO INH o REL)
+            #direccionMem = codigo[1]
+            # VerificarDirecciona(direccionMem)
+            operando = parametros[1] # 
             
-            elif len(parametros) >1: # Es una instruccion en otro tipo de direccionamiento
-                #direccionMem = codigo[1]
-                # VerificarDirecciona(direccionMem)
-                operando = parametros[1]
+            if operando[0] == "#":  # Si inicia con '#' es IMM 
+                if operando[1] == "$": #Si el operando lleva "$" ya esta en hexadecimal
+                    return [nombre_mnemo,"IMM",[operando[1:]]]
+                elif operando[1] == "'": # es un caracter ASCII
+                    dec = ord(operando[2])                           
+                    return [nombre_mnemo, "IMM", [getHex(int(dec))]] #hex -> 0x[hex]
+                else: #Esta en dec
+                    dec = operando[1:] #Obtiene el numero decimal para convertirlo a hexadecimal despues
+                    return [nombre_mnemo, "IMM", [getHex(int(dec))]]
+
+            elif ",x" in operando:  # Es IND,X
+                if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+                    return [nombre_mnemo, "IND,X", [operando[1:]]]
                 
-                if operando[0] == "#":  # Si inicia con '#' es IMM 
-                    if mnemoni['IMM']:  # se verifica que el mnemonico sea IMM
-                        if operando[1] == "$": #Si el operando lleva "$" ya esta en hexadecimal
-                            return [nombre_mnemo,"IMM",operando[1:]]
-                        elif operando[1] == "'": # es un caracter ASCII
-                            dec = ord(operando[2])
-                            return [nombre_mnemo,"IMM",getHex(int(dec))]
-                        else: #Esta en dec
-                            dec = operando[1:] #Obtiene el numero decimal para convertirlo a hexadecimal despues
-                            if len(dec) == 2 or len(dec) == 4: #Debe de ser de 8 ó 16 bits
-                                return [nombre_mnemo, "IMM", getHex(int(dec))]
-                            else:
-                                return ['Error', 'el operando de "{}" no es de 8 ó 16 bits.'.format(
-                                    nombre_mnemo), []]
+                elif operando[0] == "'": # es un caracter ASCII
+                    dec = ord(operando[1])
+                    return [nombre_mnemo,"IND,X",[getHex(int(dec))]]
+                else: #Esta en dec
+                    dec = operando[1:] #Obtiene el numero decimal para convertirlo a hexadecimal despues
+                    return [nombre_mnemo, "IND,X", getHex(int(dec))]
+            
+            elif ",y" in operando:  # Es IND,Y 
+                if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+                    return [nombre_mnemo, "IND,Y", [operando[1:]]]
+
+                elif operando[0] == "'":  # es un caracter ASCII
+                    dec = ord(operando[1])
+                    return [nombre_mnemo, "IND,Y", [getHex(int(dec))]]
+                else:  # Esta en dec
+                    # Obtiene el numero decimal para convertirlo a hexadecimal despues
+                    dec = operando[1:]
+                    return [nombre_mnemo, "IND,Y", [getHex(int(dec))]]
+
+            else: # Puede ser DIR o EXT o REL 
+                if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+                    if len(operando[1:]) == 2:  # Si es de 8 bits es DIR
+                        return [nombre_mnemo, "DIR", [[operando[1:]]]]
+                    elif len(operando[1:]) == 4:  # Si es de 16 bits es EXT
+                        return [nombre_mnemo, "EXT", [operando[1:]]]
                     else:
-                        return ['Error', 'el mnemonico "{}" no es de IMM y su operando comienza con "#".'.format(
+                        return ['Error', 'el mnemonico "{}" su operando no es ni de 8 o 16 bits.'.format(
+                            nombre_mnemo), []]
+                
+                elif operando[0] == "'":  # es un caracter ASCII
+                    dec = ord(operando[1])
+                    hex_op = getHex(dec)
+                    if len(hex_op) >= 1 and len(hex_op) <= 2: # es de 8 bits (DIR)
+                        return [nombre_mnemo, "DIR", hex_op]
+                    elif len(hex_op) >= 3 and len(hex_op) <= 4: # es de 16 bits (EXT)
+                        return [nombre_mnemo, "EXT", hex_op]
+                    else: #ERROR
+                        return ['Error', 'el mnemonico "{}" su operando no es ni de 8 o 16 bits.'.format(
                             nombre_mnemo), []]
 
-                elif ",X" in operando or ",x" in operando:  # Es IND,X
-                    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
-                        if len(operando[1:]) == 2:
-                            return [nombre_mnemo, "IND,X", operando[1:]]
-                        else:
-                            return ['Error', 'el mnemonico "{}" es IND,X pero su operando no es de 8 bits.'.format(
-                                nombre_mnemo), []]
-                    elif operando[0] == "'": # es un caracter ASCII
-                        dec = ord(operando[1])
-                        return [nombre_mnemo,"IND,X",getHex(dec)]
-                    else: #Esta en dec
-                        dec = operando[1:] #Obtiene el numero decimal para convertirlo a hexadecimal despues
-                        if len(dec) == 2: #Debe de ser de 8 bits
-                            return [nombre_mnemo, "IND,X", getHex(int(dec))]
-                        else:
-                            return ['Error', 'el operando de "{}" no es de 8 bits.'.format(
-                                nombre_mnemo), []]
-                
-                elif ",Y" in operando or ",y" in operando:  # Es IND,X
-                    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
-                        if len(operando[1:]) == 2:
-                            return [nombre_mnemo, "IND,Y", operando[1:]]
-                        else:
-                            return ['Error', 'el mnemonico "{}" es IND,Y pero su operando no es de 8 bits.'.format(
-                                nombre_mnemo), []]
-                    elif operando[0] == "'":  # es un caracter ASCII
-                        dec = ord(operando[1])
-                        return [nombre_mnemo, "IND,Y", getHex(int(dec))]
-                    else:  # Esta en dec
-                        # Obtiene el numero decimal para convertirlo a hexadecimal despues
-                        dec = operando[1:]
-                        if len(dec) == 2:  # Debe de ser de 8 bits
-                            return [nombre_mnemo, "IND,Y", getHex(int(dec))]
-                        else:
-                            return ['Error', 'el operando de "{}" no es de 8 bits.'.format(
-                                nombre_mnemo), []]
-
-                else: # Puede ser DIR o EXT o REL
-                    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
-                        if len(operando[1:]) == 2:  # Si es de 8 bits es DIR
-                            return [nombre_mnemo, "DIR", operando[1:]]
-                        elif len(operando[1:]) == 4:  # Si es de 16 bits es EXT
-                            return [nombre_mnemo, "EXT", operando[1:]]
-                        else:
-                            return ['Error', 'el mnemonico "{}" su operando no es ni de 8 o 16 bits.'.format(
-                                nombre_mnemo), []]
-                    elif operando[0] == "'":  # es un caracter ASCII
-                        dec = ord(operando[1])
-                        hex_op = getHex(dec)
-                        if len(hex_op) >= 1 and len(hex_op) <= 2: # es de 8 bits (DIR)
-                            return [nombre_mnemo, "DIR", hex_op]
-                        elif len(hex_op) >= 3 and len(hex_op) <= 4: # es de 16 bits (EXT)
-                            return [nombre_mnemo, "EXT", hex_op]
-                        else: #ERROR
-                            return ['Error', 'el mnemonico "{}" su operando no es ni de 8 o 16 bits.'.format(
-                                nombre_mnemo), []]
-
-                    elif operando.isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
-                        # Obtiene el numero decimal para convertirlo a hexadecimal despues
-                        hex_num = getHex(int(operando))
-                        if len(hex_num) == 2:  # Debe de ser de 8 bits para DIR
-                            return [nombre_mnemo, "IND,Y", hex_num]
-                        elif len(hex_num) == 4:  # Debe de ser de 16 bits para EXT
-                            return [nombre_mnemo, "IND,Y", hex_num]
-                        
-                        else:
-                            return ['Error', 'el operando de "{}" no es de 8 o 16 bits.'.format(
-                                nombre_mnemo), []]
+                elif operando.isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
+                    # Obtiene el numero decimal para convertirlo a hexadecimal despues
+                    hex_num = getHex(int(operando))
+                    if len(hex_num) == 2:  # Debe de ser de 8 bits para DIR
+                        return [nombre_mnemo, "IND,Y", hex_num]
+                    elif len(hex_num) == 4:  # Debe de ser de 16 bits para EXT
+                        return [nombre_mnemo, "IND,Y", hex_num]
                     
-                    else: #Si incluye letras significa que es una etiqueta y es REL
-                        # Aquí es lo que no supe que onda xd
-                        return [nombre_mnemo, "REL", operando]
+                    else:
+                        return ['Error', 'el operando de "{}" no es de 8 o 16 bits.'.format(
+                            nombre_mnemo), []]
+        
+    else: #error mnemonico inexistente
+        return ['Error', "004   MNEMÓNICO INEXISTENTE", []]
 
-
-
-            
-            else:
-                return ['Error', 'el mnemonico "{}" no es INH y carece de operandos.'.format(
-                    nombre_mnemo), []]
-
-        else: #error mnemonico inexistente
-            ['Error', 'el mnemonico "{}" no existe.'.format(nombre_mnemo), []]
-
-    else: # Si no hay espacio es una variable o una etiqueta
-        parametros = linea[1:]
-        parametros[0]
         
 
 
@@ -189,6 +150,11 @@ def Identificador(linea,Mnemonicos): #Recibe una lista con cadenas correspondien
 #  Error: mnemónico no lleva operandos | mnemónico faltan operandos | magnitud errónea de operandos
 #  Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (La misma de identificador si no hay errores)
 #  De otra manera devuelve ['Error', 'mensajeDeError', []]
+
+#[mnemonico, modoDeDireccionamiento, ['1234']]
+#[mnemonico, modoDeDireccionamiento, ['AB']] 
+#[mnemonico, modoDeDireccionamiento, []]
+#[mnemonico, modoDeDireccionamiento, ['Etiqueta']]
 def verificador(linea,Mnemonicos):
     # No lleva operandos
     if linea[1] == 'INH':
@@ -205,17 +171,20 @@ def verificador(linea,Mnemonicos):
 
             bytesDeOPCODE = 1 if len(Mnemonicos[linea[0]][linea[1]][0] <= 2) else 2
 
-            # Operando de 1 byte
-            if len(linea[2][0]) - 2 == 2 and Mnemonicos[linea[0]][linea[1]][1] != bytesDeOPCODE + 1:
-                return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
+            # Si operando de 2 bytes
+            if len(linea[2][0]) == 4:
+                # TotalDeBytes != Opcode + 2 -> Operando de 2 bytes en lugar de 1 byte
+                if int(Mnemonicos[linea[0]][linea[1]][1]) != bytesDeOPCODE + 2:
+                    return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
 
-            # Operando de 2 bytes
+            # Es operando de 1 byte 
             else:
-                if Mnemonicos[linea[0]][linea[1]][1] != bytesDeOPCODE + 2:
+                # TotalDeBytes != Opcode + 1 -> Operando de 1 byte en lugar 2 bytes
+                if Mnemonicos[linea[0]][linea[1]][1] != bytesDeOPCODE + 1:
                     return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
             
         # Los modos DIR e IND llevan operando de 1 byte
-        if len(linea[2][0]) - 2 >= 2:
+        if len(linea[2][0]) > 2:
             if linea[1] == 'DIR' or linea[1] == 'IND,X' or linea[1] == 'IND,Y':
                 return ['Error', '007 MAGNITUD DE OPERANDO ERRONEA', []]
 
@@ -232,11 +201,12 @@ def verificador(linea,Mnemonicos):
     return linea
 
 
-
-
 #  Procesa la instrucción y la retorna compilada (string que se escribirá en temp.txt)
 def procesador(linea, org):
     pass        
+
+
+
 
 
 #Funcionamiento de isEmpty
@@ -255,6 +225,58 @@ def isEmpty(line):
 # pone en minúsculas las palabras
 #'          ldca       $1243  * comentario'->formater-> [1,'ldca','$1243']
 #'ADR2   EQU   $1032'->formater-> [0,'adr2','equ','$1032']
+
+''' "Datos" es una lista y tiene la forma Datos=[mnemonicos, modo de direccionamiento,[operandos]], 
+en operandos tambie debera ir el op code para un correcto conteo y "Localidad" es la localidad donde vamos'''
+#linea=0 #Variable global nescesaria
+#Datos=["ABA","INX",["32","T6","AA"]]
+#Datos=[]
+#Localidad="8000"
+linea=0
+def Procesador(Datos, Localidad):
+    global linea
+    linea+=1
+    Bytes=""
+    if len(Localidad)!=0 and len(Datos)!=0:
+        Localidad=SumHex(Localidad,len(Datos[2]))#Primer parametro direccion actual y segundo el agregado, ambos son strings
+    else:#si se quita avisa que hay linea vacia
+       print("Linea vacia")
+    #print(Localidad)
+    for i in Datos[2]:
+        Bytes+=i
+    return str(linea) +" "+Localidad + ": "+ Datos[0]+" "+Bytes
+    int(Procesador(Datos, Localidad))
+
+
+#A y B son 2 numeros en hexadecimal en tipo string
+def SumHex(A,B):
+    Sum1=[]#Lista con caracteres
+    Sum2=""#Numero en tipo string
+    Original=list(A)
+    Datos=list(A)
+    #inicia programas
+    Sum1=Datos
+    for i in Sum1:
+        Sum2+=i
+    Sum3=(hex((int(Sum2,16)+int(B))).split('x')[-1]).upper()
+    Sum4=list(Sum3)#Elementos a introducir en forma de lista
+    for y in range(len(Sum4)):
+        Datos.pop()
+    Datos=Datos+Sum4
+    Sum5=""
+    for i in Datos:
+        Sum5+=i
+    if(Sum5=="1000"):
+        Resultado=Original[0]+Datos
+        return Resultado   
+    return Sum5
+
+#Funcionamiento de formater
+# 0 -> No hay espacio inicial
+# 1 -> Hay espacio inicial
+# pone en minúsculas las palabras
+#'          ldca       $1243  * comentario'->formater-> [1,'ldca','$1243']
+#'ADR2   EQU   $1032'->formater-> [0,'adr2','equ','$1032']
 def formater(line):
     formatedLine = []
     if(line[0] == ' ' or line[0] == '\t'):
@@ -266,7 +288,7 @@ def formater(line):
         if(word.startswith('*')):
             break
         formatedLine.append(word.lower())
-    return formatedLine
+    return formatedLine 
 
 
 def Main():
@@ -307,11 +329,11 @@ def Main():
                     
                     # Es una constante/variable definida?
                     if formatedLine[2] in Variables:
-                        org = hex(int(Variables[formatedLine[2]],16))
+                        org = hex(int('0x' + Variables[formatedLine[2]],16))
                         
                     # El valor se encuentra en hexadecimal?
                     elif formatedLine[2][0] == '$':
-                        org = hex(int(formatedLine[2][1:],16))
+                        org = hex(int('0x' + formatedLine[2][1:],16))
                     
                     # El valor es decimal, se transforma a hexadecimal
                     else:
@@ -340,7 +362,7 @@ def Main():
 
             # No tiene espacio
             else:
-                if (formatedLine[1].lower() in Mnemonicos) or (formatedLine[1] == 'org' or formatedLine[1] == 'end' or formatedLine[1] == 'fcb'):
+                if (formatedLine[1] in Mnemonicos) or (formatedLine[1] == 'org' or formatedLine[1] == 'end' or formatedLine[1] == 'fcb'):
                     writer.write('009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN')
                 else:
                     # Se trata de una etiqueta [0,etiqueta]
@@ -348,7 +370,7 @@ def Main():
                         Etiquetas.add(formatedLine[1])
                     # Se declara una variable o constante
                     else:
-                        Variables[formatedLine[1]] = hex(int(formatedLine[-1][1:], 16))
+                        Variables[formatedLine[1]] = hex(int('0x' + formatedLine[-1][1:], 16))
             
         # La línea está vacía o solo tiene comentarios  
         else:
@@ -408,4 +430,4 @@ print(lista1)
 # print(hex_dec)
 # print(hex_dec.replace('x', ''))
 
-print("45785748574".isnumeric())
+# print("45785748574".isnumeric())
