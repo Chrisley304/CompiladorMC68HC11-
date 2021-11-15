@@ -22,13 +22,16 @@ def IMM(linea:dict,Variables:dict,ContMemoria:hex,mnemonico:dict):
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
             # Se deja pendiente por si es una etiqueta
+            linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(mnemonico["IMM"][1]))
 
     if len(compilado)/2 == mnemonico["IMM"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+        linea["localidad"] = ContMemoria
         return SumHex(ContMemoria, int(mnemonico["IMM"][1]))
     else:
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["localidad"] = ContMemoria
         return ContMemoria
 
 
@@ -53,13 +56,16 @@ def INDX(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
             linea["compilado"] = "ERROR 002 VARIABLE INEXISTENTE"
+            linea["localidad"] = ContMemoria
             return ContMemoria
     
     if len(compilado)/2 == mnemonico["IND,X"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+        linea["localidad"] = ContMemoria
         return SumHex(ContMemoria, int(mnemonico["IND,X"][1]))
     else:
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["localidad"] = ContMemoria
         return ContMemoria
 
 def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
@@ -83,13 +89,16 @@ def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
             linea["compilado"] = "ERROR 002 VARIABLE INEXISTENTE"
+            linea["localidad"] = ContMemoria
             return ContMemoria
     
     if len(compilado)/2 == mnemonico["IND,Y"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+        linea["localidad"] = ContMemoria
         return SumHex(ContMemoria, int(mnemonico["IND,Y"][1]))
     else:
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["localidad"] = ContMemoria
         return ContMemoria
 
 def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
@@ -129,26 +138,36 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
                 dir_o_ext = 2
         else: # No esta registrada y puede ser una etiqueta
             # Se deja pendiente por si es una etiqueta
-            return SumHex(ContMemoria, 2) # NOTA: Aqui duda porque no se si es DIR o EXT
+            linea["localidad"] = ContMemoria
+            loc_str = getHexString(ContMemoria)
+            if len(loc_str) == 2:  # Debe de ser de 8 bits para DIR
+                SumHex(ContMemoria, int(mnemonico["DIR"][1]))
+            elif len(loc_str) == 4:  # Debe de ser de 16 bits para EXT
+                return SumHex(ContMemoria, int(mnemonico["EXT"][1]))
     
     if dir_o_ext == 1: # Es DIR
         opcode = mnemonico["DIR"][0]
         compilado = opcode + hex_op
         if len(compilado)/2 == mnemonico["DIR"][1]:
             linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+            linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(mnemonico["DIR"][1]))
         else:
             linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+            linea["localidad"] = ContMemoria
             return ContMemoria
     elif dir_o_ext == 2: # Es EXT
         opcode = mnemonico["EXT"][0]
         compilado = opcode + hex_op
         if len(compilado)/2 == mnemonico["EXT"][1]:
             linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+            linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(mnemonico["EXT"][1]))
         else:
             linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+            linea["localidad"] = ContMemoria
             return ContMemoria
     else: # NO es ni EXT ni DIR
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["localidad"] = ContMemoria
         return ContMemoria

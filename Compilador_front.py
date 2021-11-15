@@ -47,12 +47,17 @@ def Main():
                 # Directiva END, dejar de compilar
                 if linea["contenido"][0] == 'end':
                     flagDeEnd = True
+                    linea["compilado"] = ""
                     break
+
+                if linea["contenido"][0] == 'fcb':
+                    linea["compilado"] = ""
 
                 # Directiva ORG, comienza el contador de memoria
                 if linea["contenido"][0] == 'org':
-
-                    Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
+                    Cont_memoria = ConvertHex(linea["contenido"][2][1:])
+                    linea["compilado"] = "\t " + getHexString(Cont_memoria)
+                    # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
                 
                 else: # se envia al precompilador
                     Cont_memoria = Precompilado(linea, Mnemonicos, Variables, Cont_memoria)
@@ -74,12 +79,19 @@ def Main():
                     
                     else: #Error algo escribio mal el usuario
                         linea["compilado"] = "ERROR 004 y 009"
+        else:
+            linea["compilado"] = ""
 
 
     # Post compilado: (2da vuelta)
     # NOTAS: Directiva FCB, no hace nada el compilador, END TERMINA DE COMPILAR, ORG Inicia cont. memoria (inicia el programa)
+    for linea in lineas_formateadas:
+        if linea["compilado"] == None:
+            PostCompilado(linea,Mnemonicos,Variables)
 
-
+    
+    
+    
     if not flagDeEnd:
         # Error no hay END
         # writer.write("010 NO SE ENCUENTRA END")

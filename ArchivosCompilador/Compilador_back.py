@@ -15,12 +15,13 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
         if "INH" in mnemoni:  # Es una intruccion en INH
             if len(parametros) > 1:  # ["mnemonico","OPERANDOS"]
                 linea["compilado"] = "ERROR 006   INSTRUCCIÓN NO LLEVA OPERANDO(S)"
+                linea["localidad"] = ContMemoria
                 return ContMemoria
             else:
                 opcode = mnemoni["INH"][0]
                 bytes = mnemoni["INH"][1]
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria),opcode)
-                
+                linea["localidad"] = ContMemoria
                 return SumHex(ContMemoria,int(bytes)) # ejemplo: 8000 + 1 = 8001
 
 
@@ -32,12 +33,15 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                     salto = ResHex(etiqueta,origen)
                     opcode = mnemoni["REL"][0]
                     linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+                    linea["localidad"] = ContMemoria
                     return SumHex(ContMemoria, int(mnemoni["REL"][1]))
                 else:
                     # Se deja pendiente para el post compilado
-                    return SumHex(ContMemoria,2)
+                    linea["localidad"] = ContMemoria
+                    return SumHex(ContMemoria, int(mnemoni["REL"][1]))
             else:
                 linea["compilado"] = "ERROR 005   INSTRUCCIÓN CARECE DE OPERANDO(S)"
+                linea["localidad"] = ContMemoria
                 return ContMemoria
 
         # Es una instruccion en otro tipo de direccionamiento (NO INH o REL)
@@ -56,14 +60,75 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                 return INDY(linea,Variables,ContMemoria,mnemoni)
 
             else:  # Puede ser DIR o EXT
-                
+                return DIR_EXT(linea,Variables,ContMemoria,mnemoni)
 
-                    else:  # Variable no existe
-                        linea["compilado"] = "Error", "002 VARIABLE INEXISTENTE"
 
     else:  # error mnemonico inexistente
         linea["compilado"] = "ERROR 004 MNEMÓNICO INEXISTENTE"
+        linea["localidad"] = ContMemoria
+        return ContMemoria
 
-    # Esta funcion solo va a regresar el valor de cont memoria, ya que se pasa por valor y no por ref.
-    return ContMemoria
+
+def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
+    parametros = linea["contenido"] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+    nombre_mnemo = parametros[0]  # Se obtiene el nombre del mnemonico
+    mnemonico = Mnemonicos[nombre_mnemo]
+    ContMemoria = linea["localidad"]
+
+    if "REL" in mnemonico:
+        if parametros[1] in Variables:
+            etiqueta = Variables[parametros[1]]
+            origen = SumHex(ContMemoria,2)
+            salto = ResHex(etiqueta,origen)
+            opcode = mnemonico["REL"][0]
+            linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+        else:
+            linea["compilado"] = "ERROR 001, 002 o 003"
+
+    # Es una instruccion en otro tipo de direccionamiento (NO INH o REL)
+    else:
+        #direccionMem = codigo[1]
+        # VerificarDirecciona(direccionMem)
+        operando = parametros[1]
+
+        if operando[0] == "#":  # Si inicia con '#' es IMM
+            variable = operando[1:]
+            opcode = mnemonico["IMM"][0]
+            if variable in Variables:  # si esta registrada existe
+                compilado = opcode + Variables[variable]
+            else:  # Variable no existe
+                linea["compilado"] = "ERROR 001, 002 o 003"
+
+            if len(compilado)/2 == mnemonico["IMM"][1]:
+                linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+            else:
+                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+
+        else:  # Puede ser DIR o EXT
+            if operando in Variables:  # si esta registrada existe
+                hex_op = getHexString(Variables[operando])
+                if len(hex_op) == 2:  # Debe de ser de 8 bits para DIR
+                    dir_o_ext = 1
+                elif len(hex_op) == 4:  # Debe de ser de 16 bits para EXT
+                    dir_o_ext = 2
+
+            else: # No esta registrada
+                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+
+        if dir_o_ext == 1: # Es DIR
+            opcode = mnemonico["DIR"][0]
+            compilado = opcode + hex_op
+            if len(compilado)/2 == mnemonico["DIR"][1]:
+                linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+            else:
+                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        elif dir_o_ext == 2: # Es EXT
+            opcode = mnemonico["EXT"][0]
+            compilado = opcode + hex_op
+            if len(compilado)/2 == mnemonico["EXT"][1]:
+                linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+            else:
+                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        else: # NO es ni EXT ni DIR
+            linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
 

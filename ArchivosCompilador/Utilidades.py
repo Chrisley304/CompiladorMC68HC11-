@@ -60,4 +60,5 @@ def formater(line):
         formatedLine["contenido"].append(word.lower())
 
     formatedLine["compilado"] = None
+    formatedLine["localidad"] = None
     return formatedLine
