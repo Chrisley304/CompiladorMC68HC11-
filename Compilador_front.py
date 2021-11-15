@@ -1,10 +1,10 @@
 import json 
 from os import error, remove, waitpid
-from Compilador_back import *
+from ArchivosCompilador.Compilador_back import *
 
 def getJSON():
     mnemonicos = None
-    with open('mnemonicos.json') as json_file:
+    with open('ArchivosCompilador/mnemonicos.json') as json_file:
         mnemonicos = json.load(json_file)
     
     return mnemonicos
