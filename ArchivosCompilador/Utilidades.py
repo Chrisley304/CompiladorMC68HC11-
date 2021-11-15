@@ -10,7 +10,6 @@ def getHexString(number: int):
 
 # Devuelve una string sin el 0x de Python y añadiendo 0's para que tenga el formato del profesor.
 
-
 def getHexString(number: hex):
     hex_str = str(number).replace('0x', '')
     if len(hex_str) == 3 or len(hex_str) == 1:

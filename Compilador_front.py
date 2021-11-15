@@ -33,6 +33,7 @@ def Main():
     for i in lineas:
         lineas_formateadas.append(formater(i))
 
+    print(lineas_formateadas)
     # Precompilado
     Cont_memoria = hex(0)
     cont = 0
@@ -59,9 +60,7 @@ def Main():
             # No tiene espacio
             else:
                 if (linea["contenido"][0] in Mnemonicos) or (linea["contenido"][0] == 'org' or linea["contenido"][0] == 'end' or linea["contenido"][0] == 'fcb'):
-                    # writer.write('009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN')
-                    # Es un error pero en un rato veo como lo acomodo, probablemente en el ["compilado"], coloque el error.
-                    pass
+                    linea["compilado"] = "ERROR 009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN"
                 else:
                     # Se trata de una etiqueta [0,etiqueta]
                     if(len(linea["contenido"]) == 1):
@@ -70,8 +69,11 @@ def Main():
                         linea["compilado"] = getHexString(Cont_memoria)
                     
                     # Se declara una variable o constante
-                    else:
+                    elif linea["contenido"][1] == "equ":
                         Variables[linea["contenido"][0]] = ConvertHex(linea["contenido"][2][1:])
+                    
+                    else: #Error algo escribio mal el usuario
+                        linea["compilado"] = "ERROR 004 y 009"
 
 
     # Post compilado: (2da vuelta)
@@ -86,7 +88,7 @@ def Main():
 
 
 
-# Main()
+Main()
 
 
 

@@ -12,6 +12,7 @@ INICIO
     LDAA    $45
     LDAB    11
     LDAB    *DEBE DAR ERROR
+    LDAA    #$80
 
 SINBANDERA
     ldd     $17
