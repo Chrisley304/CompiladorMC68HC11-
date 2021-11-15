@@ -23,12 +23,12 @@ def IMM(linea:dict,Variables:dict,ContMemoria:hex,mnemonico:dict):
         else:  # Variable no existe
             # Se deja pendiente por si es una etiqueta
             linea["localidad"] = ContMemoria
-            return SumHex(ContMemoria, int(mnemonico["IMM"][1]))
+            return SumHex(ContMemoria, int(float(mnemonico["IMM"][1])))
 
     if len(compilado)/2 == mnemonico["IMM"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
         linea["localidad"] = ContMemoria
-        return SumHex(ContMemoria, int(mnemonico["IMM"][1]))
+        return SumHex(ContMemoria, int(float(mnemonico["IMM"][1])))
     else:
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
         linea["localidad"] = ContMemoria
@@ -62,7 +62,7 @@ def INDX(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
     if len(compilado)/2 == mnemonico["IND,X"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
         linea["localidad"] = ContMemoria
-        return SumHex(ContMemoria, int(mnemonico["IND,X"][1]))
+        return SumHex(ContMemoria, int(float(mnemonico["IND,X"][1])))
     else:
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
         linea["localidad"] = ContMemoria
@@ -95,7 +95,7 @@ def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
     if len(compilado)/2 == mnemonico["IND,Y"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
         linea["localidad"] = ContMemoria
-        return SumHex(ContMemoria, int(mnemonico["IND,Y"][1]))
+        return SumHex(ContMemoria, int(float(mnemonico["IND,Y"][1])))
     else:
         linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
         linea["localidad"] = ContMemoria
@@ -143,7 +143,7 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
             if len(loc_str) == 2:  # Debe de ser de 8 bits para DIR
                 SumHex(ContMemoria, int(mnemonico["DIR"][1]))
             elif len(loc_str) == 4:  # Debe de ser de 16 bits para EXT
-                return SumHex(ContMemoria, int(mnemonico["EXT"][1]))
+                return SumHex(ContMemoria, int(float(mnemonico["EXT"][1])))
     
     if dir_o_ext == 1: # Es DIR
         opcode = mnemonico["DIR"][0]
@@ -151,7 +151,7 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         if len(compilado)/2 == mnemonico["DIR"][1]:
             linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
             linea["localidad"] = ContMemoria
-            return SumHex(ContMemoria, int(mnemonico["DIR"][1]))
+            return SumHex(ContMemoria, int(float(mnemonico["DIR"][1])))
         else:
             linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
             linea["localidad"] = ContMemoria
@@ -162,7 +162,7 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         if len(compilado)/2 == mnemonico["EXT"][1]:
             linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
             linea["localidad"] = ContMemoria
-            return SumHex(ContMemoria, int(mnemonico["EXT"][1]))
+            return SumHex(ContMemoria, int(float(mnemonico["EXT"][1])))
         else:
             linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
             linea["localidad"] = ContMemoria

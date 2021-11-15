@@ -1,5 +1,7 @@
+from posixpath import splitext
 from ArchivosCompilador.Direccionamientos import *
 from ArchivosCompilador.Utilidades import *
+
 
 def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex):
     
@@ -22,7 +24,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                 bytes = mnemoni["INH"][1]
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria),opcode)
                 linea["localidad"] = ContMemoria
-                return SumHex(ContMemoria,int(bytes)) # ejemplo: 8000 + 1 = 8001
+                return SumHex(ContMemoria,int(float(bytes))) # ejemplo: 8000 + 1 = 8001
 
 
         elif "REL" in mnemoni:
@@ -34,11 +36,11 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                     opcode = mnemoni["REL"][0]
                     linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
                     linea["localidad"] = ContMemoria
-                    return SumHex(ContMemoria, int(mnemoni["REL"][1]))
+                    return SumHex(ContMemoria, int(float(mnemoni["REL"][1])))
                 else:
                     # Se deja pendiente para el post compilado
                     linea["localidad"] = ContMemoria
-                    return SumHex(ContMemoria, int(mnemoni["REL"][1]))
+                    return SumHex(ContMemoria, int(float(mnemoni["REL"][1])))
             else:
                 linea["compilado"] = "ERROR 005   INSTRUCCIÓN CARECE DE OPERANDO(S)"
                 linea["localidad"] = ContMemoria
@@ -48,19 +50,24 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
         else:
             #direccionMem = codigo[1]
             # VerificarDirecciona(direccionMem)
-            operando = parametros[1]
+            if len(parametros) > 1:
+                operando = parametros[1]
 
-            if operando[0] == "#":  # Si inicia con '#' es IMM
-                return IMM(linea,Variables,ContMemoria,mnemoni) #Devuelve el ContMemoria
+                if operando[0] == "#":  # Si inicia con '#' es IMM
+                    return IMM(linea,Variables,ContMemoria,mnemoni) #Devuelve el ContMemoria
 
-            elif ",x" in operando:  # Es IND,X
-                return INDX(linea,Variables,ContMemoria,mnemoni)
+                elif ",x" in operando:  # Es IND,X
+                    return INDX(linea,Variables,ContMemoria,mnemoni)
 
-            elif ",y" in operando:  # Es IND,Y
-                return INDY(linea,Variables,ContMemoria,mnemoni)
+                elif ",y" in operando:  # Es IND,Y
+                    return INDY(linea,Variables,ContMemoria,mnemoni)
 
-            else:  # Puede ser DIR o EXT
-                return DIR_EXT(linea,Variables,ContMemoria,mnemoni)
+                else:  # Puede ser DIR o EXT
+                    return DIR_EXT(linea,Variables,ContMemoria,mnemoni)
+            else:
+                linea["compilado"] = "ERROR 005   INSTRUCCIÓN CARECE DE OPERANDO(S)"
+                linea["localidad"] = ContMemoria
+                return ContMemoria
 
 
     else:  # error mnemonico inexistente
@@ -90,7 +97,8 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
         #direccionMem = codigo[1]
         # VerificarDirecciona(direccionMem)
         operando = parametros[1]
-
+        dir_o_ext= 0
+        
         if operando[0] == "#":  # Si inicia con '#' es IMM
             variable = operando[1:]
             opcode = mnemonico["IMM"][0]
@@ -132,3 +140,10 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
         else: # NO es ni EXT ni DIR
             linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
 
+def Escritura(lineas_comp:list,lineas_orig:list,filename):
+    texto_final = ""
+    for i in range(len(lineas_comp)):
+        texto_final += "{} {} \t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+    filename = splitext(filename)[0]
+    with open("Salida/"+filename+".ASC","w") as archivo:
+        archivo.write(texto_final)

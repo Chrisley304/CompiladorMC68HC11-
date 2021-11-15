@@ -11,14 +11,15 @@ def getJSON():
 
 def getPrograma(fileName):
     lines = None
-    with open(fileName, 'r') as input:
+    with open("ProgramasEjemplo/"+fileName, 'r') as input:
         lines = input.readlines()
     return lines
 
 def Main():
     
     Mnemonicos = getJSON()
-    lineas = getPrograma("ProgramasEjemplo/prueba.txt")
+    filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    lineas = getPrograma(filename)
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
     Etiquetas = set()  # {'Etiqueta' : True}
@@ -32,8 +33,7 @@ def Main():
     
     for i in lineas:
         lineas_formateadas.append(formater(i))
-
-    print(lineas_formateadas)
+    
     # Precompilado
     Cont_memoria = hex(0)
     cont = 0
@@ -55,7 +55,7 @@ def Main():
 
                 # Directiva ORG, comienza el contador de memoria
                 if linea["contenido"][0] == 'org':
-                    Cont_memoria = ConvertHex(linea["contenido"][2][1:])
+                    Cont_memoria = ConvertHex(linea["contenido"][1][1:])
                     linea["compilado"] = "\t " + getHexString(Cont_memoria)
                     # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
                 
@@ -76,6 +76,7 @@ def Main():
                     # Se declara una variable o constante
                     elif linea["contenido"][1] == "equ":
                         Variables[linea["contenido"][0]] = ConvertHex(linea["contenido"][2][1:])
+                        linea["compilado"] = getHexString(Variables[linea["contenido"][0]])
                     
                     else: #Error algo escribio mal el usuario
                         linea["compilado"] = "ERROR 004 y 009"
@@ -87,17 +88,17 @@ def Main():
     # NOTAS: Directiva FCB, no hace nada el compilador, END TERMINA DE COMPILAR, ORG Inicia cont. memoria (inicia el programa)
     for linea in lineas_formateadas:
         if linea["compilado"] == None:
-            PostCompilado(linea,Mnemonicos,Variables)
+            PostCompilado(linea,Mnemonicos,Variables)    
+    
 
-    
-    
-    
+
+
     if not flagDeEnd:
         # Error no hay END
-        # writer.write("010 NO SE ENCUENTRA END")
-        pass
-        
-
+        lineas_formateadas.append(" ERROR 010 NO SE ENCUENTRA END")
+        lineas.append(" ")
+    
+    Escritura(lineas_formateadas,lineas,filename)
 
 
 Main()
