@@ -1,4 +1,4 @@
-
+
 M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
 
 
@@ -556,7 +556,7 @@ M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
  520 A                 *********************************** 
  521 A                 * VECTOR INTERRUPCION REAL TIME 
  522 A                 *********************************** 
-
+
 M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
 
 
@@ -570,7 +570,7 @@ M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
  530 A FFFE 8000       RESET     FCB       $80,$00               
  531 A                 *********************************** 
  532 A                           END       $8000                 
-
+
 SYMBOL TABLE:  Total Entries=   85
 
 ADCTL               1030    INICIO              8030

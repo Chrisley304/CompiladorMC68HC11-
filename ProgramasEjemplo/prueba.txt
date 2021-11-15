@@ -1,5 +1,5 @@
 *** VARIABLES ***
-    
+   
 V1   EQU   $1032
 PRUEBA   EQU   $1033
 ADR4   EQU   $1034
@@ -7,14 +7,19 @@ OPTION EQU   $1039
 
 *** PRINCIPAL ***
     ORG    $8000
-
+INICIO
+    ABA
     LDAA    $45
     LDAB    11
-    LDAB
+    LDAB    *DEBE DAR ERROR
+
+SINBANDERA
     ldd     $17
     LDX     15  * NO se que hace
     ADDA    $7C
     ANDA    $F0
-    LDY     $AB
+    BNE     SINBANDERA
+    JMP     INICIO
+    JMP     BANDERA *DEBE DAR ERROR
 
     END     * Fin del programa

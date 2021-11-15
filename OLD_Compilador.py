@@ -153,7 +153,7 @@ def Identificador(linea:list,Mnemonicos:dict,Variables:dict): #Recibe una lista 
                             return [nombre_mnemo, "EXT", [Variables[operando]]]
                         
                     else:  # Variable no existe
-                        return ["Error", "002 VARIABLE INEXISTENTE", []]
+                        return ["Error", "002 VARIABLE INEXISTENTE", [] ]
         
     else: #error mnemonico inexistente
         return ['Error', "004 MNEMÓNICO INEXISTENTE", []]
@@ -162,10 +162,10 @@ def Identificador(linea:list,Mnemonicos:dict,Variables:dict): #Recibe una lista 
 #  Error: mnemónico no lleva operandos | mnemónico faltan operandos | magnitud errónea de operandos
 #  Devuelve lista tipo -> ['mnemónico', 'modo de direccionamiento', [Operandos]] (La misma de identificador si no hay errores)
 #  De otra manera devuelve ['Error', 'mensajeDeError', []]
-#[mnemonico, modoDeDireccionamiento, ['1234']]
-#[mnemonico, modoDeDireccionamiento, ['AB']] 
-#[mnemonico, modoDeDireccionamiento, []]
-#[mnemonico, modoDeDireccionamiento, ['Etiqueta']]
+# [mnemonico, modoDeDireccionamiento, ['1234']]
+# [mnemonico, modoDeDireccionamiento, ['AB']] 
+# [mnemonico, modoDeDireccionamiento, []]
+# [mnemonico, modoDeDireccionamiento, ['Etiqueta']]
 def verificador(linea,Mnemonicos):
     # No lleva operandos
     if linea[1] == 'INH':
