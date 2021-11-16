@@ -150,9 +150,9 @@ def Escritura(lineas_comp:list,lineas_orig:list,filename):
     texto_final = ""
     for i in range(len(lineas_comp)):
         if len(lineas_comp[i]["compilado"].strip()) <=8 and len(lineas_comp[i]["compilado"].strip()) >= 6:
-            texto_final += "{} {}   \t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+            texto_final += "{} {}   \t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
         else:
-            texto_final += "{} {} \t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+            texto_final += "{} {} \t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
     filename = splitext(filename)[0]
     with open("Salida/"+filename+".ASC","w") as archivo:
         archivo.write(texto_final)

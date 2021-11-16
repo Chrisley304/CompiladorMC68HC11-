@@ -1,5 +1,5 @@
 # Devuelve una string sin el 0x de Python y añadiendo 0's para que tenga el formato del profesor.
-def getHexString(number: int):
+def getHexStringInt(number: int):
     hex_dec = str(hex(number))
     hex_str = hex_dec.replace('0x', '')
     if len(hex_str) == 3 or len(hex_str) == 1:
