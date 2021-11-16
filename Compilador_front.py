@@ -103,15 +103,19 @@ Main()
 
 
 """ 
-    Errores:
-	- Separar Etiquetas de Variables/Constante
-    - Error salto muy grande
-    - Poner mensaje de Compilado correcto
-    - Poner descripcion de errores abajo
-    - Arreglar mapa JSON ( Bytes )
-    - Arreglar comparaciones de BYTES (Error 007)
-    - Caso 4 instrucciones Especiales (Clase 23 sep)
-    - Punto extra: Colores listado HTML
+    TODO:
+    Axel:
+        - Caso 4 instrucciones Especiales (Clase 23 sep)
+        - Archivo .S19
+        - Error salto muy grande
+        - Arreglar mapa JSON ( Bytes )
+    
+    Chris:
+        - Verificar comparaciones de BYTES (Error 007)
+        - Punto extra: Colores listado HTML
+        - Separar Etiquetas de Variables/Constante
+        - Poner mensaje de Compilado correcto
+        - Poner descripcion de errores abajo
 
     Errores a buscar:
     001   CONSTANTE INEXISTENTE
