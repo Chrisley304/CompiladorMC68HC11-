@@ -18,7 +18,6 @@ def getHexString(number: hex):
 
 #Suma 2 hex
 
-
 def SumHex(A: hex, B: int):
     sum_hex = int(A, 16)
     sum_hex = sum_hex + B
@@ -32,7 +31,7 @@ def ResHex(etiqueta: hex, origen: hex):
     origen_int = int(origen, 16)
     res_hex = res_hex - origen_int
     # Convierte el numero negativo a hexadecimal de 8 bits
-    return hex(res_hex & (2**8-1))
+    return hex(res_hex & (2**8-1) )
 
 #Devuelve el hex en str ingresado en hex()
 
@@ -42,9 +41,7 @@ def ConvertHex(hexa: str):
 
 #Pone en minúsculas las palabras
 # Regresa una linea con la siguiente estructura:
-# linea = {espacio: True/False, contenido: [...], compilado = None/[cadena compilada] }
-
-
+# linea = {espacio: True/False, contenido: [...], compilado = None/[cadena compilada] , }
 def formater(line):
     formatedLine = {}
     if (line[0] == ' ' or line[0] == '\t'):  # Si tiene espacio coloca True

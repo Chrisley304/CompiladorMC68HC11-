@@ -24,7 +24,7 @@ def IMM(linea:dict,Variables:dict,ContMemoria:hex,mnemonico:dict):
             # Se deja pendiente por si es una etiqueta
             linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(float(mnemonico["IMM"][1])))
-
+    # OPCODE HEXADECIMAL 
     if len(compilado)/2 == mnemonico["IMM"][1]:
         linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
         linea["localidad"] = ContMemoria
@@ -106,6 +106,7 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
     dir_o_ext = None # Si es 1 es DIR, si es 2 es EXT
     hex_op = None
     compilado = ""
+
     if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
         hex_op = operando[1:]
         if len(hex_op) == 2:  # Si es de 8 bits es DIR
@@ -116,9 +117,9 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
     elif operando[0] == "'":  # es un caracter ASCII
         dec = ord(operando[1])
         hex_op = getHexString(int(dec))
-        if len(hex_op) >= 1 and len(hex_op) <= 2:  # es de 8 bits (DIR)
+        if len(hex_op) == 2:  # es de 8 bits (DIR)
             dir_o_ext = 1
-        elif len(hex_op) >= 3 and len(hex_op) <= 4:  # es de 16 bits (EXT)
+        elif len(hex_op) == 4:  # es de 16 bits (EXT)
             dir_o_ext = 2
 
     elif operando.isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
@@ -148,7 +149,7 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
     if dir_o_ext == 1: # Es DIR
         opcode = mnemonico["DIR"][0]
         compilado = opcode + hex_op
-        if len(compilado)/2 == mnemonico["DIR"][1]:
+        if len(compilado)/2 == int(float(mnemonico["DIR"][1])):
             linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
             linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(float(mnemonico["DIR"][1])))

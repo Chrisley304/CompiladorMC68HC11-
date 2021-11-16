@@ -60,9 +60,8 @@ M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
   56 A 0000                                                      
   57 A                 ********************************** 
   58 A                 *CONFIGURA REGISTROS 
-
-M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
 
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
 
   59 A                 ********************************** 
   60 A      8000                 ORG       $8000                 * DIR DE INICIO 

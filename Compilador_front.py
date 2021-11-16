@@ -19,12 +19,10 @@ def Main():
     
     Mnemonicos = getJSON()
     # filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    filename = "Ejemplo_profe.ASC" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
     lineas = getPrograma(filename)
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
-    Etiquetas = set()  # {'Etiqueta' : True}
-    
     flagDeEnd = False
     
     compilado_final = ""
@@ -37,15 +35,15 @@ def Main():
     
     # Precompilado
     Cont_memoria = hex(0)
-    cont = 0
+
     for linea in lineas_formateadas:
-        
+
         if len(linea["contenido"]) != 0:   # Que la línea no este vacía 
 
             # Si comienza con espacio -> es directiva (ORG, END, FCB) o instrucción
             if(linea["espacio"]):
                 
-                # Directiva END, dejar de compilar
+                # Directiva END, dejar de compilar 
                 if linea["contenido"][0] == 'end':
                     flagDeEnd = True
                     linea["compilado"] = ""
@@ -71,6 +69,7 @@ def Main():
                     # Se trata de una etiqueta [0,etiqueta]
                     if(len(linea["contenido"]) == 1):
                         # Se pasa a compilar para almacenar en el dict. Variables el lugar
+                        # Guardar como etiqueta
                         Variables[linea["contenido"][0]] = Cont_memoria
                         linea["compilado"] = getHexString(Cont_memoria)
                     
@@ -80,7 +79,8 @@ def Main():
                         linea["compilado"] = getHexString(Variables[linea["contenido"][0]])
                     
                     else: #Error algo escribio mal el usuario
-                        linea["compilado"] = "ERROR 004 y 009"
+                        linea["compilado"] = "ERROR 010 SINTAXIS INCORRECTA"
+
         else:
             linea["compilado"] = ""
 
@@ -90,13 +90,10 @@ def Main():
     for linea in lineas_formateadas:
         if linea["compilado"] == None:
             PostCompilado(linea,Mnemonicos,Variables)    
-    
-
-
 
     if not flagDeEnd:
         # Error no hay END
-        lineas_formateadas.append(" ERROR 010 NO SE ENCUENTRA END")
+        lineas_formateadas.append({"compilado":"ERROR 010 NO SE ENCUENTRA END"})
         lineas.append(" ")
     
     Escritura(lineas_formateadas,lineas,filename)
@@ -105,20 +102,16 @@ def Main():
 Main()
 
 
-
-
 """ 
-    Organización:
-    ✓   - Leer línea 
-    ✓   - FormatoQuitaEspaciosYComentarios -> Finalizado
-        - Identificador -> FALTA (hay lógica para identificar espacio (inicial) y si es mnemónico sin espacio)
-        - Verificador -> FALTA
-        - Procesador -> FALTA
-        - Escritor -> FALTA
-    
-    NOTAS:
-    Constantes deben estar siempre pegadas,
-    directivas deben tener al menos uno.
+    Errores:
+	- Separar Etiquetas de Variables/Constante
+    - Error salto muy grande
+    - Poner mensaje de Compilado correcto
+    - Poner descripcion de errores abajo
+    - Arreglar mapa JSON ( Bytes )
+    - Arreglar comparaciones de BYTES (Error 007)
+    - Caso 4 instrucciones Especiales (Clase 23 sep)
+    - Punto extra: Colores listado HTML
 
     Errores a buscar:
     001   CONSTANTE INEXISTENTE

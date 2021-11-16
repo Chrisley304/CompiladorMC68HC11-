@@ -2,7 +2,7 @@ from posixpath import splitext
 from ArchivosCompilador.Direccionamientos import *
 from ArchivosCompilador.Utilidades import *
 
-
+# Entra una linea -> {espacio=, contenido=[],compilado=,localidad=}
 def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex):
     
     parametros = linea["contenido"] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
@@ -13,7 +13,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
         # Si entra en la condicion sabemos que es una instruccion
         
         mnemoni = Mnemonicos[nombre_mnemo]
-
+        # {INH:OPCODE; NBYTES}
         if "INH" in mnemoni:  # Es una intruccion en INH
             if len(parametros) > 1:  # ["mnemonico","OPERANDOS"]
                 linea["compilado"] = "ERROR 006   INSTRUCCIÓN NO LLEVA OPERANDO(S)"
@@ -24,11 +24,10 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                 bytes = mnemoni["INH"][1]
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria),opcode)
                 linea["localidad"] = ContMemoria
-                return SumHex(ContMemoria,int(float(bytes))) # ejemplo: 8000 + 1 = 8001
-
+                return SumHex(ContMemoria,int(float(bytes))) # ejemplo:  
 
         elif "REL" in mnemoni:
-            if len(parametros) > 1:  # ["mnemonico","OPERANDOS"]
+            if len(parametros) == 2:  # ["mnemonico","Parametros"] SALTOS PARA ATRAS
                 if parametros[1] in Variables:
                     etiqueta = Variables[parametros[1]]
                     origen = SumHex(ContMemoria,2)
@@ -41,6 +40,13 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                     # Se deja pendiente para el post compilado
                     linea["localidad"] = ContMemoria
                     return SumHex(ContMemoria, int(float(mnemoni["REL"][1])))
+            
+            elif len(parametros) > 2:
+                # ERROR 11 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
+                # ERROR 11 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
+                linea["compilado"] = "ERROR 11 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)"
+                linea["localidad"] = ContMemoria
+                return ContMemoria
             else:
                 linea["compilado"] = "ERROR 005   INSTRUCCIÓN CARECE DE OPERANDO(S)"
                 linea["localidad"] = ContMemoria
@@ -84,20 +90,21 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
 
     if "REL" in mnemonico:
         if parametros[1] in Variables:
+            # CAMBIAR A SALTOS PARA ADELANTE 
             etiqueta = Variables[parametros[1]]
             origen = SumHex(ContMemoria,2)
             salto = ResHex(etiqueta,origen)
             opcode = mnemonico["REL"][0]
             linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
         else:
-            linea["compilado"] = "ERROR 001, 002 o 003"
+            linea["compilado"] = "ERROR 003  ETIQUETA INEXISTENTE"
 
     # Es una instruccion en otro tipo de direccionamiento (NO INH o REL)
     else:
         #direccionMem = codigo[1]
         # VerificarDirecciona(direccionMem)
         operando = parametros[1]
-        dir_o_ext= 0
+        dir_o_ext= None
         
         if operando[0] == "#":  # Si inicia con '#' es IMM
             variable = operando[1:]
@@ -121,7 +128,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
                     dir_o_ext = 2
 
             else: # No esta registrada
-                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+                linea["compilado"] = "ERROR 001, 002 o 003"
 
         if dir_o_ext == 1: # Es DIR
             opcode = mnemonico["DIR"][0]
