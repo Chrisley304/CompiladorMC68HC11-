@@ -30,7 +30,7 @@ def IMM(linea:dict,Variables:dict,ContMemoria:hex,mnemonico:dict):
         linea["localidad"] = ContMemoria
         return SumHex(ContMemoria, int(float(mnemonico["IMM"][1])))
     else:
-        linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["compilado"] = "ERROR 007"
         linea["localidad"] = ContMemoria
         return ContMemoria
 
@@ -55,7 +55,7 @@ def INDX(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         if variable in Variables:  # si esta registrada existe
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
-            linea["compilado"] = "ERROR 002 VARIABLE INEXISTENTE"
+            linea["compilado"] = "ERROR 002"
             linea["localidad"] = ContMemoria
             return ContMemoria
     
@@ -64,7 +64,7 @@ def INDX(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         linea["localidad"] = ContMemoria
         return SumHex(ContMemoria, int(float(mnemonico["IND,X"][1])))
     else:
-        linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["compilado"] = "ERROR 007"
         linea["localidad"] = ContMemoria
         return ContMemoria
 
@@ -88,7 +88,7 @@ def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         if variable in Variables:  # si esta registrada existe
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
-            linea["compilado"] = "ERROR 002 VARIABLE INEXISTENTE"
+            linea["compilado"] = "ERROR 002"
             linea["localidad"] = ContMemoria
             return ContMemoria
     
@@ -97,7 +97,7 @@ def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         linea["localidad"] = ContMemoria
         return SumHex(ContMemoria, int(float(mnemonico["IND,Y"][1])))
     else:
-        linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["compilado"] = "ERROR 007"
         linea["localidad"] = ContMemoria
         return ContMemoria
 
@@ -154,7 +154,7 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
             linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(float(mnemonico["DIR"][1])))
         else:
-            linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+            linea["compilado"] = "ERROR 007"
             linea["localidad"] = ContMemoria
             return ContMemoria
     elif dir_o_ext == 2: # Es EXT
@@ -165,10 +165,10 @@ def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
             linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(float(mnemonico["EXT"][1])))
         else:
-            linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+            linea["compilado"] = "ERROR 007"
             linea["localidad"] = ContMemoria
             return ContMemoria
     else: # NO es ni EXT ni DIR
-        linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+        linea["compilado"] = "ERROR 007"
         linea["localidad"] = ContMemoria
         return ContMemoria

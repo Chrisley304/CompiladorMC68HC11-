@@ -16,7 +16,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
         # {INH:OPCODE; NBYTES}
         if "INH" in mnemoni:  # Es una intruccion en INH
             if len(parametros) > 1:  # ["mnemonico","OPERANDOS"]
-                linea["compilado"] = "ERROR 006   INSTRUCCIÓN NO LLEVA OPERANDO(S)"
+                linea["compilado"] = "ERROR 006"
                 linea["localidad"] = ContMemoria
                 return ContMemoria
             else:
@@ -42,13 +42,12 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                     return SumHex(ContMemoria, int(float(mnemoni["REL"][1])))
             
             elif len(parametros) > 2:
-                # ERROR 11 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
-                # ERROR 11 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
-                linea["compilado"] = "ERROR 11 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)"
+                # ERROR 012 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
+                linea["compilado"] = "ERROR 012"
                 linea["localidad"] = ContMemoria
                 return ContMemoria
             else:
-                linea["compilado"] = "ERROR 005   INSTRUCCIÓN CARECE DE OPERANDO(S)"
+                linea["compilado"] = "ERROR 005"
                 linea["localidad"] = ContMemoria
                 return ContMemoria
 
@@ -71,13 +70,13 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                 else:  # Puede ser DIR o EXT
                     return DIR_EXT(linea,Variables,ContMemoria,mnemoni)
             else:
-                linea["compilado"] = "ERROR 005   INSTRUCCIÓN CARECE DE OPERANDO(S)"
+                linea["compilado"] = "ERROR 005"
                 linea["localidad"] = ContMemoria
                 return ContMemoria
 
 
     else:  # error mnemonico inexistente
-        linea["compilado"] = "ERROR 004 MNEMÓNICO INEXISTENTE"
+        linea["compilado"] = "ERROR 004"
         linea["localidad"] = ContMemoria
         return ContMemoria
 
@@ -97,7 +96,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
             opcode = mnemonico["REL"][0]
             linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
         else:
-            linea["compilado"] = "ERROR 003  ETIQUETA INEXISTENTE"
+            linea["compilado"] = "ERROR 003"
 
     # Es una instruccion en otro tipo de direccionamiento (NO INH o REL)
     else:
@@ -117,7 +116,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
             if len(compilado)/2 == mnemonico["IMM"][1]:
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
             else:
-                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+                linea["compilado"] = "ERROR 007"
 
         else:  # Puede ser DIR o EXT
             if operando in Variables:  # si esta registrada existe
@@ -136,21 +135,24 @@ def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
             if len(compilado)/2 == mnemonico["DIR"][1]:
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
             else:
-                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+                linea["compilado"] = "ERROR 007"
         elif dir_o_ext == 2: # Es EXT
             opcode = mnemonico["EXT"][0]
             compilado = opcode + hex_op
             if len(compilado)/2 == mnemonico["EXT"][1]:
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
             else:
-                linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+                linea["compilado"] = "ERROR 007"
         else: # NO es ni EXT ni DIR
-            linea["compilado"] = "ERROR 007   MAGNITUD DE  OPERANDO ERRONEA"
+            linea["compilado"] = "ERROR 007"
 
 def Escritura(lineas_comp:list,lineas_orig:list,filename):
     texto_final = ""
     for i in range(len(lineas_comp)):
-        texto_final += "{} {} \t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+        if len(lineas_comp[i]["compilado"].strip()) <=8 and len(lineas_comp[i]["compilado"].strip()) >= 6:
+            texto_final += "{} {}   \t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+        else:
+            texto_final += "{} {} \t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
     filename = splitext(filename)[0]
     with open("Salida/"+filename+".ASC","w") as archivo:
         archivo.write(texto_final)

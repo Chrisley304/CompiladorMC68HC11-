@@ -46,16 +46,16 @@ def Main():
                 # Directiva END, dejar de compilar 
                 if linea["contenido"][0] == 'end':
                     flagDeEnd = True
-                    linea["compilado"] = ""
+                    linea["compilado"] = "\t\t\t"
                     break
 
                 if linea["contenido"][0] == 'fcb':
-                    linea["compilado"] = ""
+                    linea["compilado"] = "\t\t\t"
 
                 # Directiva ORG, comienza el contador de memoria
                 if linea["contenido"][0] == 'org':
                     Cont_memoria = ConvertHex(linea["contenido"][1][1:])
-                    linea["compilado"] = "\t " + getHexString(Cont_memoria)
+                    linea["compilado"] = "\t\t" + getHexString(Cont_memoria)
                     # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
                 
                 else: # se envia al precompilador
@@ -64,25 +64,25 @@ def Main():
             # No tiene espacio
             else:
                 if (linea["contenido"][0] in Mnemonicos) or (linea["contenido"][0] == 'org' or linea["contenido"][0] == 'end' or linea["contenido"][0] == 'fcb'):
-                    linea["compilado"] = "ERROR 009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN"
+                    linea["compilado"] = "ERROR 009"
                 else:
                     # Se trata de una etiqueta [0,etiqueta]
                     if(len(linea["contenido"]) == 1):
                         # Se pasa a compilar para almacenar en el dict. Variables el lugar
                         # Guardar como etiqueta
                         Variables[linea["contenido"][0]] = Cont_memoria
-                        linea["compilado"] = getHexString(Cont_memoria)
+                        linea["compilado"] = getHexString(Cont_memoria) + "\t"
                     
                     # Se declara una variable o constante
                     elif linea["contenido"][1] == "equ":
                         Variables[linea["contenido"][0]] = ConvertHex(linea["contenido"][2][1:])
-                        linea["compilado"] = getHexString(Variables[linea["contenido"][0]])
+                        linea["compilado"] = getHexString(Variables[linea["contenido"][0]]) + "\t"
                     
                     else: #Error algo escribio mal el usuario
-                        linea["compilado"] = "ERROR 010 SINTAXIS INCORRECTA"
+                        linea["compilado"] = "ERROR 011"
 
         else:
-            linea["compilado"] = ""
+            linea["compilado"] = "\t\t"
 
 
     # Post compilado: (2da vuelta)
@@ -93,7 +93,7 @@ def Main():
 
     if not flagDeEnd:
         # Error no hay END
-        lineas_formateadas.append({"compilado":"ERROR 010 NO SE ENCUENTRA END"})
+        lineas_formateadas.append({"compilado":"ERROR 010"})
         lineas.append(" ")
     
     Escritura(lineas_formateadas,lineas,filename)
@@ -128,5 +128,9 @@ Main()
     008   SALTO RELATIVO MUY LEJANO
     009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN
     010   NO SE ENCUENTRA END
+    
+    Errores nuestros:
+    011 SINTAXIS INCORRECTA
+    012 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
 
 """
