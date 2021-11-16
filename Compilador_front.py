@@ -95,9 +95,11 @@ def Main():
         # Error no hay END
         lineas_formateadas.append({"compilado":"ERROR 010"})
         lineas.append(" ")
-    
-    Escritura(lineas_formateadas,lineas,filename)
-
+    try:
+        Escritura(lineas_formateadas,lineas,filename)
+        print("El archivo .LST se genero correctamente.")
+    except:
+        print("Error al generar el archivo .LST")
 
 Main()
 
@@ -108,14 +110,14 @@ Main()
         - Caso 4 instrucciones Especiales (Clase 23 sep)
         - Archivo .S19
         - Error salto muy grande
-        - Arreglar mapa JSON ( Bytes )
+    ✓    - Arreglar mapa JSON ( Bytes )
     
     Chris:
-        - Verificar comparaciones de BYTES (Error 007)
+    ✓    - Verificar comparaciones de BYTES (Error 007)
         - Punto extra: Colores listado HTML
         - Separar Etiquetas de Variables/Constante
         - Poner mensaje de Compilado correcto
-        - Poner descripcion de errores abajo
+    ✓    - Poner descripcion de errores abajo
 
     Errores a buscar:
     001   CONSTANTE INEXISTENTE
