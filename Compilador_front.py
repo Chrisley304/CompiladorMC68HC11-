@@ -23,6 +23,7 @@ def Main():
     lineas = getPrograma(filename)
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
+    Etiquetas = {}  # {'etiqueta' : direcciónDememoria}
     flagDeEnd = False
     
     compilado_final = ""
@@ -59,7 +60,7 @@ def Main():
                     # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
                 
                 else: # se envia al precompilador
-                    Cont_memoria = Precompilado(linea, Mnemonicos, Variables, Cont_memoria)
+                    Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
 
             # No tiene espacio
             else:
@@ -70,7 +71,7 @@ def Main():
                     if(len(linea["contenido"]) == 1):
                         # Se pasa a compilar para almacenar en el dict. Variables el lugar
                         # Guardar como etiqueta
-                        Variables[linea["contenido"][0]] = Cont_memoria
+                        Etiquetas[linea["contenido"][0]] = Cont_memoria
                         linea["compilado"] = getHexString(Cont_memoria) + "\t"
                     
                     # Se declara una variable o constante
@@ -89,7 +90,7 @@ def Main():
     # NOTAS: Directiva FCB, no hace nada el compilador, END TERMINA DE COMPILAR, ORG Inicia cont. memoria (inicia el programa)
     for linea in lineas_formateadas:
         if linea["compilado"] == None:
-            PostCompilado(linea,Mnemonicos,Variables)    
+            PostCompilado(linea,Mnemonicos,Etiquetas,Variables)    
 
     if not flagDeEnd:
         # Error no hay END
@@ -114,9 +115,10 @@ Main()
     
     Chris:
     ✓    - Verificar comparaciones de BYTES (Error 007)
+        - Arreglar error 007 donde deberia de estar 1,2 o 3
         - Punto extra: Colores listado HTML
         - Separar Etiquetas de Variables/Constante
-        - Poner mensaje de Compilado correcto
+    ✓    - Poner mensaje de Compilado correcto
     ✓    - Poner descripcion de errores abajo
 
     Errores a buscar:

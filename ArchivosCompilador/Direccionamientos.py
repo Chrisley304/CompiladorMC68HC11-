@@ -1,7 +1,7 @@
 from io import open_code
 from ArchivosCompilador.Utilidades import *
 
-def IMM(linea:dict,Variables:dict,ContMemoria:hex,mnemonico:dict):
+def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict):
     operando = linea["contenido"][1]
     opcode = mnemonico["IMM"][0]
     compilado = ""
@@ -35,7 +35,7 @@ def IMM(linea:dict,Variables:dict,ContMemoria:hex,mnemonico:dict):
         return ContMemoria
 
 
-def INDX(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
+def INDX(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
     operando = linea["contenido"][1]
     opcode = mnemonico["IND,X"][0]
     compilado = ""
@@ -68,7 +68,7 @@ def INDX(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         linea["localidad"] = ContMemoria
         return ContMemoria
 
-def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
+def INDY(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
     operando = linea["contenido"][1]
     opcode = mnemonico["IND,Y"][0]
     compilado = ""
@@ -101,7 +101,7 @@ def INDY(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
         linea["localidad"] = ContMemoria
         return ContMemoria
 
-def DIR_EXT(linea: dict, Variables: dict, ContMemoria: hex, mnemonico: dict):
+def DIR_EXT(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
     operando = linea["contenido"][1]
     dir_o_ext = None # Si es 1 es DIR, si es 2 es EXT
     hex_op = None

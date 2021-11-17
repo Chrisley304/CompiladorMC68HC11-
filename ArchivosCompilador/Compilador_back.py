@@ -3,7 +3,7 @@ from ArchivosCompilador.Direccionamientos import *
 from ArchivosCompilador.Utilidades import *
 
 # Entra una linea -> {espacio=, contenido=[],compilado=,localidad=}
-def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex):
+def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,ContMemoria:hex):
     
     parametros = linea["contenido"] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
     
@@ -28,8 +28,8 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
 
         elif "REL" in mnemoni:
             if len(parametros) == 2:  # ["mnemonico","Parametros"] SALTOS PARA ATRAS
-                if parametros[1] in Variables:
-                    etiqueta = Variables[parametros[1]]
+                if parametros[1] in Etiquetas:
+                    etiqueta = Etiquetas[parametros[1]]
                     origen = SumHex(ContMemoria,2)
                     salto = ResHex(etiqueta,origen)
                     opcode = mnemoni["REL"][0]
@@ -59,16 +59,16 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
                 operando = parametros[1]
 
                 if operando[0] == "#":  # Si inicia con '#' es IMM
-                    return IMM(linea,Variables,ContMemoria,mnemoni) #Devuelve el ContMemoria
+                    return IMM(linea,Variables,Etiquetas,ContMemoria,mnemoni) #Devuelve el ContMemoria
 
                 elif ",x" in operando:  # Es IND,X
-                    return INDX(linea,Variables,ContMemoria,mnemoni)
+                    return INDX(linea,Variables,Etiquetas,ContMemoria,mnemoni)
 
                 elif ",y" in operando:  # Es IND,Y
-                    return INDY(linea,Variables,ContMemoria,mnemoni)
+                    return INDY(linea,Variables,Etiquetas,ContMemoria,mnemoni)
 
                 else:  # Puede ser DIR o EXT
-                    return DIR_EXT(linea,Variables,ContMemoria,mnemoni)
+                    return DIR_EXT(linea,Variables,Etiquetas,ContMemoria,mnemoni)
             else:
                 linea["compilado"] = "ERROR 005"
                 linea["localidad"] = ContMemoria
@@ -81,7 +81,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,ContMemoria:hex)
         return ContMemoria
 
 
-def PostCompilado(linea: dict, Mnemonicos: dict, Variables: dict):
+def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict):
     parametros = linea["contenido"] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
     nombre_mnemo = parametros[0]  # Se obtiene el nombre del mnemonico
     mnemonico = Mnemonicos[nombre_mnemo]
