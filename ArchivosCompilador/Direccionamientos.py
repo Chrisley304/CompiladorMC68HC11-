@@ -20,6 +20,8 @@ def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict)
         variable = operando[1:]
         if variable in Variables:  # si esta registrada existe
             compilado = opcode + Variables[variable]
+        elif variable in Etiquetas:
+            compilado = opcode + Etiquetas[variable]
         else:  # Variable no existe
             # Se deja pendiente por si es una etiqueta
             linea["localidad"] = ContMemoria
@@ -55,7 +57,7 @@ def INDX(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonic
         if variable in Variables:  # si esta registrada existe
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
-            linea["compilado"] = "ERROR 002"
+            linea["compilado"] = "ERROR 001/002"
             linea["localidad"] = ContMemoria
             return ContMemoria
     
@@ -88,7 +90,7 @@ def INDY(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonic
         if variable in Variables:  # si esta registrada existe
             compilado = opcode + Variables[variable]
         else:  # Variable no existe
-            linea["compilado"] = "ERROR 002"
+            linea["compilado"] = "ERROR 001/002"
             linea["localidad"] = ContMemoria
             return ContMemoria
     
@@ -137,6 +139,13 @@ def DIR_EXT(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemo
                 dir_o_ext = 1
             elif len(hex_op) == 4:  # Debe de ser de 16 bits para EXT
                 dir_o_ext = 2
+        elif operando in Etiquetas:
+            hex_op = getHexString(Etiquetas[operando])
+            if len(hex_op) == 2:  # Debe de ser de 8 bits para DIR
+                dir_o_ext = 1
+            elif len(hex_op) == 4:  # Debe de ser de 16 bits para EXT
+                dir_o_ext = 2
+        
         else: # No esta registrada y puede ser una etiqueta
             # Se deja pendiente por si es una etiqueta
             linea["localidad"] = ContMemoria

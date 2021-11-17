@@ -88,9 +88,9 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
     ContMemoria = linea["localidad"]
 
     if "REL" in mnemonico:
-        if parametros[1] in Variables:
+        if parametros[1] in Etiquetas:
             # CAMBIAR A SALTOS PARA ADELANTE 
-            etiqueta = Variables[parametros[1]]
+            etiqueta = Etiquetas[parametros[1]]
             origen = SumHex(ContMemoria,2)
             salto = ResHex(etiqueta,origen)
             opcode = mnemonico["REL"][0]
@@ -110,8 +110,10 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
             opcode = mnemonico["IMM"][0]
             if variable in Variables:  # si esta registrada existe
                 compilado = opcode + Variables[variable]
+            elif variable in Etiquetas:  # si esta registrada existe
+                compilado = opcode + Etiquetas[variable]
             else:  # Variable no existe
-                linea["compilado"] = "ERROR 001, 002 o 003"
+                linea["compilado"] = "ERROR 001/002/003"
 
             if len(compilado)/2 == mnemonico["IMM"][1]:
                 linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
@@ -119,40 +121,51 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
                 linea["compilado"] = "ERROR 007"
 
         else:  # Puede ser DIR o EXT
+            
             if operando in Variables:  # si esta registrada existe
                 hex_op = getHexString(Variables[operando])
                 if len(hex_op) == 2:  # Debe de ser de 8 bits para DIR
                     dir_o_ext = 1
                 elif len(hex_op) == 4:  # Debe de ser de 16 bits para EXT
                     dir_o_ext = 2
+            
+            elif operando in Etiquetas:  # si esta registrada existe
+                hex_op = getHexString(Etiquetas[operando])
+                if len(hex_op) == 2:  # Debe de ser de 8 bits para DIR
+                    dir_o_ext = 1
+                elif len(hex_op) == 4:  # Debe de ser de 16 bits para EXT
+                    dir_o_ext = 2
 
             else: # No esta registrada
-                linea["compilado"] = "ERROR 001, 002 o 003"
+                linea["compilado"] = "ERROR 001/002/003"
 
-        if dir_o_ext == 1: # Es DIR
-            opcode = mnemonico["DIR"][0]
-            compilado = opcode + hex_op
-            if len(compilado)/2 == mnemonico["DIR"][1]:
-                linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
-            else:
-                linea["compilado"] = "ERROR 007"
-        elif dir_o_ext == 2: # Es EXT
-            opcode = mnemonico["EXT"][0]
-            compilado = opcode + hex_op
-            if len(compilado)/2 == mnemonico["EXT"][1]:
-                linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
-            else:
-                linea["compilado"] = "ERROR 007"
-        else: # NO es ni EXT ni DIR
-            linea["compilado"] = "ERROR 007"
+            if dir_o_ext == 1: # Es DIR
+                opcode = mnemonico["DIR"][0]
+                compilado = opcode + hex_op
+                if len(compilado)/2 == mnemonico["DIR"][1]:
+                    linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+                else:
+                    linea["compilado"] = "ERROR 007"
+            elif dir_o_ext == 2: # Es EXT
+                opcode = mnemonico["EXT"][0]
+                compilado = opcode + hex_op
+                if len(compilado)/2 == mnemonico["EXT"][1]:
+                    linea["compilado"] = "{} {}".format(getHexString(ContMemoria), compilado)
+                else:
+                    linea["compilado"] = "ERROR 007"
+            else: # NO se encontro la variable o etiqueta
+                linea["compilado"] = "ERROR 001/002/003"
 
 def Escritura(lineas_comp:list,lineas_orig:list,filename):
     texto_final = ""
     for i in range(len(lineas_comp)):
         if len(lineas_comp[i]["compilado"].strip()) <=8 and len(lineas_comp[i]["compilado"].strip()) >= 6:
-            texto_final += "{} {}   \t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+            texto_final += "{} {}   \t\t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+        elif len(lineas_comp[i]["compilado"].strip()) > 11:
+            texto_final += "{} {} \t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
         else:
-            texto_final += "{} {} \t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+            texto_final += "{} {} \t\t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+
     texto_final += "\n\n=== Descripcion de errores ===\n001   CONSTANTE INEXISTENTE\n002   VARIABLE INEXISTENTE\n003   ETIQUETA INEXISTENTE\n004   MNEMÓNICO INEXISTENTE\n005   INSTRUCCIÓN CARECE DE  OPERANDO(S)\n006   INSTRUCCIÓN NO LLEVA OPERANDO(S)\n007   MAGNITUD DE  OPERANDO ERRONEA\n008   SALTO RELATIVO MUY LEJANO\n009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN\n010   NO SE ENCUENTRA END\n011   SINTAXIS INCORRECTA\n012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)"
     
     filename = splitext(filename)[0]

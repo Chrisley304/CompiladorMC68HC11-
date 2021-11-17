@@ -1,29 +1,29 @@
-1 		 			 *** VARIABLES ***
-2 		 			    
-3 1032	 			 V1   EQU   $1032
-4 1033	 			 PRUEBA   EQU   $1033
-5 1034	 			 ADR4   EQU   $1034
-6 1039	 			 OPTION EQU   $1039
-7 		 			 
-8 		 			 *** PRINCIPAL ***
-9 		8000 			     ORG    $8000
-10 8000	 			 INICIO
-11 8000 1B   			     ABA
-12 8001 9645 			     LDAA    $45
-13 8003 D60B 			     LDAB    11
-14 ERROR 005 			     LDAB    *DEBE DAR ERROR
-15 8005 8680 			     LDAA    #$80
-16 		 			 
-17 8007	 			 SINBANDERA
-18 8007 DC17 			     ldd     $17
-19 8009 DE0F 			     LDX     15  * NO se que hace
-20 800B 9B7c 			     ADDA    $7C
-21 800D 94f0 			     ANDA    $F0
-22 800F 26F6 			     BNE     SINBANDERA
-23 8011 7E8000 			     JMP     INICIO
-24 ERROR 007 			     JMP     BANDERA *DEBE DAR ERROR
-25 		 			 
-26 			 			     END     * Fin del programa
+1 		 				 *** VARIABLES ***
+2 		 				    
+3 1032	 				 V1   EQU   $1032
+4 1033	 				 PRUEBA   EQU   $1033
+5 1034	 				 ADR4   EQU   $1034
+6 1039	 				 OPTION EQU   $1039
+7 		 				 
+8 		 				 *** PRINCIPAL ***
+9 		8000 				     ORG    $8000
+10 8000	 				 INICIO
+11 8000 1B   				     ABA
+12 8001 9645 				     LDAA    $45
+13 8003 D60B 				     LDAB    11
+14 ERROR 005 				     LDAB    *DEBE DAR ERROR
+15 8005 8680 				     LDAA    #$80
+16 		 				 
+17 8007	 				 SINBANDERA
+18 8007 DC17 				     ldd     $17
+19 8009 DE0F 				     LDX     15  * NO se que hace
+20 800B 9B7c 				     ADDA    $7C
+21 800D 94f0 				     ANDA    $F0
+22 800F 26F6 				     BNE     SINBANDERA
+23 8011 7E8000 				     JMP     INICIO
+24 ERROR 001/002/003 		     JMP     BANDERA *DEBE DAR ERROR
+25 		 				 
+26 			 				     END     * Fin del programa
 
 === Descripcion de errores ===
 001   CONSTANTE INEXISTENTE
