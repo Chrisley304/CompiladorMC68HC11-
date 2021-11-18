@@ -32,10 +32,18 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
                     etiqueta = Etiquetas[parametros[1]]
                     origen = SumHex(ContMemoria,2)
                     salto = ResHex(etiqueta,origen)
-                    opcode = mnemoni["REL"][0]
-                    linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
-                    linea["localidad"] = ContMemoria
-                    return SumHex(ContMemoria, int(float(mnemoni["REL"][1])))
+
+                    if(CheckHex(etiqueta, origen, True)):
+                        opcode = mnemoni["REL"][0]
+                        linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+                        linea["localidad"] = ContMemoria
+                        return SumHex(ContMemoria, int(float(mnemoni["REL"][1])))
+
+                    else:
+                        # ERROR 008 SALTO RELATIVO MUY LEJANO
+                        linea["compilado"] = "ERROR 008"
+                        linea["localidad"] = ContMemoria
+                        return ContMemoria
                 else:
                     # Se deja pendiente para el post compilado
                     linea["localidad"] = ContMemoria
@@ -92,9 +100,13 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
             # CAMBIAR A SALTOS PARA ADELANTE 
             etiqueta = Etiquetas[parametros[1]]
             origen = SumHex(ContMemoria,2)
-            salto = ResHex(etiqueta,origen)
-            opcode = mnemonico["REL"][0]
-            linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+
+            if(CheckHex(etiqueta, origen, False)):
+                salto = ResHex(etiqueta,origen)
+                opcode = mnemonico["REL"][0]
+                linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+            else: 
+                linea["compilado"] = "ERROR 008"
         else:
             linea["compilado"] = "ERROR 003"
 
