@@ -19,7 +19,7 @@ def Main():
     
     Mnemonicos = getJSON()
     # filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    filename = "Profe.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
     lineas = getPrograma(filename)
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
@@ -60,8 +60,11 @@ def Main():
                     # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
                 
                 else: # se envia al precompilador
-                    Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
-
+                    try:
+                        Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
+                    except:
+                        print("Linea con error: {}".format(linea))
+                        return
             # No tiene espacio
             else:
                 if (linea["contenido"][0] in Mnemonicos) or (linea["contenido"][0] == 'org' or linea["contenido"][0] == 'end' or linea["contenido"][0] == 'fcb'):
@@ -89,18 +92,30 @@ def Main():
     # Post compilado: (2da vuelta)
     # NOTAS: Directiva FCB, no hace nada el compilador, END TERMINA DE COMPILAR, ORG Inicia cont. memoria (inicia el programa)
     for linea in lineas_formateadas:
-        if linea["compilado"] == None:
-            PostCompilado(linea,Mnemonicos,Etiquetas,Variables)    
+        try:
+            if linea["compilado"] == None and len(linea["contenido"]) !=0:
+                PostCompilado(linea,Mnemonicos,Etiquetas,Variables)   
+        except:
+            print("Linea con error: {}".format(linea))
+            return
+            
 
     if not flagDeEnd:
         # Error no hay END
         lineas_formateadas.append({"compilado":"ERROR 010"})
         lineas.append(" ")
+    # Escritura del archivo .LST
     try:
-        Escritura(lineas_formateadas,lineas,filename)
+        EscrituraLST(lineas_formateadas,lineas,filename)
         print("El archivo .LST se genero correctamente.")
     except:
         print("Error al generar el archivo .LST")
+    
+    try:
+        EscrituraHTML(lineas_formateadas,lineas,filename)
+        print("El archivo HTML se genero correctamente.")
+    except:
+        print("Error al generar el archivo HTML")
 
 Main()
 
@@ -115,9 +130,10 @@ Main()
     
     Chris:
     ✓    - Verificar comparaciones de BYTES (Error 007)
-        - Arreglar error 007 donde deberia de estar 1,2 o 3
+    ✓    - Arreglar error 007 donde deberia de estar 1,2 o 3
         - Punto extra: Colores listado HTML
-        - Separar Etiquetas de Variables/Constante
+    ✓    - Saltos para adelante
+    ✓    - Separar Etiquetas de Variables/Constante
     ✓    - Poner mensaje de Compilado correcto
     ✓    - Poner descripcion de errores abajo
 

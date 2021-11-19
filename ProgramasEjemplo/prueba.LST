@@ -1,0 +1,43 @@
+  ADDR B1 B2 B3 B4 C:\Users\chris\Documentos SSD\Proyectos Python\  PAGE       1
+
+                   *** VARIABLES ***
+
+                   V1   EQU   $1032
+                   PRUEBA   EQU   $1033
+                   ADR4   EQU   $1034
+                   OPTION EQU   $1039
+
+                   *** PRINCIPAL ***
+                       ORG    $8000
+                   INICIO
+                       AB
+E                      ^ Unknown instruction or directive.
+  8000 7E 80 0E        JMP     SINBANDERA
+  8003 96 45           LDAA    $45
+  8005 D6 0B           LDAB    11
+  8007 26 05           BNE     SINBANDERA
+                       LDAB    *DEBE DAR ERROR
+E                              ^ Unexpected character.
+E                               ^ Unknown identifier.
+  8009 86 80           LDAA    #$80
+
+                   SINBANDERA
+  800B DC 17           ldd     $17
+  800D DE 0F           LDX     15  * NO se que hace
+  800F 9B 7C           ADDA    $7C
+  8011 94 F0           ANDA    $F0
+  8013 26 F6           BNE     SINBANDERA
+  8015 7E 80 00        JMP     INICIO
+                       JMP     BANDERA *DEBE DAR ERROR
+E                              ^ Unknown identifier.
+
+                       END     * Fin del programa
+
+  Symbol Table 
+
+  V1                 1032
+  OPTION             1039
+  SINBANDERA         800B
+  ADR4               1034
+  PRUEBA             1033
+  INICIO             8000

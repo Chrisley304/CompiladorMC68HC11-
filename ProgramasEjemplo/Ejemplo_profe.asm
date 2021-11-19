@@ -102,7 +102,7 @@ MAIN
 INICIO  CLR    U4
 NO_S1   CLR    U3
 NO_S    CLR    U2
-       CLR    U1 
+        CLR    U1 
 
  
 

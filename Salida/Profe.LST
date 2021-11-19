@@ -1,0 +1,549 @@
+1 		 				 **********************************
+2 		 				 *PROGRAMA DE EJEMPLO
+3 		 				 **********************************
+4 		 				 
+5 1026	 				 PACTL  EQU   $1026
+6 1027	 				 PACNT  EQU   $1027
+7 1030	 				 ADCTL  EQU   $1030
+8 1031	 				 ADR1   EQU   $1031
+9 1032	 				 ADR2   EQU   $1032
+10 1033	 				 ADR3   EQU   $1033
+11 1034	 				 ADR4   EQU   $1034
+12 1039	 				 OPTION EQU   $1039
+13 		 				 
+14 1000	 				 PORTA  EQU   $1000
+15 1008	 				 PORTD  EQU   $1008
+16 100A	 				 PORTE  EQU   $100A
+17 1002	 				 PORTG  EQU   $1002
+18 		 				 
+19 1001	 				 DDRA   EQU   $1001
+20 1009	 				 DDRD   EQU   $1009
+21 1003	 				 DDRG   EQU   $1003
+22 		 				    
+23 1024	 				 TMSK2  EQU   $1024
+24 1025	 				 TFLG2  EQU   $1025
+25 		 				 
+26 102F	 				 SCDR   EQU   $102F
+27 102D	 				 SCCR2  EQU   $102D
+28 102E	 				 SCSR   EQU   $102E
+29 102C	 				 SCCR1  EQU   $102C
+30 102B	 				 BAUD   EQU   $102B
+31 103C	 				 HPRIO  EQU   $103C
+32 1028	 				 SPCR   EQU   $1028
+33 105D	 				 CSCTL  EQU   $105D
+34 1038	 				 OPT2   EQU   $1038
+35 		 				 
+36 		 				 * VARIABLES *********************
+37 		 				 
+38 0C	 				 ORDEN  EQU   $000C
+39 0D	 				 SEG    EQU   $000D
+40 0E	 				 U1     EQU   $000E
+41 0F	 				 U2     EQU   $000F
+42 10	 				 U3     EQU   $0010
+43 11	 				 U4     EQU   $0011
+44 12	 				 U5     EQU   $0012
+45 13	 				 V1     EQU   $0013
+46 14	 				 V2     EQU   $0014
+47 15	 				 BAS_H  EQU   $0015
+48 16	 				 BAS_L  EQU   $0016
+49 17	 				 V5     EQU   $0017
+50 18	 				 TEMPO  EQU   $0018
+51 19	 				 ALTO   EQU   $0019
+52 1A	 				 BAJO   EQU   $001A
+53 1B	 				 BASE_H EQU   $001B
+54 1C	 				 BASE_L EQU   $001C
+55 1D	 				 V3     EQU   $001D
+56 1E	 				 V4     EQU   $001E
+57 		 				 
+58 		 				 **********************************
+59 		 				 *CONFIGURA REGISTROS
+60 		 				 **********************************
+61 		8000 				        ORG   $8000   * DIR DE INICIO
+62 8000 8E00ff 				        LDS   #$00FF  * APUNTADOR DE STAK
+63 		 				 
+64 		 				                
+65 8003 8600 				        LDAA  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS
+66 8005 B71001 				        STAA  DDRA    * EL PUERTO A
+67 		 				        
+68 8008 86ff 				        LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS
+69 800A B71003 				        STAA  DDRG    * EL PUERTO G 
+70 		 				 
+71 800D 8600 				        LDAA  #$00    * SE PONE PUERTO G EN CEROS
+72 800F B71002 				        STAA  PORTG
+73 		 				        
+74 8012 CC302c 				        LDD   #$302C  * CONFIGURA PUERTO SERIAL
+75 8015 B7102B 				        STAA  BAUD    * BAUD  9600  para cristal de 8MHz
+76 8018 F7102D 				        STAB  SCCR2   * HABILITA  RX Y TX PERO INTERRUPCN SOLO RX
+77 801B 8600 				        LDAA  #$00
+78 801D B7102C 				        STAA  SCCR1   * 8 BITS
+79 		 				 
+80 8020 86fe 				        LDAA  #$FE    * CONFIG PUERTO D COMO SALIDAS (EXCEPTO PD0)
+81 8022 B71009 				        STAA  DDRD    * SEA  ENABLE DEL DISPLAY  PD4  Y RS PD3
+82 		 				                      
+83 		 				       
+84 8025 8604 				        LDAA  #$04
+85 8027 B7103C 				        STAA  HPRIO
+86 		 				 
+87 802A 8600 				        LDAA  #$00
+88 802C 06   				        TAP
+89 		 				 
+90 		 				 
+91 		 				 
+92 		 				        
+93 		 				 
+94 		 				 
+95 		 				 
+96 		 				 **********************************
+97 		 				 *PROGRAMA PRINCIPAL
+98 		 				 **********************************
+99 802D	 				 MAIN 
+100 802D BD8087 				        JSR    INICIA
+101 		 				         
+102 ERROR 011 				 INICIO  CLR    U4
+103 ERROR 011 				 NO_S1   CLR    U3
+104 ERROR 011 				 NO_S    CLR    U2
+105 ERROR 007 				         CLR    U1 
+106 		 				 
+107 		 				  
+108 		 				 
+109 		 				 
+110 8030	 				 OTRO    
+111 8030 863F 				         LDAA    #'?
+112 ERROR 007 				         STAA    ORDEN
+113 		 				        
+114 8032	 				 CICLO
+115 ERROR 007 				         LDAA    ORDEN
+116 8032 813F 				         CMPA    #'?
+117 8034 27FC 				         BEQ     CICLO
+118 		 				 
+119 ERROR 007 				         LDAB    U1
+120 8036 2607 				         BNE     CHECA_U2
+121 8038 8173 				         CMPA    #'s
+122 803A 26F4 				         BNE     OTRO
+123 ERROR 007 				         STAA    U1
+124 803C 7E8030 				         JMP     OTRO
+125 		 				 
+126 		 				 
+127 803F	 				 CHECA_U2
+128 		 				 
+129 ERROR 007 				         LDAB    U2
+130 803F 260E 				         BNE     CHECA_U3
+131 8041 8174 				         CMPA    #'T
+132 ERROR 003 				         BEQ     ES_T
+133 8045 8173 				         CMPA    #'S
+134 8047 27E7 				         BEQ     OTRO
+135 ERROR 007 				         CLR     U1
+136 8049 7E8030 				         JMP     OTRO
+137 ERROR 011 				 ES_T    STAA    U2
+138 804C 7E8030 				         JMP     OTRO
+139 		 				 
+140 804F	 				 CHECA_U3
+141 		 				 
+142 ERROR 007 				         LDAB    U3
+143 804F 260E 				         BNE     CHECA_U4
+144 8051 8161 				         CMPA    #'A
+145 8053 2707 				         BEQ     ES_A
+146 8055 8173 				         CMPA    #'S
+147 ERROR 003 				         BNE     NO_S
+148 ERROR 007 				         CLR     U2
+149 8059 7E8030 				         JMP     OTRO
+150 		 				 
+151 805C	 				 ES_A
+152 		 				 
+153 ERROR 007 				         STAA    U3
+154 805C 7E8030 				         JMP     OTRO
+155 		 				 
+156 805F	 				 CHECA_U4
+157 		 				 
+158 ERROR 007 				         LDAB    U4
+159 805F 260E 				         BNE     CHECA_T
+160 8061 8172 				         CMPA    #'R
+161 8063 2707 				         BEQ     ES_R
+162 8065 8173 				         CMPA    #'S
+163 ERROR 003 				         BNE     NO_S1
+164 ERROR 007 				         CLR     U3
+165 ERROR 007 				         CLR     U2
+166 8069 7E8030 				         JMP     OTRO
+167 		 				 
+168 806C	 				 ES_R
+169 		 				 
+170 ERROR 007 				         STAA    U4
+171 806C 7E8030 				         JMP     OTRO
+172 		 				  
+173 806F	 				 CHECA_T
+174 		 				 
+175 806F 8174 				         CMPA    #'T
+176 8071 2707 				         BEQ     EXITO
+177 8073 8173 				         CMPA    #'S
+178 ERROR 003 				         BNE     INICIO
+179 ERROR 007 				         CLR     U4
+180 ERROR 007 				         CLR     U3
+181 ERROR 007 				         CLR     U2
+182 8077 7E8030 				         JMP     OTRO
+183 		 				 
+184 807A	 				 EXITO
+185 807A 8665 				         LDAA  #'E
+186 ERROR 007 				         STAA  ALTO
+187 807C 8678 				         LDAA  #'X
+188 ERROR 007 				         STAA  BAJO
+189 807E 8669 				         LDAA  #'I
+190 ERROR 007 				         STAA  BASE_H
+191 8080 8674 				         LDAA  #'T
+192 ERROR 007 				         STAA  BASE_L
+193 8082 866F 				         LDAA  #'O
+194 ERROR 007 				         STAA  V3
+195 		 				 
+196 8084 7E802D 				         JMP MAIN       
+197 		 				 
+198 		 				 
+199 		 				 ***********************************
+200 		 				 * INICIA
+201 		 				 ***********************************
+202 8087	 				 INICIA
+203 		 				      
+204 ERROR 007 				       CLR  SEG
+205 		 				 
+206 8087 7F1002 				       CLR  PORTG
+207 808A 86f4 				       LDAA #$F4         
+208 ERROR 007 				       STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
+209 		 				 
+210 ERROR 007 				       LDX #TMSK2
+211 ERROR 007 				       BSET $00,X,#$40    * HABILITA INTERRUPCION TIMER T-REAL
+212 808C 0E   				       CLI
+213 		 				 
+214 ERROR 007 				       LDX #PACTL
+215 ERROR 007 				       BSET $00,X,#$50    * HABILITA PAEN -ACUMULADOR PULSOS ALTOS-
+216 808D 7F1027 				       CLR PACNT          * BORRA ACUMULADOR DE PULSOS
+217 		 				 
+218 8090 8610 				       LDAA #$10
+219 ERROR 007 				       STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE INICIAL
+220 8092 8660 				       LDAA #$60
+221 ERROR 007 				       STAA BASE_L    
+222 		 				       
+223 8094 18CE1060 		       LDY  #$1060      
+224 		 				       
+225 8098 8616 				       LDAA #$16
+226 ERROR 007 				       STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS
+227 809A 8653 				       LDAA #$53
+228 ERROR 007 				       STAA BAS_L   
+229 		 				 
+230 		 				 
+231 ERROR 007 				       CLR  ALTO          * INICIA INDICE MUESTRA EN 0
+232 ERROR 007 				       CLR  BAJO
+233 		 				 
+234 809C 39   				        RTS
+235 		 				 ***********************************
+236 		 				 * SACA
+237 		 				 ***********************************
+238 809D	 				 SACA
+239 		 				             
+240 		 				        
+241 ERROR 007 				        LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)
+242 ERROR 007 				        LDAB  BAJO
+243 809D 188F 				        XGDY
+244 809F 1808 				        INY
+245 80A1 188F 				        XGDY
+246 80A3 BD8179 				        JSR   BINBCD
+247 80A6 BD8105 				        JSR   DISPLAY
+248 ERROR 001/002/003 		        JSR   COMA
+249 		 				  
+250 ERROR 007 				        LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)
+251 ERROR 007 				        LDAB  BASE_L
+252 80AC 188F 				        XGDY
+253 		 				        
+254 80AE 1808 				        INY
+255 80B0 4F   				        CLRA
+256 80B1 18E600 				        LDAB  $00,Y  
+257 80B4 BD8182 				        JSR   BNBCD
+258 80B7 BD8115 				        JSR   DSPLY
+259 ERROR 001/002/003 		        JSR   COMA
+260 		 				 
+261 80BD 1808 				        INY
+262 80BF 4F   				        CLRA
+263 80C0 18E600 				        LDAB  $00,Y
+264 80C3 BD8182 				        JSR   BNBCD
+265 80C6 BD8115 				        JSR   DSPLY
+266 ERROR 001/002/003 		        JSR   COMA
+267 		 				 
+268 80CC 1808 				        INY
+269 80CE 4F   				        CLRA
+270 80CF 18E600 				        LDAB  $00,Y
+271 80D2 BD8182 				        JSR   BNBCD
+272 80D5 BD8115 				        JSR   DSPLY
+273 ERROR 001/002/003 		        JSR   COMA
+274 		 				 
+275 80DB 1808 				        INY
+276 80DD 4F   				        CLRA
+277 80DE 18E600 				        LDAB  $00,Y
+278 80E1 BD8182 				        JSR   BNBCD
+279 80E4 BD8115 				        JSR   DSPLY
+280 ERROR 001/002/003 		        JSR   COMA
+281 		 				  
+282 80EA 1808 				        INY
+283 80EC 4F   				        CLRA 
+284 80ED 18E600 				        LDAB  $00,Y
+285 80F0 BD8182 				        JSR   BNBCD
+286 80F3 BD8115 				        JSR   DSPLY
+287 		 				        
+288 80F6 188F 				        XGDY
+289 ERROR 007 				        STAA BASE_H
+290 ERROR 007 				        STAB BASE_L
+291 		 				 
+292 80F8 BD812E 				        JSR   CRYTRN
+293 		 				 
+294 80FB 39   				        RTS
+295 		 				 ***********************************
+296 		 				 * COMA
+297 		 				 ***********************************
+298 ERROR 009 				 COMA
+299 ERROR 007 				        LDX   #SCSR 
+300 		 				        
+301 80FC B6102E 				        LDAA  SCSR
+302 80FF 862c 				        LDAA  #$2C             * COMA
+303 8101 B7102F 				        STAA  SCDR
+304 8104	 				 C1
+305 ERROR 007 				        BRCLR $00,X,#$80 C1 
+306 8104 39   				        RTS
+307 		 				 ***********************************
+308 		 				 * DESPLIEGA
+309 		 				 ***********************************
+310 8105	 				 DISPLAY
+311 		 				        
+312 ERROR 007 				        LDX   #SCSR 
+313 		 				        
+314 8105 B6102E 				        LDAA  SCSR
+315 ERROR 007 				        LDAA  U1             * U1
+316 8108 8B30 				        ADDA  #$30
+317 810A B7102F 				        STAA  SCDR
+318 810D	 				 T1
+319 ERROR 007 				        BRCLR $00,X,#$80 T1 
+320 		 				       
+321 810D B6102E 				        LDAA  SCSR
+322 ERROR 007 				        LDAA  U2             * U2
+323 8110 8B30 				        ADDA  #$30
+324 8112 B7102F 				        STAA  SCDR
+325 8115	 				 T2
+326 ERROR 007 				        BRCLR $00,X,#$80 T2 
+327 		 				 
+328 8115	 				 DSPLY  
+329 ERROR 007 				        LDX   #SCSR
+330 		 				     
+331 8115 B6102E 				        LDAA SCSR
+332 ERROR 007 				        LDAA  U3             * U3
+333 8118 8B30 				        ADDA  #$30
+334 811A B7102F 				        STAA  SCDR
+335 811D	 				 T3
+336 ERROR 007 				        BRCLR $00,X,#$80 T3 
+337 		 				       
+338 811D B6102E 				        LDAA SCSR 
+339 ERROR 007 				        LDAA  U4             * U4
+340 8120 8B30 				        ADDA  #$30
+341 8122 B7102F 				        STAA  SCDR
+342 8125	 				 T4
+343 ERROR 007 				        BRCLR $00,X,#$80 T4 
+344 		 				    
+345 8125 B6102E 				        LDAA SCSR
+346 ERROR 007 				        LDAA  U5             * U5
+347 8128 8B30 				        ADDA  #$30
+348 812A B7102F 				        STAA  SCDR
+349 812D	 				 T5
+350 ERROR 007 				        BRCLR $00,X,#$80 T5  
+351 		 				        
+352 812D 39   				        RTS
+353 		 				 
+354 		 				 ***********************************
+355 		 				 * CARRY RETURN
+356 		 				 ***********************************
+357 		 				 
+358 812E	 				 CRYTRN
+359 ERROR 007 				        LDX   #SCSR 
+360 812E B6102E 				        LDAA  SCSR
+361 8131 860a 				        LDAA  #$0A             * NEW LINE     
+362 8133 B7102F 				        STAA  SCDR
+363 8136	 				 CR1
+364 ERROR 007 				        BRCLR $00,X,#$80 CR1        
+365 		 				 
+366 8136 B6102E 				        LDAA SCSR
+367 8139 860d 				        LDAA #$0D              * CARRY RETURN     
+368 813B B7102F 				        STAA SCDR
+369 813E	 				 CR2
+370 ERROR 007 				        BRCLR $00,X,#$80 CR2        
+371 		 				 
+372 813E 39   				        RTS
+373 		 				 ***********************************
+374 		 				 *  DESPLIEGUE DE DATO RECIBIDO
+375 		 				 ***********************************
+376 		 				 
+377 813F	 				 DATARX
+378 ERROR 007 				        LDX   #SCSR 
+379 813F B6102E 				        LDAA  SCSR
+380 ERROR 007 				        LDAA  ORDEN             * NEW LINE     
+381 8142 B7102F 				        STAA  SCDR
+382 8145	 				 DT1
+383 ERROR 007 				        BRCLR $00,X,#$80 DT1        
+384 		 				 
+385 8145 B6102E 				        LDAA SCSR 
+386 8148 863a 				        LDAA #$3A              * DOS PUNTOS    
+387 814A B7102F 				        STAA SCDR
+388 814D	 				 DT2
+389 ERROR 007 				        BRCLR $00,X,#$80 DT2        
+390 		 				 
+391 814D 39   				        RTS
+392 		 				 ***********************************
+393 		 				 * voltimetro
+394 		 				 ***********************************
+395 814E	 				 VOLTA
+396 ERROR 007 				       LDX #ADCTL      
+397 		 				 
+398 814E 8680 				       LDAA #$80
+399 8150 B71039 				       STAA OPTION        * PONE EN MARCHA EL ADC
+400 		 				     
+401 8153 8610 				       LDAA #$10
+402 8155 B71030 				       STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0
+403 		 				 
+404 8158	 				 E1
+405 ERROR 007 				       BRCLR $00,X,#$80 E1  
+406 8158 F61031 				       LDAB ADR1
+407 ERROR 007 				       STAB V1
+408 		 				       
+409 815B 8680 				       LDAA #$80
+410 815D B71039 				       STAA OPTION        * PONE EN MARCHA EL ADC
+411 		 				     
+412 8160 8611 				       LDAA #$11
+413 8162 B71030 				       STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1
+414 		 				 
+415 8165	 				 E2
+416 ERROR 007 				       BRCLR $00,X,#$80 E2  
+417 8165 F61032 				       LDAB ADR2
+418 ERROR 007 				       STAB V2
+419 		 				      
+420 8168 8612 				       LDAA #$12
+421 816A B71030 				       STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2
+422 		 				 
+423 816D	 				 E3
+424 ERROR 007 				       BRCLR $00,X,#$80 E3  
+425 816D F61033 				       LDAB ADR3
+426 ERROR 007 				       STAB V3 
+427 		 				 
+428 8170 8613 				       LDAA #$13
+429 8172 B71030 				       STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3
+430 		 				 
+431 8175	 				 E4
+432 ERROR 007 				       BRCLR $00,X,#$80 E4  
+433 8175 F61034 				       LDAB ADR4
+434 ERROR 007 				       STAB V4
+435 		 				 
+436 		 				            
+437 8178 39   				       RTS
+438 		 				 ***********************************
+439 		 				 * CONVIERTE A BCD
+440 		 				 ***********************************
+441 		 				 
+442 8179	 				 BINBCD
+443 		 				      
+444 8179 CE2710 				       LDX  #$2710
+445 817C 02   				       IDIV 
+446 817D 8F   				       XGDX
+447 ERROR 007 				       STAB U1
+448 817E 8F   				       XGDX
+449 ERROR 007 				       LDX  #$3E8
+450 817F 02   				       IDIV
+451 8180 8F   				       XGDX
+452 ERROR 007 				       STAB U2
+453 8181 8F   				       XGDX
+454 		 				 
+455 8182	 				 BNBCD
+456 ERROR 007 				       LDX  #$64
+457 8182 02   				       IDIV
+458 8183 8F   				       XGDX
+459 ERROR 007 				       STAB U3
+460 8184 8F   				       XGDX
+461 ERROR 007 				       LDX  #$A
+462 8185 02   				       IDIV
+463 8186 8F   				       XGDX
+464 ERROR 007 				       STAB U4
+465 8187 8F   				       XGDX
+466 ERROR 007 				       STAB U5
+467 		 				 
+468 		 				 
+469 		 				 
+470 8188 39   				       RTS
+471 		 				 
+472 		 				 
+473 		 				 
+474 		 				 ***********************************
+475 		 				 * ATENCION A INTERRUPCION SERIAL
+476 		 				 ***********************************
+477 		F100 				        ORG  $F100
+478 		 				   
+479 F100 36   				        PSHA
+480 		 				  
+481 F101 B6102E 				        LDAA SCSR
+482 F104 B6102F 				        LDAA SCDR
+483 ERROR 007 				        STAA ORDEN
+484 		 				 
+485 F107 32   				        PULA  
+486 		 				 
+487 F108 3B   				        RTI
+488 		 				 
+489 		 				 ***********************************
+490 		 				 * ATENCION A INTERRUPCION REAL TIME
+491 		 				 ***********************************
+492 		F110 				       ORG  $F110
+493 		 				 
+494 F110 36   				       PSHA
+495 F111 3C   				       PSHX
+496 		 				 
+497 ERROR 007 				       LDX #TFLG2
+498 ERROR 007 				       BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
+499 ERROR 007 				       DEC TEMPO
+500 F112 2703 				       BEQ SEGUNDO
+501 		 				       
+502 F114 32   				       PULA
+503 F115 38   				       PULX
+504 F116 3B   				       RTI
+505 		 				 
+506 F117	 				 SEGUNDO
+507 F117 86ff 				       LDAA #$FF
+508 ERROR 007 				       STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO    
+509 F119 86f4 				       LDAA #$F4         
+510 ERROR 007 				       STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
+511 F11B 7C1002 				       INC  PORTG
+512 		 				      
+513 F11E 32   				       PULA
+514 F11F 38   				       PULX
+515 F120 3B   				       RTI
+516 		 				 ***********************************
+517 		 				 * VECTOR INTERRUPCION SERIAL
+518 		 				 ***********************************
+519 		FFD6 				        ORG   $FFD6
+520 ERROR 004 				        FCB   $F1,$00       
+521 		 				 
+522 		 				 ***********************************
+523 		 				 * VECTOR INTERRUPCION REAL TIME
+524 		 				 ***********************************
+525 		FFF0 				        ORG   $FFF0
+526 ERROR 004 				        FCB   $F1,$10       
+527 		 				 
+528 		 				 ***********************************
+529 		 				 *RESET
+530 		 				 ***********************************
+531 		FFFE 				        ORG    $FFFE
+532 ERROR 011 				 RESET  FCB    $80,$00
+533 		 				 ***********************************
+534 			 				        END   $8000
+
+
+=== Descripcion de errores ===
+001   CONSTANTE INEXISTENTE
+002   VARIABLE INEXISTENTE
+003   ETIQUETA INEXISTENTE
+004   MNEMÓNICO INEXISTENTE
+005   INSTRUCCIÓN CARECE DE  OPERANDO(S)
+006   INSTRUCCIÓN NO LLEVA OPERANDO(S)
+007   MAGNITUD DE  OPERANDO ERRONEA
+008   SALTO RELATIVO MUY LEJANO
+009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN
+010   NO SE ENCUENTRA END
+011   SINTAXIS INCORRECTA
+012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
