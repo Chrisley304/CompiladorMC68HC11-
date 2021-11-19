@@ -208,3 +208,45 @@ def EscrituraHTML(lineas_comp:list,lineas_orig:list,filename):
     filename = splitext(filename)[0]
     with open("Salida/"+filename+".html","w",encoding="UTF-8") as archivo:
         archivo.write(texto_final)
+
+
+def EscrituraS19(lineas_comp:list,filename):
+    texto_final = ""
+    contadorDeMemoria = -1
+    counter = 0
+    aux = []
+    
+    for i in range(len(lineas_comp)):
+
+        # Buscamos el inicio del programa
+        if(contadorDeMemoria == -1):
+            if(len(lineas_comp[i]['contenido']) == 2 and lineas_comp[i]['contenido'][0].lower() == 'org'):
+                contadorDeMemoria = ConvertHex(lineas_comp[i]['contenido'][1][1:])
+        else:
+            # Es una instrucción compilada
+            if not lineas_comp[i]["OPCODE"] == "":
+                aux = Divide_str(lineas_comp[i]["OPCODE"])
+
+                for item in aux:
+                    if(counter == 0):
+                        texto_final += "\n <{}>".format(getHexString(contadorDeMemoria))
+                        counter = 16
+                    texto_final += " " + item
+                    contadorDeMemoria = SumHex(contadorDeMemoria, 1)
+                    counter -= 1
+
+                aux = Divide_str(lineas_comp[i]["operando"])
+
+                for item in aux:
+                    if(counter == 0):
+                        texto_final += "\n <{}>".format(getHexString(contadorDeMemoria))
+                        counter = 16
+                
+                    texto_final += " " + item
+                    contadorDeMemoria = SumHex(contadorDeMemoria, 1)
+                    counter -= 1
+
+
+    filename = splitext(filename)[0]
+    with open("Salida/"+filename+".S19","w",encoding="UTF-8") as archivo:
+        archivo.write(texto_final)

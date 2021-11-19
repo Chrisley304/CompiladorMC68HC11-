@@ -117,6 +117,13 @@ def Main():
     except:
         print("Error al generar el archivo HTML")
 
+    try:
+        EscrituraS19(lineas_formateadas,filename)
+        print("El archivo S19 se genero correctamente.")
+    except:
+        print("Error al generar el archivo S19")
+
+
 Main()
 
 
@@ -124,8 +131,8 @@ Main()
     TODO:
     Axel:
         - Caso 4 instrucciones Especiales (Clase 23 sep)
-        - Archivo .S19
-        - Error salto muy grande
+    ✓   - Archivo .S19
+    ✓   - Error salto muy grande
     ✓    - Arreglar mapa JSON ( Bytes )
     
     Chris:

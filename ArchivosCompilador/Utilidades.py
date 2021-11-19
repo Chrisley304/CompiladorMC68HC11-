@@ -81,3 +81,9 @@ def formater(line):
 def Convert_to_HTML(cont,direccion,OPCODE,operando,original):
     salida = "<p>{}: {} (<span style=\"color: red;\">{}</span><span style=\"color: blue;\">{}</span>):{}</p>".format(cont,direccion,OPCODE,operando,original)
     return salida
+
+
+def Divide_str(l):
+
+    for i in range(0, len(l), 2): 
+        yield l[i:i + 2]
