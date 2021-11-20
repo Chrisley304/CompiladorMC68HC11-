@@ -18,8 +18,8 @@ def getPrograma(fileName):
 def Main():
     
     Mnemonicos = getJSON()
-    # filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    filename = "Profe.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    # filename = "Profe.ASC" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
     lineas = getPrograma(filename)
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
@@ -62,8 +62,9 @@ def Main():
                 else: # se envia al precompilador
                     try:
                         Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
-                    except:
+                    except Exception as e:
                         print("Linea con error: {}".format(linea))
+                        print(e)
                         return
             # No tiene espacio
             else:
@@ -82,8 +83,14 @@ def Main():
                         Variables[linea["contenido"][0]] = ConvertHex(linea["contenido"][2][1:])
                         linea["compilado"] = getHexString(Variables[linea["contenido"][0]]) + "\t"
                     
-                    else: #Error algo escribio mal el usuario
-                        linea["compilado"] = "ERROR 011"
+                    else: #Puede ser una etiqueta con mnemonico
+                        
+                        if linea["contenido"][1] in Mnemonicos:
+                            Etiquetas[linea["contenido"][0]] = Cont_memoria
+                            Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
+
+                        else:
+                            linea["compilado"] = "ERROR 011"
 
         else:
             linea["compilado"] = "\t\t"
@@ -98,12 +105,12 @@ def Main():
         except:
             print("Linea con error: {}".format(linea))
             return
-            
 
     if not flagDeEnd:
         # Error no hay END
         lineas_formateadas.append({"compilado":"ERROR 010"})
         lineas.append(" ")
+    
     # Escritura del archivo .LST
     try:
         EscrituraLST(lineas_formateadas,lineas,filename)
@@ -138,7 +145,7 @@ Main()
     Chris:
     ✓    - Verificar comparaciones de BYTES (Error 007)
     ✓    - Arreglar error 007 donde deberia de estar 1,2 o 3
-        - Punto extra: Colores listado HTML
+    ✓    - Punto extra: Colores listado HTML
     ✓    - Saltos para adelante
     ✓    - Separar Etiquetas de Variables/Constante
     ✓    - Poner mensaje de Compilado correcto

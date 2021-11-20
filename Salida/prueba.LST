@@ -12,7 +12,7 @@
 12 8000 7E800B 				     JMP     SINBANDERA
 13 8003 9645 				     LDAA    $45
 14 8005 D60B 				     LDAB    11
-15 8007 2602 				     BNE     SINBANDERA
+15 8007 2604 				     BNE     SINBANDERA
 16 ERROR 005 				     LDAB    *DEBE DAR ERROR
 17 8009 8680 				     LDAA    #$80
 18 		 				 

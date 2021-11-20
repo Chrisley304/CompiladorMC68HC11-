@@ -2,7 +2,10 @@ from io import open_code
 from ArchivosCompilador.Utilidades import *
 
 def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict):
-    operando = linea["contenido"][1]
+    if linea["contenido"][0] in Etiquetas: 
+        operando = linea["contenido"][2]
+    else:
+        operando = linea["contenido"][1]
     opcode = mnemonico["IMM"][0]
     compilado = ""
     
@@ -22,10 +25,16 @@ def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict)
     else:  # esta utilizando una constante
         variable = operando[1:]
         if variable in Variables:  # si esta registrada existe
-            compilado = opcode + Variables[variable]
+            hex_op = getHexString(Variables[variable])
+            if len(hex_op) == 2:
+                hex_op = "00{}".format(hex_op)
+            compilado = opcode + hex_op
             linea["operando"] = Variables[variable]
         elif variable in Etiquetas:
-            compilado = opcode + Etiquetas[variable]
+            hex_op = getHexString(Etiquetas[variable])
+            if len(hex_op) == 2:
+                hex_op = "00{}".format(hex_op)
+            compilado = opcode + hex_op
             linea["operando"] = Etiquetas[variable]
         else:  # Variable no existe
             # Se deja pendiente por si es una etiqueta
@@ -44,7 +53,10 @@ def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict)
 
 
 def INDX(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
-    operando = linea["contenido"][1]
+    if linea["contenido"][0] in Etiquetas: 
+        operando = linea["contenido"][2]
+    else:
+        operando = linea["contenido"][1]
     opcode = mnemonico["IND,X"][0]
     compilado = ""
     
@@ -82,7 +94,10 @@ def INDX(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonic
         return ContMemoria
 
 def INDY(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
-    operando = linea["contenido"][1]
+    if linea["contenido"][0] in Etiquetas: 
+        operando = linea["contenido"][2]
+    else:
+        operando = linea["contenido"][1]
     opcode = mnemonico["IND,Y"][0]
     compilado = ""
     
@@ -120,7 +135,10 @@ def INDY(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonic
         return ContMemoria
 
 def DIR_EXT(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
-    operando = linea["contenido"][1]
+    if linea["contenido"][0] in Etiquetas: 
+        operando = linea["contenido"][2]
+    else:
+        operando = linea["contenido"][1]
     dir_o_ext = None # Si es 1 es DIR, si es 2 es EXT
     hex_op = None
     compilado = ""
@@ -171,11 +189,11 @@ def DIR_EXT(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemo
             elif len(loc_str) == 4:  # Debe de ser de 16 bits para EXT
                 return SumHex(ContMemoria, int(float(mnemonico["EXT"][1])))
     
+    if operando in Variables or operando in Etiquetas:
+        if len(hex_op) == 2:
+            hex_op = "00{}".format(hex_op)
+
     if dir_o_ext == 1: # Es DIR
-        try:
-            opcode = mnemonico["DIR"][0]
-        except:
-            print("Aqui se rompio:\nContenido de la linea: {}".format(linea["contenido"]))
         opcode = mnemonico["DIR"][0]
         compilado = opcode + hex_op
         if len(compilado)/2 == int(float(mnemonico["DIR"][1])):

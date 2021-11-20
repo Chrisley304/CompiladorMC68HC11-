@@ -5,7 +5,10 @@ from ArchivosCompilador.Utilidades import *
 # Entra una linea -> {espacio=, contenido=[],compilado=,localidad=}
 def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,ContMemoria:hex):
     
-    parametros = linea["contenido"] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+    if linea["contenido"][0] in Etiquetas: 
+        parametros = linea["contenido"][1:] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+    else:
+        parametros = linea["contenido"]
     
     nombre_mnemo = parametros[0]  # Se obtiene el nombre del mnemonico
 
@@ -91,9 +94,11 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
         linea["localidad"] = ContMemoria
         return ContMemoria
 
-
 def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict):
-    parametros = linea["contenido"] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+    if linea["contenido"][0] in Etiquetas: 
+        parametros = linea["contenido"][1:] # Se obtiene la lista del indice 1-.. debido a que se omite el primer indice que ya no nos es util aquí
+    else:
+        parametros = linea["contenido"]
     nombre_mnemo = parametros[0]  # Se obtiene el nombre del mnemonico
     mnemonico = Mnemonicos[nombre_mnemo]
     ContMemoria = linea["localidad"]
@@ -102,7 +107,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
         if parametros[1] in Etiquetas:
             # CAMBIAR A SALTOS PARA ADELANTE 
             etiqueta = Etiquetas[parametros[1]]
-            origen = SumHex(ContMemoria,2)
+            origen = ContMemoria
 
             if(CheckHex(etiqueta, origen, False)):
                 salto = ResHex(etiqueta,origen)
@@ -127,9 +132,17 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
             variable = operando[1:]
             opcode = mnemonico["IMM"][0]
             if variable in Variables:  # si esta registrada existe
-                compilado = opcode + Variables[variable]
-            elif variable in Etiquetas:  # si esta registrada existe
-                compilado = opcode + Etiquetas[variable]
+                hex_op = getHexString(Variables[variable])
+                if len(hex_op) == 2:
+                    hex_op = "00{}".format(hex_op)
+                compilado = opcode + hex_op
+                linea["operando"] = Variables[variable]
+            elif variable in Etiquetas:
+                hex_op = getHexString(Etiquetas[variable])
+                if len(hex_op) == 2:
+                    hex_op = "00{}".format(hex_op)
+                compilado = opcode + hex_op
+                linea["operando"] = Etiquetas[variable]
             else:  # Variable no existe
                 linea["compilado"] = "ERROR 001/002/003"
 
@@ -152,6 +165,10 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
 
             else: # No esta registrada
                 linea["compilado"] = "ERROR 001/002/003"
+
+            if operando in Variables or operando in Etiquetas:
+                if len(hex_op) == 2:
+                    hex_op = "00{}".format(hex_op)
 
             if dir_o_ext == 1: # Es DIR
                 opcode = mnemonico["DIR"][0]
