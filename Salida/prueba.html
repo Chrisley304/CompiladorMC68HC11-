@@ -12,21 +12,23 @@
 </p><p>8: 		:*** PRINCIPAL ***
 </p><p>9: 		8000:    ORG    $8000
 </p><p>10: 8000	:INICIO
-</p><p>11: ERROR 004:    AB
-</p><p>12: 8000 (<span style="color: red;">7E</span><span style="color: blue;">800B</span>):    JMP     SINBANDERA
-</p><p>13: 8003 (<span style="color: red;">96</span><span style="color: blue;">45</span>):    LDAA    $45
-</p><p>14: 8005 (<span style="color: red;">D6</span><span style="color: blue;">0B</span>):    LDAB    11
-</p><p>15: 8007 (<span style="color: red;">26</span><span style="color: blue;">04</span>):    BNE     SINBANDERA
-</p><p>16: ERROR 005:    LDAB    *DEBE DAR ERROR
-</p><p>17: 8009 (<span style="color: red;">86</span><span style="color: blue;">80</span>):    LDAA    #$80
-</p><p>18: 		:
-</p><p>19: 800B	:SINBANDERA
-</p><p>20: 800B (<span style="color: red;">DC</span><span style="color: blue;">17</span>):    ldd     $17
-</p><p>21: 800D (<span style="color: red;">DE</span><span style="color: blue;">0F</span>):    LDX     15  * NO se que hace
-</p><p>22: 800F (<span style="color: red;">9B</span><span style="color: blue;">7c</span>):    ADDA    $7C
-</p><p>23: 8011 (<span style="color: red;">94</span><span style="color: blue;">f0</span>):    ANDA    $F0
-</p><p>24: 8013 (<span style="color: red;">26</span><span style="color: blue;">F6</span>):    BNE     SINBANDERA
-</p><p>25: 8015 (<span style="color: red;">7E</span><span style="color: blue;">8000</span>):    JMP     INICIO
-</p><p>26: ERROR 001/002/003:    JMP     BANDERA *DEBE DAR ERROR
-</p><p>27: 		:
-</p><p>28: 			:    END     * Fin del programa</p><p>=== Descripcion de errores ===<br>001   CONSTANTE INEXISTENTE<br>002   VARIABLE INEXISTENTE<br>003   ETIQUETA INEXISTENTE<br>004   MNEMÓNICO INEXISTENTE<br>005   INSTRUCCIÓN CARECE DE  OPERANDO(S)<br>006   INSTRUCCIÓN NO LLEVA OPERANDO(S)<br>007   MAGNITUD DE  OPERANDO ERRONEA<br>008   SALTO RELATIVO MUY LEJANO<br>009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN<br>010   NO SE ENCUENTRA END<br>011   SINTAXIS INCORRECTA<br>012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)</p></body></html>
+</p><p>11: 		B123:    ORG    $B123
+</p><p>12: ERROR 004:    AB
+</p><p>13: B123 (<span style="color: red;">7E</span><span style="color: blue;">B12C</span>):    JMP     SINBANDERA * Si debe jalar, pero es en post
+</p><p>14: B126 (<span style="color: red;">96</span><span style="color: blue;">45</span>):    LDAA    $45
+</p><p>15: B128 (<span style="color: red;">D6</span><span style="color: blue;">0B</span>):    LDAB    11
+</p><p>16: ERROR 008:    BNE     INICIO
+</p><p>17: ERROR 005:    LDAB    *DEBE DAR ERROR
+</p><p>18: B12A (<span style="color: red;">86</span><span style="color: blue;">80</span>):    LDAA    #$80
+</p><p>19: 		:
+</p><p>20: B12C	:SINBANDERA
+</p><p>21: B12C (<span style="color: red;">DC</span><span style="color: blue;">17</span>):    ldd     $17
+</p><p>22: B12E (<span style="color: red;">DE</span><span style="color: blue;">0F</span>):    LDX     15  * NO se que hace
+</p><p>23: B130 (<span style="color: red;">9B</span><span style="color: blue;">7c</span>):    ADDA    $7C
+</p><p>24: B132 (<span style="color: red;">94</span><span style="color: blue;">f0</span>):    ANDA    $F0
+</p><p>25: 		0123:    ORG     $0123
+</p><p>26: 0123 (<span style="color: red;">26</span><span style="color: blue;">07</span>):    BNE     SINBANDERA
+</p><p>27: 0125 (<span style="color: red;">7E</span><span style="color: blue;">8000</span>):    JMP     INICIO
+</p><p>28: ERROR 001/002/003:    JMP     BANDERA *DEBE DAR ERROR
+</p><p>29: 		:
+</p><p>30: 			:    END     * Fin del programa</p><p>=== Descripcion de errores ===<br>001   CONSTANTE INEXISTENTE<br>002   VARIABLE INEXISTENTE<br>003   ETIQUETA INEXISTENTE<br>004   MNEMÓNICO INEXISTENTE<br>005   INSTRUCCIÓN CARECE DE  OPERANDO(S)<br>006   INSTRUCCIÓN NO LLEVA OPERANDO(S)<br>007   MAGNITUD DE  OPERANDO ERRONEA<br>008   SALTO RELATIVO MUY LEJANO<br>009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN<br>010   NO SE ENCUENTRA END<br>011   SINTAXIS INCORRECTA<br>012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)</p></body></html>

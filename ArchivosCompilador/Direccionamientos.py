@@ -184,10 +184,7 @@ def DIR_EXT(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemo
             # Se deja pendiente por si es una etiqueta
             linea["localidad"] = ContMemoria
             loc_str = getHexString(ContMemoria)
-            if len(loc_str) == 2:  # Debe de ser de 8 bits para DIR
-                return SumHex(ContMemoria, int(mnemonico["DIR"][1]))
-            elif len(loc_str) == 4:  # Debe de ser de 16 bits para EXT
-                return SumHex(ContMemoria, int(float(mnemonico["EXT"][1])))
+            return SumHex(ContMemoria, int(float(mnemonico["EXT"][1])))
     
     if operando in Variables or operando in Etiquetas:
         if len(hex_op) == 2:

@@ -63,7 +63,7 @@ def Main():
                     try:
                         Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
                     except Exception as e:
-                        print("Linea con error: {}".format(linea))
+                        print("Linea con error (pre): {}".format(linea))
                         print(e)
                         return
             # No tiene espacio
@@ -102,14 +102,15 @@ def Main():
         try:
             if linea["compilado"] == None and len(linea["contenido"]) !=0:
                 PostCompilado(linea,Mnemonicos,Etiquetas,Variables)   
-        except:
-            print("Linea con error: {}".format(linea))
+        except Exception as e:
+            print("Linea con error (post): {}".format(linea))
+            print(e)
             return
 
     if not flagDeEnd:
         # Error no hay END
         lineas_formateadas.append({"compilado":"ERROR 010"})
-        lineas.append(" ")
+        lineas.append("")
     
     # Escritura del archivo .LST
     try:
