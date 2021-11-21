@@ -58,9 +58,10 @@ def INDX(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonic
         operando = linea["contenido"][2]
     else:
         operando = linea["contenido"][1]
+    nombre_mne = mnemonico["nombre"]
     opcode = mnemonico["IND,X"][0]
     compilado = ""
-    
+
     if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
         compilado = opcode + operando[-2]
         linea["operando"] = operando[-2].upper()
@@ -222,3 +223,84 @@ def DIR_EXT(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemo
         linea["compilado"] = "ERROR 007"
         linea["localidad"] = ContMemoria
         return ContMemoria
+
+
+def Especiales(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mnemonico: dict):
+    
+    operandos = linea["contenido"][1].split(",")
+
+    #Directo
+    if(len(operandos) == 2):
+        
+        primer = operandos[0]
+        segundo = operandos[1]
+        
+        if primer[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+            hex_op = primer[1:]
+            linea["operando"] = hex_op.upper()
+            if len(hex_op) == 2:  # Si es de 8 bits es DIR
+                dir_o_ext = 1
+            elif len(hex_op) == 4:  # Si es de 16 bits es EXT
+                # Error
+                
+                pass
+
+        elif primer[0] == "'":  # es un caracter ASCII
+            dec = ord(primer[1])
+            hex_op = getHexStringInt(int(dec))
+            linea["operando"] = hex_op
+            if len(hex_op) == 2:  # es de 8 bits (DIR)
+                dir_o_ext = 1
+            elif len(hex_op) == 4:  # es de 16 bits (EXT)
+                dir_o_ext = 2
+
+        elif primer.isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
+            # Obtiene el numero decimal para convertirlo a hexadecimal despues
+            hex_op = getHexStringInt(int(primer))
+            linea["operando"] = hex_op
+
+            if len(hex_op) == 2:  # Debe de ser de 8 bits para DIR
+                dir_o_ext = 1
+            elif len(hex_op) == 4:  # Debe de ser de 16 bits para EXT
+                dir_o_ext = 2
+
+    #Ind,x o Ind, y
+    elif(len(operandos) == 3):
+        primer = operandos[0]
+        segundo = operandos[2]
+        
+        if(operandos[1] == "x"):
+            pass
+            
+        elif(operandos[1] == "y"):
+            pass
+
+         #Error de sintaxis
+        else:
+            pass
+
+    #Error de sintaxis
+    else:
+        pass
+
+
+    dir_o_ext = None # Si es 1 es DIR, si es 2 es EXT
+    hex_op = None
+    compilado = ""
+    
+    # Instrucciones especiales:
+
+    if operando[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+        compilado = opcode + operando[-2]
+        linea["operando"] = operando[-2]
+    elif operando[0] == "'":  # es un caracter ASCII
+        dec = ord(operando[1])
+        compilado = opcode + getHexStringInt(dec)
+        linea["operando"] = getHexStringInt(dec)
+    # La cadena son solo numeros, por tanto esta en dec
+    elif operando[-2].isnumeric():
+        # Obtiene el numero decimal para convertirlo a hexadecimal despues
+        dec = operando[-2]
+        compilado = opcode + getHexStringInt(dec)
+        linea["operando"] = getHexString(dec)
+    pass

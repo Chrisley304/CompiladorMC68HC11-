@@ -16,6 +16,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
         # Si entra en la condicion sabemos que es una instruccion
         
         mnemoni = Mnemonicos[nombre_mnemo]
+        mnemoni["nombre"] = nombre_mnemo
         # {INH:OPCODE; NBYTES}
         if "INH" in mnemoni:  # Es una intruccion en INH
             if len(parametros) > 1:  # ["mnemonico","OPERANDOS"]
@@ -81,8 +82,12 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
                 elif ",y" in operando:  # Es IND,Y
                     return INDY(linea,Variables,Etiquetas,ContMemoria,mnemoni)
 
+                elif nombre_mne == "BRCLR" or nombre_mne =="BRSET" or nombre_mne == "BCLR" or nombre_mne =="BSET":
+                    return Especiales(linea,Variables,Etiquetas,ContMemoria,mnemoni)
+                
                 else:  # Puede ser DIR o EXT
                     return DIR_EXT(linea,Variables,Etiquetas,ContMemoria,mnemoni)
+
             else:
                 linea["compilado"] = "ERROR 005"
                 linea["localidad"] = ContMemoria
