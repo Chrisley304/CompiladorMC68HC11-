@@ -1,0 +1,42 @@
+  ADDR B1 B2 B3 B4 C:\Users\chris\Documentos SSD\Proyectos Python\  PAGE       1
+
+                   *** VARIABLES ***
+
+                   V1   EQU   $1032
+                   PRUEBA   EQU   $1033
+                   ADR4   EQU   $1034
+                   OPTION EQU   $1039
+
+                   *** PRINCIPAL ***
+                       ORG    $8000
+
+                   INICIO
+  8000 01              NOP
+  8001 7E 80 0F        JMP     SINBANDERA * Si debe jalar, pero es en post
+  8004 26 FA           BNE     INICIO
+  8006 26 07           BNE     SINBANDERA
+  8008 01              NOP
+  8009 96 45           LDAA    $45
+  800B D6 0B           LDAB    11
+  800D 86 80           LDAA    #$80
+
+                   SINBANDERA
+  800F DC 17           ldd     $17
+  8011 DE 0F           LDX     15
+  8013 9B 7C           ADDA    $7C
+  8015 94 F0           ANDA    $F0
+                       ORG     $0123
+                       BNE     SINBANDERA
+E                              ^ The offset must fit in 8 bits.
+  0123 7E 80 00        JMP     INICIO
+
+                       END
+
+  Symbol Table 
+
+  V1                 1032
+  OPTION             1039
+  SINBANDERA         800F
+  ADR4               1034
+  PRUEBA             1033
+  INICIO             8000

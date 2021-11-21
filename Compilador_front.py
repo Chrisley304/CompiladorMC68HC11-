@@ -18,7 +18,7 @@ def getPrograma(fileName):
 def Main():
     
     Mnemonicos = getJSON()
-    filename = "prueba.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
     # filename = "Profe.ASC" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
     lineas = getPrograma(filename)
     
@@ -50,14 +50,15 @@ def Main():
                     linea["compilado"] = "\t\t\t"
                     break
 
-                if linea["contenido"][0] == 'fcb':
+                elif linea["contenido"][0] == 'fcb':
                     linea["compilado"] = "\t\t\t"
 
                 # Directiva ORG, comienza el contador de memoria
-                if linea["contenido"][0] == 'org':
+                elif linea["contenido"][0] == 'org':
                     Cont_memoria = ConvertHex(linea["contenido"][1][1:])
                     linea["compilado"] = "\t\t" + getHexString(Cont_memoria)
                     # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
+                
                 
                 else: # se envia al precompilador
                     try:
@@ -88,6 +89,24 @@ def Main():
                         if linea["contenido"][1] in Mnemonicos:
                             Etiquetas[linea["contenido"][0]] = Cont_memoria
                             Cont_memoria = Precompilado(linea, Mnemonicos, Variables,Etiquetas,Cont_memoria)
+
+                        # Directiva END, dejar de compilar 
+                        elif linea["contenido"][1] == 'end':
+                            flagDeEnd = True
+                            Etiquetas[linea["contenido"][0]] = Cont_memoria
+                            linea["compilado"] = getHexString(Cont_memoria) + "\t"
+                            break
+
+                        elif linea["contenido"][1] == 'fcb':
+                            Etiquetas[linea["contenido"][0]] = Cont_memoria
+                            linea["compilado"] = getHexString(Cont_memoria) + "\t"
+
+                        # Directiva ORG, comienza el contador de memoria
+                        elif linea["contenido"][1] == 'org':
+                            Cont_memoria = ConvertHex(linea["contenido"][2][1:])
+                            linea["compilado"] = "\t\t" + getHexString(Cont_memoria)
+                            Etiquetas[linea["contenido"][0]] = Cont_memoria
+                            # Cont_memoria = hex(int('0x' + linea["contenido"][2][1:], 16))
 
                         else:
                             linea["compilado"] = "ERROR 011"
@@ -137,20 +156,23 @@ Main()
 
 """ 
     TODO:
-    Axel:
-        - Caso 4 instrucciones Especiales (Clase 23 sep)
-    ✓   - Archivo .S19
-    ✓   - Error salto muy grande
-    ✓    - Arreglar mapa JSON ( Bytes )
     
-    Chris:
-    ✓    - Verificar comparaciones de BYTES (Error 007)
-    ✓    - Arreglar error 007 donde deberia de estar 1,2 o 3
-    ✓    - Punto extra: Colores listado HTML
-    ✓    - Saltos para adelante
-    ✓    - Separar Etiquetas de Variables/Constante
-    ✓    - Poner mensaje de Compilado correcto
-    ✓    - Poner descripcion de errores abajo
+    Instrucciones especiales:
+    Casos de 3: 
+    - BRCLR (3 operandos)
+    - BRSET (3 operandos)
+        ej. 15,#12 Etiqueta
+            [DIR,INDXoY de 8 bits][IMM] [Etiqueta] <- La etiqueta se calcula como relativa
+            15,x,#12 Etiqueta
+            15,y,#12 Etiqueta
+    
+    Casos de 2:
+    - BCLR (2 operandos)
+    - BSET (2 operandos)
+        ej. 15,#12 
+            15,x,#12 
+            15,y,#12
+
 
     Errores a buscar:
     001   CONSTANTE INEXISTENTE

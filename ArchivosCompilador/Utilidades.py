@@ -30,13 +30,19 @@ def CheckHex(etiqueta: hex, origen: hex, flag: bool):
     if(flag):
         res_int = int(etiqueta, 16)
         origen_int = int(origen, 16)    
-        return True if res_int - (origen_int + 1) > -128 else False
+        return True if (res_int - (origen_int + 1)) > -128 else False
     
     # Salto hacia adelante, si es mayor a 128 regresa falso
     else:
         res_int = int(etiqueta, 16)
         origen_int = int(origen, 16)    
-        return True if res_int - (origen_int) < 129 else False
+        return True if (res_int - origen_int) < 129 else False
+
+
+def CheckSalto(etiqueta: hex, origen: hex):
+    # Salto hacia atras, si es menor a 127 regresa falso
+
+    True if int(origen,16) > int(etiqueta,16) else False
 
 #Resta 2 hex
 

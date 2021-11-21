@@ -7,22 +7,24 @@ OPTION EQU   $1039
 
 *** PRINCIPAL ***
     ORG    $8000
+
 INICIO
-    AB
-    JMP     SINBANDERA
+    NOP
+    JMP     SINBANDERA * Si debe jalar, pero es en post
+    BNE     INICIO
+    BNE     SINBANDERA
+    NOP
     LDAA    $45
     LDAB    11
-    BNE     SINBANDERA
-    LDAB    *DEBE DAR ERROR
     LDAA    #$80
 
 SINBANDERA
     ldd     $17
-    LDX     15  * NO se que hace
+    LDX     15  
     ADDA    $7C
     ANDA    $F0
+    ORG     $0123
     BNE     SINBANDERA
     JMP     INICIO
-    JMP     BANDERA *DEBE DAR ERROR
 
-    END     * Fin del programa
+    END   

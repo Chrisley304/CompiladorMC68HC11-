@@ -6,41 +6,29 @@
 6 1039	 				 OPTION EQU   $1039
 7 		 				 
 8 		 				 *** PRINCIPAL ***
-9 ERROR 001/002/003 		     JMP     BANDERA *DEBE DAR ERROR Error 1 o 2 o 3, No existe BANDERA
-10 ERROR 003 				     BNE     BANDERA *DEBE DAR ERROR Error 3, No existe BANDERA
-11 		 				 
-12 		8000 				     ORG    $8000
-13 8000	 				 INICIO
-14 		B123 				     ORG    $B123
-15 		 				 
-16 ERROR 004 				     AB      *DEBE DAR ERROR Error 4, No existe mnemonico
-17 ERROR 005 				     BNE     *DEBE DAR ERROR 5 carece de operando
-18 ERROR 005 				     LDAA    *DEBE DAR ERROR 5 lo de arriba x2
-19 ERROR 006 				     aba    $8000 *DEBE DAR ERROR 6 sobra de operando
-20 ERROR 007 				     asr    $8000,y  *DEBE DAR ERROR 7 operando grande
-21 ERROR 008 				     BNE     INICIO *DEBE DAR ERROR 8 salto lejano
-22 		 				 
-23 ERROR 009 				 JMP     SINBANDERA *DEBE DAR ERROR 9 Falta espacio relativo al margen
-24 		 				 
-25 B123 7EB12C 				     JMP     SINBANDERA * Si debe jalar, pero es en post
-26 		 				     
-27 B126 9645 				     LDAA    $45
-28 B128 D60B 				     LDAB    11
-29 ERROR 008 				     BNE     INICIO
-30 ERROR 005 				     LDAB    *DEBE DAR ERROR
-31 B12A 8680 				     LDAA    #$80
-32 		 				 
-33 B12C	 				 SINBANDERA
-34 B12C DC17 				     ldd     $17
-35 B12E DE0F 				     LDX     15  * NO se que hace
-36 B130 9B7c 				     ADDA    $7C
-37 B132 94f0 				     ANDA    $F0
-38 		0123 				     ORG     $0123
-39 0123 2607 				     BNE     SINBANDERA
-40 0125 7E8000 				     JMP     INICIO
-41 		 				 
-42 		 				     *END     * Fin del programa *DEBE DAR ERROR 10 no se encuentra end
-43 ERROR 010 				 
+9 		8000 				     ORG    $8000
+10 		 				 
+11 8000	 				 INICIO
+12 8000 01   				     NOP
+13 8001 7E800F 				     JMP     SINBANDERA * Si debe jalar, pero es en post
+14 8004 26FA 				     BNE     INICIO
+15 8006 2607 				     BNE     SINBANDERA
+16 8008 01   				     NOP
+17 8009 9645 				     LDAA    $45
+18 800B D60B 				     LDAB    11
+19 800D 8680 				     LDAA    #$80
+20 		 				 
+21 800F	 				 SINBANDERA
+22 800F DC17 				     ldd     $17
+23 8011 DE0F 				     LDX     15  
+24 8013 9B7c 				     ADDA    $7C
+25 8015 94f0 				     ANDA    $F0
+26 		0123 				     ORG     $0123
+27 ERROR 008 				     BNE     SINBANDERA
+28 0123 7E8000 				     JMP     INICIO
+29 		 				 
+30 			 				     END   
+
 
 === Descripcion de errores ===
 001   CONSTANTE INEXISTENTE

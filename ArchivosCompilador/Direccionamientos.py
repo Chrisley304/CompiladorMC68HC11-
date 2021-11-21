@@ -10,8 +10,9 @@ def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict)
     compilado = ""
     
     if operando[1] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
-        compilado = opcode + operando[2:]
-        linea["operando"] = operando[2:].upper()
+        hex_temp = ConvertHex(operando[2:])
+        compilado = opcode + getHexString(hex_temp)
+        linea["operando"] = getHexString(hex_temp)
     elif operando[1] == "'":  # es un caracter ASCII
         dec = ord(operando[2])
         compilado = opcode + getHexStringInt(dec)

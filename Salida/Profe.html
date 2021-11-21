@@ -63,33 +63,33 @@
 </p><p>59: 		:*CONFIGURA REGISTROS
 </p><p>60: 		:**********************************
 </p><p>61: 		8000:       ORG   $8000   * DIR DE INICIO
-</p><p>62: 8000 (<span style="color: red;">8E</span><span style="color: blue;">00FF</span>):       LDS   #$00FF  * APUNTADOR DE STAK
+</p><p>62: ERROR 007:       LDS   #$00FF  * APUNTADOR DE STAK
 </p><p>63: 		:
 </p><p>64: 		:               
-</p><p>65: 8003 (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS
-</p><p>66: 8005 (<span style="color: red;">B7</span><span style="color: blue;">1001</span>):       STAA  DDRA    * EL PUERTO A
+</p><p>65: 8000 (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS
+</p><p>66: 8002 (<span style="color: red;">B7</span><span style="color: blue;">1001</span>):       STAA  DDRA    * EL PUERTO A
 </p><p>67: 		:       
-</p><p>68: 8008 (<span style="color: red;">86</span><span style="color: blue;">FF</span>):       LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS
-</p><p>69: 800A (<span style="color: red;">B7</span><span style="color: blue;">1003</span>):       STAA  DDRG    * EL PUERTO G 
+</p><p>68: 8005 (<span style="color: red;">86</span><span style="color: blue;">FF</span>):       LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS
+</p><p>69: 8007 (<span style="color: red;">B7</span><span style="color: blue;">1003</span>):       STAA  DDRG    * EL PUERTO G 
 </p><p>70: 		:
-</p><p>71: 800D (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00    * SE PONE PUERTO G EN CEROS
-</p><p>72: 800F (<span style="color: red;">B7</span><span style="color: blue;">1002</span>):       STAA  PORTG
+</p><p>71: 800A (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00    * SE PONE PUERTO G EN CEROS
+</p><p>72: 800C (<span style="color: red;">B7</span><span style="color: blue;">1002</span>):       STAA  PORTG
 </p><p>73: 		:       
-</p><p>74: 8012 (<span style="color: red;">CC</span><span style="color: blue;">302C</span>):       LDD   #$302C  * CONFIGURA PUERTO SERIAL
-</p><p>75: 8015 (<span style="color: red;">B7</span><span style="color: blue;">102B</span>):       STAA  BAUD    * BAUD  9600  para cristal de 8MHz
-</p><p>76: 8018 (<span style="color: red;">F7</span><span style="color: blue;">102D</span>):       STAB  SCCR2   * HABILITA  RX Y TX PERO INTERRUPCN SOLO RX
-</p><p>77: 801B (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00
-</p><p>78: 801D (<span style="color: red;">B7</span><span style="color: blue;">102C</span>):       STAA  SCCR1   * 8 BITS
+</p><p>74: 800F (<span style="color: red;">CC</span><span style="color: blue;">302C</span>):       LDD   #$302C  * CONFIGURA PUERTO SERIAL
+</p><p>75: 8012 (<span style="color: red;">B7</span><span style="color: blue;">102B</span>):       STAA  BAUD    * BAUD  9600  para cristal de 8MHz
+</p><p>76: 8015 (<span style="color: red;">F7</span><span style="color: blue;">102D</span>):       STAB  SCCR2   * HABILITA  RX Y TX PERO INTERRUPCN SOLO RX
+</p><p>77: 8018 (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00
+</p><p>78: 801A (<span style="color: red;">B7</span><span style="color: blue;">102C</span>):       STAA  SCCR1   * 8 BITS
 </p><p>79: 		:
-</p><p>80: 8020 (<span style="color: red;">86</span><span style="color: blue;">FE</span>):       LDAA  #$FE    * CONFIG PUERTO D COMO SALIDAS (EXCEPTO PD0)
-</p><p>81: 8022 (<span style="color: red;">B7</span><span style="color: blue;">1009</span>):       STAA  DDRD    * SEA  ENABLE DEL DISPLAY  PD4  Y RS PD3
+</p><p>80: 801D (<span style="color: red;">86</span><span style="color: blue;">FE</span>):       LDAA  #$FE    * CONFIG PUERTO D COMO SALIDAS (EXCEPTO PD0)
+</p><p>81: 801F (<span style="color: red;">B7</span><span style="color: blue;">1009</span>):       STAA  DDRD    * SEA  ENABLE DEL DISPLAY  PD4  Y RS PD3
 </p><p>82: 		:                     
 </p><p>83: 		:      
-</p><p>84: 8025 (<span style="color: red;">86</span><span style="color: blue;">04</span>):       LDAA  #$04
-</p><p>85: 8027 (<span style="color: red;">B7</span><span style="color: blue;">103C</span>):       STAA  HPRIO
+</p><p>84: 8022 (<span style="color: red;">86</span><span style="color: blue;">04</span>):       LDAA  #$04
+</p><p>85: 8024 (<span style="color: red;">B7</span><span style="color: blue;">103C</span>):       STAA  HPRIO
 </p><p>86: 		:
-</p><p>87: 802A (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00
-</p><p>88: 802C (<span style="color: red;">06</span><span style="color: blue;"></span>):       TAP
+</p><p>87: 8027 (<span style="color: red;">86</span><span style="color: blue;">00</span>):       LDAA  #$00
+</p><p>88: 8029 (<span style="color: red;">06</span><span style="color: blue;"></span>):       TAP
 </p><p>89: 		:
 </p><p>90: 		:
 </p><p>91: 		:
@@ -100,357 +100,357 @@
 </p><p>96: 		:**********************************
 </p><p>97: 		:*PROGRAMA PRINCIPAL
 </p><p>98: 		:**********************************
-</p><p>99: 802D	:MAIN 
-</p><p>100: 802D (<span style="color: red;">BD</span><span style="color: blue;">80D5</span>):       JSR    INICIA
+</p><p>99: 802A	:MAIN 
+</p><p>100: 802A (<span style="color: red;">BD</span><span style="color: blue;">80D2</span>):       JSR    INICIA
 </p><p>101: 		:        
-</p><p>102: 8030 (<span style="color: red;">7F</span><span style="color: blue;">11</span>):INICIO  CLR    U4
-</p><p>103: 8033 (<span style="color: red;">7F</span><span style="color: blue;">10</span>):NO_S1   CLR    U3
-</p><p>104: 8036 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):NO_S    CLR    U2
-</p><p>105: 8039 (<span style="color: red;">7F</span><span style="color: blue;">0E</span>):        CLR    U1 
+</p><p>102: 802D (<span style="color: red;">7F</span><span style="color: blue;">11</span>):INICIO  CLR    U4
+</p><p>103: 8030 (<span style="color: red;">7F</span><span style="color: blue;">10</span>):NO_S1   CLR    U3
+</p><p>104: 8033 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):NO_S    CLR    U2
+</p><p>105: 8036 (<span style="color: red;">7F</span><span style="color: blue;">0E</span>):        CLR    U1 
 </p><p>106: 		:
 </p><p>107: 		: 
 </p><p>108: 		:
 </p><p>109: 		:
-</p><p>110: 803C	:OTRO    
-</p><p>111: 803C (<span style="color: red;">86</span><span style="color: blue;">3F</span>):        LDAA    #'?
-</p><p>112: 803E (<span style="color: red;">B7</span><span style="color: blue;">0C</span>):        STAA    ORDEN
+</p><p>110: 8039	:OTRO    
+</p><p>111: 8039 (<span style="color: red;">86</span><span style="color: blue;">3F</span>):        LDAA    #'?
+</p><p>112: 803B (<span style="color: red;">B7</span><span style="color: blue;">0C</span>):        STAA    ORDEN
 </p><p>113: 		:       
-</p><p>114: 8041	:CICLO
-</p><p>115: 8041 (<span style="color: red;">B6</span><span style="color: blue;">0C</span>):        LDAA    ORDEN
-</p><p>116: 8044 (<span style="color: red;">81</span><span style="color: blue;">3F</span>):        CMPA    #'?
-</p><p>117: 8046 (<span style="color: red;">27</span><span style="color: blue;">F9</span>):        BEQ     CICLO
+</p><p>114: 803E	:CICLO
+</p><p>115: 803E (<span style="color: red;">B6</span><span style="color: blue;">0C</span>):        LDAA    ORDEN
+</p><p>116: 8041 (<span style="color: red;">81</span><span style="color: blue;">3F</span>):        CMPA    #'?
+</p><p>117: 8043 (<span style="color: red;">27</span><span style="color: blue;">F9</span>):        BEQ     CICLO
 </p><p>118: 		:
-</p><p>119: 8048 (<span style="color: red;">F6</span><span style="color: blue;">0E</span>):        LDAB    U1
-</p><p>120: 804B (<span style="color: red;">26</span><span style="color: blue;">0A</span>):        BNE     CHECA_U2
-</p><p>121: 804D (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'s
-</p><p>122: 804F (<span style="color: red;">26</span><span style="color: blue;">EB</span>):        BNE     OTRO
-</p><p>123: 8051 (<span style="color: red;">B7</span><span style="color: blue;">0E</span>):        STAA    U1
-</p><p>124: 8054 (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>119: 8045 (<span style="color: red;">F6</span><span style="color: blue;">0E</span>):        LDAB    U1
+</p><p>120: 8048 (<span style="color: red;">26</span><span style="color: blue;">0C</span>):        BNE     CHECA_U2
+</p><p>121: 804A (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'s
+</p><p>122: 804C (<span style="color: red;">26</span><span style="color: blue;">EB</span>):        BNE     OTRO
+</p><p>123: 804E (<span style="color: red;">B7</span><span style="color: blue;">0E</span>):        STAA    U1
+</p><p>124: 8051 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>125: 		:
 </p><p>126: 		:
-</p><p>127: 8057	:CHECA_U2
+</p><p>127: 8054	:CHECA_U2
 </p><p>128: 		:
-</p><p>129: 8057 (<span style="color: red;">F6</span><span style="color: blue;">0F</span>):        LDAB    U2
-</p><p>130: 805A (<span style="color: red;">26</span><span style="color: blue;">14</span>):        BNE     CHECA_U3
-</p><p>131: 805C (<span style="color: red;">81</span><span style="color: blue;">74</span>):        CMPA    #'T
-</p><p>132: 805E (<span style="color: red;">27</span><span style="color: blue;">0A</span>):        BEQ     ES_T
-</p><p>133: 8060 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>134: 8062 (<span style="color: red;">27</span><span style="color: blue;">D8</span>):        BEQ     OTRO
-</p><p>135: 8064 (<span style="color: red;">7F</span><span style="color: blue;">0E</span>):        CLR     U1
-</p><p>136: 8067 (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
-</p><p>137: 806A (<span style="color: red;">B7</span><span style="color: blue;">0F</span>):ES_T    STAA    U2
-</p><p>138: 806D (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>129: 8054 (<span style="color: red;">F6</span><span style="color: blue;">0F</span>):        LDAB    U2
+</p><p>130: 8057 (<span style="color: red;">26</span><span style="color: blue;">16</span>):        BNE     CHECA_U3
+</p><p>131: 8059 (<span style="color: red;">81</span><span style="color: blue;">74</span>):        CMPA    #'T
+</p><p>132: 805B (<span style="color: red;">27</span><span style="color: blue;">0C</span>):        BEQ     ES_T
+</p><p>133: 805D (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
+</p><p>134: 805F (<span style="color: red;">27</span><span style="color: blue;">D8</span>):        BEQ     OTRO
+</p><p>135: 8061 (<span style="color: red;">7F</span><span style="color: blue;">0E</span>):        CLR     U1
+</p><p>136: 8064 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
+</p><p>137: 8067 (<span style="color: red;">B7</span><span style="color: blue;">0F</span>):ES_T    STAA    U2
+</p><p>138: 806A (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>139: 		:
-</p><p>140: 8070	:CHECA_U3
+</p><p>140: 806D	:CHECA_U3
 </p><p>141: 		:
-</p><p>142: 8070 (<span style="color: red;">F6</span><span style="color: blue;">10</span>):        LDAB    U3
-</p><p>143: 8073 (<span style="color: red;">26</span><span style="color: blue;">14</span>):        BNE     CHECA_U4
-</p><p>144: 8075 (<span style="color: red;">81</span><span style="color: blue;">61</span>):        CMPA    #'A
-</p><p>145: 8077 (<span style="color: red;">27</span><span style="color: blue;">0A</span>):        BEQ     ES_A
-</p><p>146: 8079 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>147: 807B (<span style="color: red;">26</span><span style="color: blue;">B9</span>):        BNE     NO_S
-</p><p>148: 807D (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
-</p><p>149: 8080 (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>142: 806D (<span style="color: red;">F6</span><span style="color: blue;">10</span>):        LDAB    U3
+</p><p>143: 8070 (<span style="color: red;">26</span><span style="color: blue;">16</span>):        BNE     CHECA_U4
+</p><p>144: 8072 (<span style="color: red;">81</span><span style="color: blue;">61</span>):        CMPA    #'A
+</p><p>145: 8074 (<span style="color: red;">27</span><span style="color: blue;">0C</span>):        BEQ     ES_A
+</p><p>146: 8076 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
+</p><p>147: 8078 (<span style="color: red;">26</span><span style="color: blue;">B9</span>):        BNE     NO_S
+</p><p>148: 807A (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
+</p><p>149: 807D (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>150: 		:
-</p><p>151: 8083	:ES_A
+</p><p>151: 8080	:ES_A
 </p><p>152: 		:
-</p><p>153: 8083 (<span style="color: red;">B7</span><span style="color: blue;">10</span>):        STAA    U3
-</p><p>154: 8086 (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>153: 8080 (<span style="color: red;">B7</span><span style="color: blue;">10</span>):        STAA    U3
+</p><p>154: 8083 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>155: 		:
-</p><p>156: 8089	:CHECA_U4
+</p><p>156: 8086	:CHECA_U4
 </p><p>157: 		:
-</p><p>158: 8089 (<span style="color: red;">F6</span><span style="color: blue;">11</span>):        LDAB    U4
-</p><p>159: 808C (<span style="color: red;">26</span><span style="color: blue;">17</span>):        BNE     CHECA_T
-</p><p>160: 808E (<span style="color: red;">81</span><span style="color: blue;">72</span>):        CMPA    #'R
-</p><p>161: 8090 (<span style="color: red;">27</span><span style="color: blue;">0D</span>):        BEQ     ES_R
-</p><p>162: 8092 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>163: 8094 (<span style="color: red;">26</span><span style="color: blue;">9D</span>):        BNE     NO_S1
-</p><p>164: 8096 (<span style="color: red;">7F</span><span style="color: blue;">10</span>):        CLR     U3
-</p><p>165: 8099 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
-</p><p>166: 809C (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>158: 8086 (<span style="color: red;">F6</span><span style="color: blue;">11</span>):        LDAB    U4
+</p><p>159: 8089 (<span style="color: red;">26</span><span style="color: blue;">19</span>):        BNE     CHECA_T
+</p><p>160: 808B (<span style="color: red;">81</span><span style="color: blue;">72</span>):        CMPA    #'R
+</p><p>161: 808D (<span style="color: red;">27</span><span style="color: blue;">0F</span>):        BEQ     ES_R
+</p><p>162: 808F (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
+</p><p>163: 8091 (<span style="color: red;">26</span><span style="color: blue;">9D</span>):        BNE     NO_S1
+</p><p>164: 8093 (<span style="color: red;">7F</span><span style="color: blue;">10</span>):        CLR     U3
+</p><p>165: 8096 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
+</p><p>166: 8099 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>167: 		:
-</p><p>168: 809F	:ES_R
+</p><p>168: 809C	:ES_R
 </p><p>169: 		:
-</p><p>170: 809F (<span style="color: red;">B7</span><span style="color: blue;">11</span>):        STAA    U4
-</p><p>171: 80A2 (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>170: 809C (<span style="color: red;">B7</span><span style="color: blue;">11</span>):        STAA    U4
+</p><p>171: 809F (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>172: 		: 
-</p><p>173: 80A5	:CHECA_T
+</p><p>173: 80A2	:CHECA_T
 </p><p>174: 		:
-</p><p>175: 80A5 (<span style="color: red;">81</span><span style="color: blue;">74</span>):        CMPA    #'T
-</p><p>176: 80A7 (<span style="color: red;">27</span><span style="color: blue;">10</span>):        BEQ     EXITO
-</p><p>177: 80A9 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>178: 80AB (<span style="color: red;">26</span><span style="color: blue;">83</span>):        BNE     INICIO
-</p><p>179: 80AD (<span style="color: red;">7F</span><span style="color: blue;">11</span>):        CLR     U4
-</p><p>180: 80B0 (<span style="color: red;">7F</span><span style="color: blue;">10</span>):        CLR     U3
-</p><p>181: 80B3 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
-</p><p>182: 80B6 (<span style="color: red;">7E</span><span style="color: blue;">803C</span>):        JMP     OTRO
+</p><p>175: 80A2 (<span style="color: red;">81</span><span style="color: blue;">74</span>):        CMPA    #'T
+</p><p>176: 80A4 (<span style="color: red;">27</span><span style="color: blue;">12</span>):        BEQ     EXITO
+</p><p>177: 80A6 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
+</p><p>178: 80A8 (<span style="color: red;">26</span><span style="color: blue;">83</span>):        BNE     INICIO
+</p><p>179: 80AA (<span style="color: red;">7F</span><span style="color: blue;">11</span>):        CLR     U4
+</p><p>180: 80AD (<span style="color: red;">7F</span><span style="color: blue;">10</span>):        CLR     U3
+</p><p>181: 80B0 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
+</p><p>182: 80B3 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>183: 		:
-</p><p>184: 80B9	:EXITO
-</p><p>185: 80B9 (<span style="color: red;">86</span><span style="color: blue;">65</span>):        LDAA  #'E
-</p><p>186: 80BB (<span style="color: red;">B7</span><span style="color: blue;">19</span>):        STAA  ALTO
-</p><p>187: 80BE (<span style="color: red;">86</span><span style="color: blue;">78</span>):        LDAA  #'X
-</p><p>188: 80C0 (<span style="color: red;">B7</span><span style="color: blue;">1A</span>):        STAA  BAJO
-</p><p>189: 80C3 (<span style="color: red;">86</span><span style="color: blue;">69</span>):        LDAA  #'I
-</p><p>190: 80C5 (<span style="color: red;">B7</span><span style="color: blue;">1B</span>):        STAA  BASE_H
-</p><p>191: 80C8 (<span style="color: red;">86</span><span style="color: blue;">74</span>):        LDAA  #'T
-</p><p>192: 80CA (<span style="color: red;">B7</span><span style="color: blue;">1C</span>):        STAA  BASE_L
-</p><p>193: 80CD (<span style="color: red;">86</span><span style="color: blue;">6F</span>):        LDAA  #'O
-</p><p>194: 80CF (<span style="color: red;">B7</span><span style="color: blue;">1D</span>):        STAA  V3
+</p><p>184: 80B6	:EXITO
+</p><p>185: 80B6 (<span style="color: red;">86</span><span style="color: blue;">65</span>):        LDAA  #'E
+</p><p>186: 80B8 (<span style="color: red;">B7</span><span style="color: blue;">19</span>):        STAA  ALTO
+</p><p>187: 80BB (<span style="color: red;">86</span><span style="color: blue;">78</span>):        LDAA  #'X
+</p><p>188: 80BD (<span style="color: red;">B7</span><span style="color: blue;">1A</span>):        STAA  BAJO
+</p><p>189: 80C0 (<span style="color: red;">86</span><span style="color: blue;">69</span>):        LDAA  #'I
+</p><p>190: 80C2 (<span style="color: red;">B7</span><span style="color: blue;">1B</span>):        STAA  BASE_H
+</p><p>191: 80C5 (<span style="color: red;">86</span><span style="color: blue;">74</span>):        LDAA  #'T
+</p><p>192: 80C7 (<span style="color: red;">B7</span><span style="color: blue;">1C</span>):        STAA  BASE_L
+</p><p>193: 80CA (<span style="color: red;">86</span><span style="color: blue;">6F</span>):        LDAA  #'O
+</p><p>194: 80CC (<span style="color: red;">B7</span><span style="color: blue;">1D</span>):        STAA  V3
 </p><p>195: 		:
-</p><p>196: 80D2 (<span style="color: red;">7E</span><span style="color: blue;">802D</span>):        JMP MAIN       
+</p><p>196: 80CF (<span style="color: red;">7E</span><span style="color: blue;">802A</span>):        JMP MAIN       
 </p><p>197: 		:
 </p><p>198: 		:
 </p><p>199: 		:***********************************
 </p><p>200: 		:* INICIA
 </p><p>201: 		:***********************************
-</p><p>202: 80D5	:INICIA
+</p><p>202: 80D2	:INICIA
 </p><p>203: 		:     
-</p><p>204: 80D5 (<span style="color: red;">7F</span><span style="color: blue;">0D</span>):      CLR  SEG
+</p><p>204: 80D2 (<span style="color: red;">7F</span><span style="color: blue;">0D</span>):      CLR  SEG
 </p><p>205: 		:
-</p><p>206: 80D8 (<span style="color: red;">7F</span><span style="color: blue;">1002</span>):      CLR  PORTG
-</p><p>207: 80DB (<span style="color: red;">86</span><span style="color: blue;">F4</span>):      LDAA #$F4         
-</p><p>208: 80DD (<span style="color: red;">B7</span><span style="color: blue;">18</span>):      STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
+</p><p>206: 80D5 (<span style="color: red;">7F</span><span style="color: blue;">1002</span>):      CLR  PORTG
+</p><p>207: 80D8 (<span style="color: red;">86</span><span style="color: blue;">F4</span>):      LDAA #$F4         
+</p><p>208: 80DA (<span style="color: red;">B7</span><span style="color: blue;">18</span>):      STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
 </p><p>209: 		:
-</p><p>210: 80E0 (<span style="color: red;">CE</span><span style="color: blue;">0x1024</span>):      LDX #TMSK2
+</p><p>210: 80DD (<span style="color: red;">CE</span><span style="color: blue;">0x1024</span>):      LDX #TMSK2
 </p><p>211: ERROR 007:      BSET $00,X,#$40    * HABILITA INTERRUPCION TIMER T-REAL
-</p><p>212: 80E3 (<span style="color: red;">0E</span><span style="color: blue;"></span>):      CLI
+</p><p>212: 80E0 (<span style="color: red;">0E</span><span style="color: blue;"></span>):      CLI
 </p><p>213: 		:
-</p><p>214: 80E4 (<span style="color: red;">CE</span><span style="color: blue;">0x1026</span>):      LDX #PACTL
+</p><p>214: 80E1 (<span style="color: red;">CE</span><span style="color: blue;">0x1026</span>):      LDX #PACTL
 </p><p>215: ERROR 007:      BSET $00,X,#$50    * HABILITA PAEN -ACUMULADOR PULSOS ALTOS-
-</p><p>216: 80E7 (<span style="color: red;">7F</span><span style="color: blue;">1027</span>):      CLR PACNT          * BORRA ACUMULADOR DE PULSOS
+</p><p>216: 80E4 (<span style="color: red;">7F</span><span style="color: blue;">1027</span>):      CLR PACNT          * BORRA ACUMULADOR DE PULSOS
 </p><p>217: 		:
-</p><p>218: 80EA (<span style="color: red;">86</span><span style="color: blue;">10</span>):      LDAA #$10
-</p><p>219: 80EC (<span style="color: red;">B7</span><span style="color: blue;">1B</span>):      STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE INICIAL
-</p><p>220: 80EF (<span style="color: red;">86</span><span style="color: blue;">60</span>):      LDAA #$60
-</p><p>221: 80F1 (<span style="color: red;">B7</span><span style="color: blue;">1C</span>):      STAA BASE_L    
+</p><p>218: 80E7 (<span style="color: red;">86</span><span style="color: blue;">10</span>):      LDAA #$10
+</p><p>219: 80E9 (<span style="color: red;">B7</span><span style="color: blue;">1B</span>):      STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE INICIAL
+</p><p>220: 80EC (<span style="color: red;">86</span><span style="color: blue;">60</span>):      LDAA #$60
+</p><p>221: 80EE (<span style="color: red;">B7</span><span style="color: blue;">1C</span>):      STAA BASE_L    
 </p><p>222: 		:      
-</p><p>223: 80F4 (<span style="color: red;">18CE</span><span style="color: blue;">1060</span>):      LDY  #$1060      
+</p><p>223: 80F1 (<span style="color: red;">18CE</span><span style="color: blue;">1060</span>):      LDY  #$1060      
 </p><p>224: 		:      
-</p><p>225: 80F8 (<span style="color: red;">86</span><span style="color: blue;">16</span>):      LDAA #$16
-</p><p>226: 80FA (<span style="color: red;">B7</span><span style="color: blue;">15</span>):      STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS
-</p><p>227: 80FD (<span style="color: red;">86</span><span style="color: blue;">53</span>):      LDAA #$53
-</p><p>228: 80FF (<span style="color: red;">B7</span><span style="color: blue;">16</span>):      STAA BAS_L   
+</p><p>225: 80F5 (<span style="color: red;">86</span><span style="color: blue;">16</span>):      LDAA #$16
+</p><p>226: 80F7 (<span style="color: red;">B7</span><span style="color: blue;">15</span>):      STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS
+</p><p>227: 80FA (<span style="color: red;">86</span><span style="color: blue;">53</span>):      LDAA #$53
+</p><p>228: 80FC (<span style="color: red;">B7</span><span style="color: blue;">16</span>):      STAA BAS_L   
 </p><p>229: 		:
 </p><p>230: 		:
-</p><p>231: 8102 (<span style="color: red;">7F</span><span style="color: blue;">19</span>):      CLR  ALTO          * INICIA INDICE MUESTRA EN 0
-</p><p>232: 8105 (<span style="color: red;">7F</span><span style="color: blue;">1A</span>):      CLR  BAJO
+</p><p>231: 80FF (<span style="color: red;">7F</span><span style="color: blue;">19</span>):      CLR  ALTO          * INICIA INDICE MUESTRA EN 0
+</p><p>232: 8102 (<span style="color: red;">7F</span><span style="color: blue;">1A</span>):      CLR  BAJO
 </p><p>233: 		:
-</p><p>234: 8108 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>234: 8105 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
 </p><p>235: 		:***********************************
 </p><p>236: 		:* SACA
 </p><p>237: 		:***********************************
-</p><p>238: 8109	:SACA
+</p><p>238: 8106	:SACA
 </p><p>239: 		:            
 </p><p>240: 		:       
-</p><p>241: 8109 (<span style="color: red;">B6</span><span style="color: blue;">19</span>):       LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)
-</p><p>242: 810C (<span style="color: red;">F6</span><span style="color: blue;">1A</span>):       LDAB  BAJO
-</p><p>243: 810F (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
-</p><p>244: 8111 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
-</p><p>245: 8113 (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
-</p><p>246: 8115 (<span style="color: red;">BD</span><span style="color: blue;">8227</span>):       JSR   BINBCD
-</p><p>247: 8118 (<span style="color: red;">BD</span><span style="color: blue;">8186</span>):       JSR   DISPLAY
-</p><p>248: ERROR 001/002/003:       JSR   COMA
+</p><p>241: 8106 (<span style="color: red;">B6</span><span style="color: blue;">19</span>):       LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)
+</p><p>242: 8109 (<span style="color: red;">F6</span><span style="color: blue;">1A</span>):       LDAB  BAJO
+</p><p>243: 810C (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
+</p><p>244: 810E (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
+</p><p>245: 8110 (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
+</p><p>246: 8112 (<span style="color: red;">BD</span><span style="color: blue;">8224</span>):       JSR   BINBCD
+</p><p>247: 8115 (<span style="color: red;">BD</span><span style="color: blue;">8183</span>):       JSR   DISPLAY
+</p><p>248: 8118 (<span style="color: red;">BD</span><span style="color: blue;">8177</span>):       JSR   COMAN
 </p><p>249: 		: 
-</p><p>250: 811E (<span style="color: red;">B6</span><span style="color: blue;">1B</span>):       LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)
-</p><p>251: 8121 (<span style="color: red;">F6</span><span style="color: blue;">1C</span>):       LDAB  BASE_L
-</p><p>252: 8124 (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
+</p><p>250: 811B (<span style="color: red;">B6</span><span style="color: blue;">1B</span>):       LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)
+</p><p>251: 811E (<span style="color: red;">F6</span><span style="color: blue;">1C</span>):       LDAB  BASE_L
+</p><p>252: 8121 (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
 </p><p>253: 		:       
-</p><p>254: 8126 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
-</p><p>255: 8128 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
-</p><p>256: 8129 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y  
-</p><p>257: 812C (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
-</p><p>258: 812F (<span style="color: red;">BD</span><span style="color: blue;">819F</span>):       JSR   DSPLY
-</p><p>259: ERROR 001/002/003:       JSR   COMA
+</p><p>254: 8123 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
+</p><p>255: 8125 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
+</p><p>256: 8126 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y  
+</p><p>257: 8129 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
+</p><p>258: 812C (<span style="color: red;">BD</span><span style="color: blue;">819C</span>):       JSR   DSPLY
+</p><p>259: 812F (<span style="color: red;">BD</span><span style="color: blue;">8177</span>):       JSR   COMAN
 </p><p>260: 		:
-</p><p>261: 8135 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
-</p><p>262: 8137 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
-</p><p>263: 8138 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
-</p><p>264: 813B (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
-</p><p>265: 813E (<span style="color: red;">BD</span><span style="color: blue;">819F</span>):       JSR   DSPLY
-</p><p>266: ERROR 001/002/003:       JSR   COMA
+</p><p>261: 8132 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
+</p><p>262: 8134 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
+</p><p>263: 8135 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
+</p><p>264: 8138 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
+</p><p>265: 813B (<span style="color: red;">BD</span><span style="color: blue;">819C</span>):       JSR   DSPLY
+</p><p>266: 813E (<span style="color: red;">BD</span><span style="color: blue;">8177</span>):       JSR   COMAN
 </p><p>267: 		:
-</p><p>268: 8144 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
-</p><p>269: 8146 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
-</p><p>270: 8147 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
-</p><p>271: 814A (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
-</p><p>272: 814D (<span style="color: red;">BD</span><span style="color: blue;">819F</span>):       JSR   DSPLY
-</p><p>273: ERROR 001/002/003:       JSR   COMA
+</p><p>268: 8141 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
+</p><p>269: 8143 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
+</p><p>270: 8144 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
+</p><p>271: 8147 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
+</p><p>272: 814A (<span style="color: red;">BD</span><span style="color: blue;">819C</span>):       JSR   DSPLY
+</p><p>273: 814D (<span style="color: red;">BD</span><span style="color: blue;">8177</span>):       JSR   COMAN
 </p><p>274: 		:
-</p><p>275: 8153 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
-</p><p>276: 8155 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
-</p><p>277: 8156 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
-</p><p>278: 8159 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
-</p><p>279: 815C (<span style="color: red;">BD</span><span style="color: blue;">819F</span>):       JSR   DSPLY
-</p><p>280: ERROR 001/002/003:       JSR   COMA
+</p><p>275: 8150 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
+</p><p>276: 8152 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA
+</p><p>277: 8153 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
+</p><p>278: 8156 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
+</p><p>279: 8159 (<span style="color: red;">BD</span><span style="color: blue;">819C</span>):       JSR   DSPLY
+</p><p>280: 815C (<span style="color: red;">BD</span><span style="color: blue;">8177</span>):       JSR   COMAN
 </p><p>281: 		: 
-</p><p>282: 8162 (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
-</p><p>283: 8164 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA 
-</p><p>284: 8165 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
-</p><p>285: 8168 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
-</p><p>286: 816B (<span style="color: red;">BD</span><span style="color: blue;">819F</span>):       JSR   DSPLY
+</p><p>282: 815F (<span style="color: red;">1808</span><span style="color: blue;"></span>):       INY
+</p><p>283: 8161 (<span style="color: red;">4F</span><span style="color: blue;"></span>):       CLRA 
+</p><p>284: 8162 (<span style="color: red;">18E6</span><span style="color: blue;">00</span>):       LDAB  $00,Y
+</p><p>285: 8165 (<span style="color: red;">BD</span><span style="color: blue;">8236</span>):       JSR   BNBCD
+</p><p>286: 8168 (<span style="color: red;">BD</span><span style="color: blue;">819C</span>):       JSR   DSPLY
 </p><p>287: 		:       
-</p><p>288: 816E (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
-</p><p>289: 8170 (<span style="color: red;">B7</span><span style="color: blue;">1B</span>):       STAA BASE_H
-</p><p>290: 8173 (<span style="color: red;">F7</span><span style="color: blue;">1C</span>):       STAB BASE_L
+</p><p>288: 816B (<span style="color: red;">188F</span><span style="color: blue;"></span>):       XGDY
+</p><p>289: 816D (<span style="color: red;">B7</span><span style="color: blue;">1B</span>):       STAA BASE_H
+</p><p>290: 8170 (<span style="color: red;">F7</span><span style="color: blue;">1C</span>):       STAB BASE_L
 </p><p>291: 		:
-</p><p>292: 8176 (<span style="color: red;">BD</span><span style="color: blue;">81C4</span>):       JSR   CRYTRN
+</p><p>292: 8173 (<span style="color: red;">BD</span><span style="color: blue;">81C1</span>):       JSR   CRYTRN
 </p><p>293: 		:
-</p><p>294: 8179 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>294: 8176 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
 </p><p>295: 		:***********************************
 </p><p>296: 		:* COMA
 </p><p>297: 		:***********************************
-</p><p>298: ERROR 009:COMA
-</p><p>299: 817A (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
+</p><p>298: 8177	:COMAN
+</p><p>299: 8177 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
 </p><p>300: 		:       
-</p><p>301: 817D (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
-</p><p>302: 8180 (<span style="color: red;">86</span><span style="color: blue;">2C</span>):       LDAA  #$2C             * COMA
-</p><p>303: 8182 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>304: 8185	:C1
+</p><p>301: 817A (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
+</p><p>302: 817D (<span style="color: red;">86</span><span style="color: blue;">2C</span>):       LDAA  #$2C             * COMA
+</p><p>303: 817F (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>304: 8182	:C1
 </p><p>305: ERROR 007:       BRCLR $00,X,#$80 C1 
-</p><p>306: 8185 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>306: 8182 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
 </p><p>307: 		:***********************************
 </p><p>308: 		:* DESPLIEGA
 </p><p>309: 		:***********************************
-</p><p>310: 8186	:DISPLAY
+</p><p>310: 8183	:DISPLAY
 </p><p>311: 		:       
-</p><p>312: 8186 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
+</p><p>312: 8183 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
 </p><p>313: 		:       
-</p><p>314: 8189 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
-</p><p>315: 818C (<span style="color: red;">B6</span><span style="color: blue;">0E</span>):       LDAA  U1             * U1
-</p><p>316: 818F (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
-</p><p>317: 8191 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>318: 8194	:T1
+</p><p>314: 8186 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
+</p><p>315: 8189 (<span style="color: red;">B6</span><span style="color: blue;">0E</span>):       LDAA  U1             * U1
+</p><p>316: 818C (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
+</p><p>317: 818E (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>318: 8191	:T1
 </p><p>319: ERROR 007:       BRCLR $00,X,#$80 T1 
 </p><p>320: 		:      
-</p><p>321: 8194 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
-</p><p>322: 8197 (<span style="color: red;">B6</span><span style="color: blue;">0F</span>):       LDAA  U2             * U2
-</p><p>323: 819A (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
-</p><p>324: 819C (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>325: 819F	:T2
+</p><p>321: 8191 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
+</p><p>322: 8194 (<span style="color: red;">B6</span><span style="color: blue;">0F</span>):       LDAA  U2             * U2
+</p><p>323: 8197 (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
+</p><p>324: 8199 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>325: 819C	:T2
 </p><p>326: ERROR 007:       BRCLR $00,X,#$80 T2 
 </p><p>327: 		:
-</p><p>328: 819F	:DSPLY  
-</p><p>329: 819F (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR
+</p><p>328: 819C	:DSPLY  
+</p><p>329: 819C (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR
 </p><p>330: 		:    
-</p><p>331: 81A2 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR
-</p><p>332: 81A5 (<span style="color: red;">B6</span><span style="color: blue;">10</span>):       LDAA  U3             * U3
-</p><p>333: 81A8 (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
-</p><p>334: 81AA (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>335: 81AD	:T3
+</p><p>331: 819F (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR
+</p><p>332: 81A2 (<span style="color: red;">B6</span><span style="color: blue;">10</span>):       LDAA  U3             * U3
+</p><p>333: 81A5 (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
+</p><p>334: 81A7 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>335: 81AA	:T3
 </p><p>336: ERROR 007:       BRCLR $00,X,#$80 T3 
 </p><p>337: 		:      
-</p><p>338: 81AD (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR 
-</p><p>339: 81B0 (<span style="color: red;">B6</span><span style="color: blue;">11</span>):       LDAA  U4             * U4
-</p><p>340: 81B3 (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
-</p><p>341: 81B5 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>342: 81B8	:T4
+</p><p>338: 81AA (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR 
+</p><p>339: 81AD (<span style="color: red;">B6</span><span style="color: blue;">11</span>):       LDAA  U4             * U4
+</p><p>340: 81B0 (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
+</p><p>341: 81B2 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>342: 81B5	:T4
 </p><p>343: ERROR 007:       BRCLR $00,X,#$80 T4 
 </p><p>344: 		:   
-</p><p>345: 81B8 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR
-</p><p>346: 81BB (<span style="color: red;">B6</span><span style="color: blue;">12</span>):       LDAA  U5             * U5
-</p><p>347: 81BE (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
-</p><p>348: 81C0 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>349: 81C3	:T5
+</p><p>345: 81B5 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR
+</p><p>346: 81B8 (<span style="color: red;">B6</span><span style="color: blue;">12</span>):       LDAA  U5             * U5
+</p><p>347: 81BB (<span style="color: red;">8B</span><span style="color: blue;">30</span>):       ADDA  #$30
+</p><p>348: 81BD (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>349: 81C0	:T5
 </p><p>350: ERROR 007:       BRCLR $00,X,#$80 T5  
 </p><p>351: 		:       
-</p><p>352: 81C3 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>352: 81C0 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
 </p><p>353: 		:
 </p><p>354: 		:***********************************
 </p><p>355: 		:* CARRY RETURN
 </p><p>356: 		:***********************************
 </p><p>357: 		:
-</p><p>358: 81C4	:CRYTRN
-</p><p>359: 81C4 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
-</p><p>360: 81C7 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
-</p><p>361: 81CA (<span style="color: red;">86</span><span style="color: blue;">0A</span>):       LDAA  #$0A             * NEW LINE     
-</p><p>362: 81CC (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>363: 81CF	:CR1
+</p><p>358: 81C1	:CRYTRN
+</p><p>359: 81C1 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
+</p><p>360: 81C4 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
+</p><p>361: 81C7 (<span style="color: red;">86</span><span style="color: blue;">0A</span>):       LDAA  #$0A             * NEW LINE     
+</p><p>362: 81C9 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>363: 81CC	:CR1
 </p><p>364: ERROR 007:       BRCLR $00,X,#$80 CR1        
 </p><p>365: 		:
-</p><p>366: 81CF (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR
-</p><p>367: 81D2 (<span style="color: red;">86</span><span style="color: blue;">0D</span>):       LDAA #$0D              * CARRY RETURN     
-</p><p>368: 81D4 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA SCDR
-</p><p>369: 81D7	:CR2
+</p><p>366: 81CC (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR
+</p><p>367: 81CF (<span style="color: red;">86</span><span style="color: blue;">0D</span>):       LDAA #$0D              * CARRY RETURN     
+</p><p>368: 81D1 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA SCDR
+</p><p>369: 81D4	:CR2
 </p><p>370: ERROR 007:       BRCLR $00,X,#$80 CR2        
 </p><p>371: 		:
-</p><p>372: 81D7 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>372: 81D4 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
 </p><p>373: 		:***********************************
 </p><p>374: 		:*  DESPLIEGUE DE DATO RECIBIDO
 </p><p>375: 		:***********************************
 </p><p>376: 		:
-</p><p>377: 81D8	:DATARX
-</p><p>378: 81D8 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
-</p><p>379: 81DB (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
-</p><p>380: 81DE (<span style="color: red;">B6</span><span style="color: blue;">0C</span>):       LDAA  ORDEN             * NEW LINE     
-</p><p>381: 81E1 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>382: 81E4	:DT1
+</p><p>377: 81D5	:DATARX
+</p><p>378: 81D5 (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
+</p><p>379: 81D8 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
+</p><p>380: 81DB (<span style="color: red;">B6</span><span style="color: blue;">0C</span>):       LDAA  ORDEN             * NEW LINE     
+</p><p>381: 81DE (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
+</p><p>382: 81E1	:DT1
 </p><p>383: ERROR 007:       BRCLR $00,X,#$80 DT1        
 </p><p>384: 		:
-</p><p>385: 81E4 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR 
-</p><p>386: 81E7 (<span style="color: red;">86</span><span style="color: blue;">3A</span>):       LDAA #$3A              * DOS PUNTOS    
-</p><p>387: 81E9 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA SCDR
-</p><p>388: 81EC	:DT2
+</p><p>385: 81E1 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA SCSR 
+</p><p>386: 81E4 (<span style="color: red;">86</span><span style="color: blue;">3A</span>):       LDAA #$3A              * DOS PUNTOS    
+</p><p>387: 81E6 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA SCDR
+</p><p>388: 81E9	:DT2
 </p><p>389: ERROR 007:       BRCLR $00,X,#$80 DT2        
 </p><p>390: 		:
-</p><p>391: 81EC (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>391: 81E9 (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
 </p><p>392: 		:***********************************
 </p><p>393: 		:* voltimetro
 </p><p>394: 		:***********************************
-</p><p>395: 81ED	:VOLTA
-</p><p>396: 81ED (<span style="color: red;">CE</span><span style="color: blue;">0x1030</span>):      LDX #ADCTL      
+</p><p>395: 81EA	:VOLTA
+</p><p>396: 81EA (<span style="color: red;">CE</span><span style="color: blue;">0x1030</span>):      LDX #ADCTL      
 </p><p>397: 		:
-</p><p>398: 81F0 (<span style="color: red;">86</span><span style="color: blue;">80</span>):      LDAA #$80
-</p><p>399: 81F2 (<span style="color: red;">B7</span><span style="color: blue;">1039</span>):      STAA OPTION        * PONE EN MARCHA EL ADC
+</p><p>398: 81ED (<span style="color: red;">86</span><span style="color: blue;">80</span>):      LDAA #$80
+</p><p>399: 81EF (<span style="color: red;">B7</span><span style="color: blue;">1039</span>):      STAA OPTION        * PONE EN MARCHA EL ADC
 </p><p>400: 		:    
-</p><p>401: 81F5 (<span style="color: red;">86</span><span style="color: blue;">10</span>):      LDAA #$10
-</p><p>402: 81F7 (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0
+</p><p>401: 81F2 (<span style="color: red;">86</span><span style="color: blue;">10</span>):      LDAA #$10
+</p><p>402: 81F4 (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0
 </p><p>403: 		:
-</p><p>404: 81FA	:E1
+</p><p>404: 81F7	:E1
 </p><p>405: ERROR 007:      BRCLR $00,X,#$80 E1  
-</p><p>406: 81FA (<span style="color: red;">F6</span><span style="color: blue;">1031</span>):      LDAB ADR1
-</p><p>407: 81FD (<span style="color: red;">F7</span><span style="color: blue;">13</span>):      STAB V1
+</p><p>406: 81F7 (<span style="color: red;">F6</span><span style="color: blue;">1031</span>):      LDAB ADR1
+</p><p>407: 81FA (<span style="color: red;">F7</span><span style="color: blue;">13</span>):      STAB V1
 </p><p>408: 		:      
-</p><p>409: 8200 (<span style="color: red;">86</span><span style="color: blue;">80</span>):      LDAA #$80
-</p><p>410: 8202 (<span style="color: red;">B7</span><span style="color: blue;">1039</span>):      STAA OPTION        * PONE EN MARCHA EL ADC
+</p><p>409: 81FD (<span style="color: red;">86</span><span style="color: blue;">80</span>):      LDAA #$80
+</p><p>410: 81FF (<span style="color: red;">B7</span><span style="color: blue;">1039</span>):      STAA OPTION        * PONE EN MARCHA EL ADC
 </p><p>411: 		:    
-</p><p>412: 8205 (<span style="color: red;">86</span><span style="color: blue;">11</span>):      LDAA #$11
-</p><p>413: 8207 (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1
+</p><p>412: 8202 (<span style="color: red;">86</span><span style="color: blue;">11</span>):      LDAA #$11
+</p><p>413: 8204 (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1
 </p><p>414: 		:
-</p><p>415: 820A	:E2
+</p><p>415: 8207	:E2
 </p><p>416: ERROR 007:      BRCLR $00,X,#$80 E2  
-</p><p>417: 820A (<span style="color: red;">F6</span><span style="color: blue;">1032</span>):      LDAB ADR2
-</p><p>418: 820D (<span style="color: red;">F7</span><span style="color: blue;">14</span>):      STAB V2
+</p><p>417: 8207 (<span style="color: red;">F6</span><span style="color: blue;">1032</span>):      LDAB ADR2
+</p><p>418: 820A (<span style="color: red;">F7</span><span style="color: blue;">14</span>):      STAB V2
 </p><p>419: 		:     
-</p><p>420: 8210 (<span style="color: red;">86</span><span style="color: blue;">12</span>):      LDAA #$12
-</p><p>421: 8212 (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2
+</p><p>420: 820D (<span style="color: red;">86</span><span style="color: blue;">12</span>):      LDAA #$12
+</p><p>421: 820F (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2
 </p><p>422: 		:
-</p><p>423: 8215	:E3
+</p><p>423: 8212	:E3
 </p><p>424: ERROR 007:      BRCLR $00,X,#$80 E3  
-</p><p>425: 8215 (<span style="color: red;">F6</span><span style="color: blue;">1033</span>):      LDAB ADR3
-</p><p>426: 8218 (<span style="color: red;">F7</span><span style="color: blue;">1D</span>):      STAB V3 
+</p><p>425: 8212 (<span style="color: red;">F6</span><span style="color: blue;">1033</span>):      LDAB ADR3
+</p><p>426: 8215 (<span style="color: red;">F7</span><span style="color: blue;">1D</span>):      STAB V3 
 </p><p>427: 		:
-</p><p>428: 821B (<span style="color: red;">86</span><span style="color: blue;">13</span>):      LDAA #$13
-</p><p>429: 821D (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3
+</p><p>428: 8218 (<span style="color: red;">86</span><span style="color: blue;">13</span>):      LDAA #$13
+</p><p>429: 821A (<span style="color: red;">B7</span><span style="color: blue;">1030</span>):      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3
 </p><p>430: 		:
-</p><p>431: 8220	:E4
+</p><p>431: 821D	:E4
 </p><p>432: ERROR 007:      BRCLR $00,X,#$80 E4  
-</p><p>433: 8220 (<span style="color: red;">F6</span><span style="color: blue;">1034</span>):      LDAB ADR4
-</p><p>434: 8223 (<span style="color: red;">F7</span><span style="color: blue;">1E</span>):      STAB V4
+</p><p>433: 821D (<span style="color: red;">F6</span><span style="color: blue;">1034</span>):      LDAB ADR4
+</p><p>434: 8220 (<span style="color: red;">F7</span><span style="color: blue;">1E</span>):      STAB V4
 </p><p>435: 		:
 </p><p>436: 		:           
-</p><p>437: 8226 (<span style="color: red;">39</span><span style="color: blue;"></span>):      RTS
+</p><p>437: 8223 (<span style="color: red;">39</span><span style="color: blue;"></span>):      RTS
 </p><p>438: 		:***********************************
 </p><p>439: 		:* CONVIERTE A BCD
 </p><p>440: 		:***********************************
 </p><p>441: 		:
-</p><p>442: 8227	:BINBCD
+</p><p>442: 8224	:BINBCD
 </p><p>443: 		:     
-</p><p>444: 8227 (<span style="color: red;">CE</span><span style="color: blue;">2710</span>):      LDX  #$2710
-</p><p>445: 822A (<span style="color: red;">02</span><span style="color: blue;"></span>):      IDIV 
-</p><p>446: 822B (<span style="color: red;">8F</span><span style="color: blue;"></span>):      XGDX
-</p><p>447: 822C (<span style="color: red;">F7</span><span style="color: blue;">0E</span>):      STAB U1
-</p><p>448: 822F (<span style="color: red;">8F</span><span style="color: blue;"></span>):      XGDX
-</p><p>449: ERROR 007:      LDX  #$3E8
+</p><p>444: 8224 (<span style="color: red;">CE</span><span style="color: blue;">2710</span>):      LDX  #$2710
+</p><p>445: 8227 (<span style="color: red;">02</span><span style="color: blue;"></span>):      IDIV 
+</p><p>446: 8228 (<span style="color: red;">8F</span><span style="color: blue;"></span>):      XGDX
+</p><p>447: 8229 (<span style="color: red;">F7</span><span style="color: blue;">0E</span>):      STAB U1
+</p><p>448: 822C (<span style="color: red;">8F</span><span style="color: blue;"></span>):      XGDX
+</p><p>449: 822D (<span style="color: red;">CE</span><span style="color: blue;">03E8</span>):      LDX  #$3E8
 </p><p>450: 8230 (<span style="color: red;">02</span><span style="color: blue;"></span>):      IDIV
 </p><p>451: 8231 (<span style="color: red;">8F</span><span style="color: blue;"></span>):      XGDX
 </p><p>452: 8232 (<span style="color: red;">F7</span><span style="color: blue;">0F</span>):      STAB U2
@@ -501,7 +501,7 @@
 </p><p>497: F112 (<span style="color: red;">CE</span><span style="color: blue;">0x1025</span>):      LDX #TFLG2
 </p><p>498: ERROR 007:      BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
 </p><p>499: F115 (<span style="color: red;">7A</span><span style="color: blue;">18</span>):      DEC TEMPO
-</p><p>500: F118 (<span style="color: red;">27</span><span style="color: blue;">03</span>):      BEQ SEGUNDO
+</p><p>500: F118 (<span style="color: red;">27</span><span style="color: blue;">05</span>):      BEQ SEGUNDO
 </p><p>501: 		:      
 </p><p>502: F11A (<span style="color: red;">32</span><span style="color: blue;"></span>):      PULA
 </p><p>503: F11B (<span style="color: red;">38</span><span style="color: blue;"></span>):      PULX
@@ -521,19 +521,19 @@
 </p><p>517: 		:* VECTOR INTERRUPCION SERIAL
 </p><p>518: 		:***********************************
 </p><p>519: 		FFD6:       ORG   $FFD6
-</p><p>520: ERROR 004:       FCB   $F1,$00       
+</p><p>520: 			:       FCB   $F1,$00       
 </p><p>521: 		:
 </p><p>522: 		:***********************************
 </p><p>523: 		:* VECTOR INTERRUPCION REAL TIME
 </p><p>524: 		:***********************************
 </p><p>525: 		FFF0:       ORG   $FFF0
-</p><p>526: ERROR 004:       FCB   $F1,$10       
+</p><p>526: 			:       FCB   $F1,$10       
 </p><p>527: 		:
 </p><p>528: 		:***********************************
 </p><p>529: 		:*RESET
 </p><p>530: 		:***********************************
 </p><p>531: 		FFFE:       ORG    $FFFE
-</p><p>532: ERROR 011:RESET  FCB    $80,$00
+</p><p>532: FFFE	:RESET  FCB    $80,$00
 </p><p>533: 		:***********************************
 </p><p>534: 			:       END   $8000
 </p><p>=== Descripcion de errores ===<br>001   CONSTANTE INEXISTENTE<br>002   VARIABLE INEXISTENTE<br>003   ETIQUETA INEXISTENTE<br>004   MNEMÓNICO INEXISTENTE<br>005   INSTRUCCIÓN CARECE DE  OPERANDO(S)<br>006   INSTRUCCIÓN NO LLEVA OPERANDO(S)<br>007   MAGNITUD DE  OPERANDO ERRONEA<br>008   SALTO RELATIVO MUY LEJANO<br>009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN<br>010   NO SE ENCUENTRA END<br>011   SINTAXIS INCORRECTA<br>012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)</p></body></html>
