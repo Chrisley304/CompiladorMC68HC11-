@@ -1,0 +1,47 @@
+<html>
+        <head>
+            <title>Document</title>
+        </head>
+        <body><p>1: 		:*** VARIABLES ***
+</p><p>2: 		:   
+</p><p>3: 1032	:V1   EQU   $1032
+</p><p>4: 1033	:PRUEBA   EQU   $1033
+</p><p>5: 1034	:ADR4   EQU   $1034
+</p><p>6: 1039	:OPTION EQU   $1039
+</p><p>7: 		:
+</p><p>8: 		:*** PRINCIPAL ***
+</p><p>9: ERROR 001/002/003:    JMP     BANDERA *DEBE DAR ERROR Error 1 o 2 o 3, No existe BANDERA
+</p><p>10: ERROR 003:    BNE     BANDERA *DEBE DAR ERROR Error 3, No existe BANDERA
+</p><p>11: 		:
+</p><p>12: 		8000:    ORG    $8000
+</p><p>13: 8000	:INICIO
+</p><p>14: 		B123:    ORG    $B123
+</p><p>15: 		:
+</p><p>16: ERROR 004:    AB      *DEBE DAR ERROR Error 4, No existe mnemonico
+</p><p>17: ERROR 005:    BNE     *DEBE DAR ERROR 5 carece de operando
+</p><p>18: ERROR 005:    LDAA    *DEBE DAR ERROR 5 lo de arriba x2
+</p><p>19: ERROR 006:    aba    $8000 *DEBE DAR ERROR 6 sobra de operando
+</p><p>20: ERROR 007:    asr    $8000,y  *DEBE DAR ERROR 7 operando grande
+</p><p>21: B123 (<span style="color: red;">26</span><span style="color: blue;">DB</span>):    BNE     INICIO *DEBE DAR ERROR 8 salto lejano
+</p><p>22: 		:
+</p><p>23: ERROR 009:JMP     SINBANDERA *DEBE DAR ERROR 9 Falta espacio relativo al margen
+</p><p>24: 		:
+</p><p>25: B125 (<span style="color: red;">7E</span><span style="color: blue;">B130</span>):    JMP     SINBANDERA * Si debe jalar, pero es en post
+</p><p>26: 		:    
+</p><p>27: B128 (<span style="color: red;">96</span><span style="color: blue;">45</span>):    LDAA    $45
+</p><p>28: B12A (<span style="color: red;">D6</span><span style="color: blue;">0B</span>):    LDAB    11
+</p><p>29: B12C (<span style="color: red;">26</span><span style="color: blue;">D2</span>):    BNE     INICIO
+</p><p>30: ERROR 005:    LDAB    *DEBE DAR ERROR
+</p><p>31: B12E (<span style="color: red;">86</span><span style="color: blue;">80</span>):    LDAA    #$80
+</p><p>32: 		:
+</p><p>33: B130	:SINBANDERA
+</p><p>34: B130 (<span style="color: red;">DC</span><span style="color: blue;">17</span>):    ldd     $17
+</p><p>35: B132 (<span style="color: red;">DE</span><span style="color: blue;">0F</span>):    LDX     15  * NO se que hace
+</p><p>36: B134 (<span style="color: red;">9B</span><span style="color: blue;">7c</span>):    ADDA    $7C
+</p><p>37: B136 (<span style="color: red;">94</span><span style="color: blue;">f0</span>):    ANDA    $F0
+</p><p>38: 		0123:    ORG     $0123
+</p><p>39: ERROR 008:    BNE     SINBANDERA
+</p><p>40: 0123 (<span style="color: red;">7E</span><span style="color: blue;">8000</span>):    JMP     INICIO
+</p><p>41: 		:
+</p><p>42: 		:    *END     * Fin del programa *DEBE DAR ERROR 10 no se encuentra end
+</p><p>43: ERROR 010:</p><p>=== Descripcion de errores ===<br>001   CONSTANTE INEXISTENTE<br>002   VARIABLE INEXISTENTE<br>003   ETIQUETA INEXISTENTE<br>004   MNEMÓNICO INEXISTENTE<br>005   INSTRUCCIÓN CARECE DE  OPERANDO(S)<br>006   INSTRUCCIÓN NO LLEVA OPERANDO(S)<br>007   MAGNITUD DE  OPERANDO ERRONEA<br>008   SALTO RELATIVO MUY LEJANO<br>009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN<br>010   NO SE ENCUENTRA END<br>011   SINTAXIS INCORRECTA<br>012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)</p></body></html>

@@ -72,7 +72,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
             if len(parametros) > 1:
                 operando = parametros[1]
 
-                if nombre_mnemo == "BRCLR" or nombre_mnemo =="BRSET" or nombre_mnemo == "BCLR" or nombre_mnemo =="BSET":
+                if nombre_mnemo == "brclr" or nombre_mnemo == "brset" or nombre_mnemo == "bclr" or nombre_mnemo =="bset":
                     return Especiales(linea,Variables,Etiquetas,ContMemoria,mnemoni)
                 
                 elif operando[0] == "#":  # Si inicia con '#' es IMM
@@ -107,39 +107,47 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
     mnemonico = Mnemonicos[nombre_mnemo]
     ContMemoria = linea["localidad"]
 
+
     if "REL" in mnemonico:
         if parametros[1] in Etiquetas:
+            opcode = mnemonico["REL"][0]
             etiqueta = Etiquetas[parametros[1]]
             origen = ContMemoria
-
-            if(CheckHex(etiqueta, origen, CheckSalto(etiqueta, origen))):
-                salto = ResHex(etiqueta,SumHex(origen,2))
-                opcode = mnemonico["REL"][0]
-                linea["OPCODE"] = opcode
-                linea["operando"] = getHexString(salto)
-
-                linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
-            else: 
+            salto = ResHex(etiqueta,SumHex(origen,2))
+            if int(salto,16) > 128 and int(salto,16) < -127:
                 linea["compilado"] = "ERROR 008"
+                linea["OPCODE"] = opcode
+            else:
+                linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+
+            # if(CheckHex(etiqueta, origen, CheckSalto(etiqueta, SumHex(origen,2)))):
+            #     salto = ResHex(etiqueta,SumHex(origen,2))
+            #     opcode = mnemonico["REL"][0]
+            #     linea["OPCODE"] = opcode
+            #     linea["operando"] = getHexString(salto)
+
+            #     linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
+            # else: 
+            #     linea["compilado"] = "ERROR 008"
         else:
             linea["compilado"] = "ERROR 003"
     
-    elif nombre_mnemo == "BRCLR" or nombre_mnemo =="BRSET" or nombre_mnemo == "BCLR" or nombre_mnemo =="BSET":
+    elif nombre_mnemo == "brclr" or nombre_mnemo == "brset" or nombre_mnemo == "bclr" or nombre_mnemo =="bset":
+
         direcc = linea["direcc"]
         
         if parametros[2] in Etiquetas:
             etiqueta = Etiquetas[parametros[2]]
             origen = ContMemoria
+            salto = ResHex(etiqueta,SumHex(origen,mnemonico[direcc][1]))
+            opcode = mnemonico[direcc][0]
 
-            if(CheckHex(etiqueta, origen, CheckSalto(etiqueta, origen))):
-                salto = ResHex(etiqueta,SumHex(origen,2))
-                opcode = mnemonico[direcc][0]
-                linea["OPCODE"] = opcode
-                linea["operando"] += getHexString(salto)
-
-                linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode,linea["operando"])
-            else:
+            if int(salto,16) > 128 and int(salto,16) < -127:
                 linea["compilado"] = "ERROR 008"
+            else:
+                linea["operando"] += getHexString(salto)
+                linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode,linea["operando"])
+            
         else:
             linea["compilado"] = "ERROR 003"
 
@@ -238,9 +246,12 @@ def EscrituraHTML(lineas_comp:list,lineas_orig:list,filename):
             
     
     for i in range(len(lineas_comp)):
-        if not lineas_comp[i]["OPCODE"] == "":
-            texto_final += Convert_to_HTML(i+1,getHexString(lineas_comp[i]["localidad"]),lineas_comp[i]["OPCODE"],lineas_comp[i]["operando"],lineas_orig[i])
-        else:
+        try:
+            if not lineas_comp[i]["OPCODE"] == "":
+                texto_final += Convert_to_HTML(i+1,getHexString(lineas_comp[i]["localidad"]),lineas_comp[i]["OPCODE"],lineas_comp[i]["operando"],lineas_orig[i])
+            else:
+                texto_final += "<p>{}: {}:{}</p>".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
+        except:
              texto_final += "<p>{}: {}:{}</p>".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
     texto_final += "<p>=== Descripcion de errores ===<br>001   CONSTANTE INEXISTENTE<br>002   VARIABLE INEXISTENTE<br>003   ETIQUETA INEXISTENTE<br>004   MNEMÓNICO INEXISTENTE<br>005   INSTRUCCIÓN CARECE DE  OPERANDO(S)<br>006   INSTRUCCIÓN NO LLEVA OPERANDO(S)<br>007   MAGNITUD DE  OPERANDO ERRONEA<br>008   SALTO RELATIVO MUY LEJANO<br>009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN<br>010   NO SE ENCUENTRA END<br>011   SINTAXIS INCORRECTA<br>012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)</p></body></html>"
     
@@ -258,32 +269,35 @@ def EscrituraS19(lineas_comp:list,filename):
     for i in range(len(lineas_comp)):
 
         # Si org, modificamos contDeMemo y counter
-        if(len(lineas_comp[i]['contenido']) == 2 and lineas_comp[i]['contenido'][0].lower() == 'org'):
-            contadorDeMemoria = ConvertHex(lineas_comp[i]['contenido'][1][1:])
-            counter = 0
+        try:
+            if(len(lineas_comp[i]['contenido']) == 2 and lineas_comp[i]['contenido'][0].lower() == 'org'):
+                contadorDeMemoria = ConvertHex(lineas_comp[i]['contenido'][1][1:])
+                counter = 0
 
-        else:
-            # Es una instrucción compilada
-            if not lineas_comp[i]["OPCODE"] == "":
-                aux = Divide_str(lineas_comp[i]["OPCODE"])
-                for item in aux:
-                    if(counter == 0):
-                        texto_final += "\n <{}>".format(getHexString(contadorDeMemoria))
-                        counter = 16
-                    texto_final += " " + item
-                    contadorDeMemoria = SumHex(contadorDeMemoria, 1)
-                    counter -= 1
+            else:
+                # Es una instrucción compilada
+                if not lineas_comp[i]["OPCODE"] == "":
+                    aux = Divide_str(lineas_comp[i]["OPCODE"])
+                    for item in aux:
+                        if(counter == 0):
+                            texto_final += "\n <{}>".format(getHexString(contadorDeMemoria))
+                            counter = 16
+                        texto_final += " " + item
+                        contadorDeMemoria = SumHex(contadorDeMemoria, 1)
+                        counter -= 1
 
-                aux = Divide_str(lineas_comp[i]["operando"])
+                    aux = Divide_str(lineas_comp[i]["operando"])
 
-                for item in aux:
-                    if(counter == 0):
-                        texto_final += "\n <{}>".format(getHexString(contadorDeMemoria))
-                        counter = 16
-                
-                    texto_final += " " + item
-                    contadorDeMemoria = SumHex(contadorDeMemoria, 1)
-                    counter -= 1
+                    for item in aux:
+                        if(counter == 0):
+                            texto_final += "\n <{}>".format(getHexString(contadorDeMemoria))
+                            counter = 16
+                    
+                        texto_final += " " + item
+                        contadorDeMemoria = SumHex(contadorDeMemoria, 1)
+                        counter -= 1
+        except:
+            pass
 
 
     filename = splitext(filename)[0]

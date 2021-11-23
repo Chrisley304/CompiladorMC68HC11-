@@ -1,0 +1,57 @@
+1 		 				 *** VARIABLES ***
+2 		 				    
+3 1032	 				 V1   EQU   $1032
+4 1033	 				 PRUEBA   EQU   $1033
+5 1034	 				 ADR4   EQU   $1034
+6 1039	 				 OPTION EQU   $1039
+7 		 				 
+8 		 				 *** PRINCIPAL ***
+9 ERROR 001/002/003 		     JMP     BANDERA *DEBE DAR ERROR Error 1 o 2 o 3, No existe BANDERA
+10 ERROR 003 				     BNE     BANDERA *DEBE DAR ERROR Error 3, No existe BANDERA
+11 		 				 
+12 		8000 				     ORG    $8000
+13 8000	 				 INICIO
+14 		B123 				     ORG    $B123
+15 		 				 
+16 ERROR 004 				     AB      *DEBE DAR ERROR Error 4, No existe mnemonico
+17 ERROR 005 				     BNE     *DEBE DAR ERROR 5 carece de operando
+18 ERROR 005 				     LDAA    *DEBE DAR ERROR 5 lo de arriba x2
+19 ERROR 006 				     aba    $8000 *DEBE DAR ERROR 6 sobra de operando
+20 ERROR 007 				     asr    $8000,y  *DEBE DAR ERROR 7 operando grande
+21 B123 26DB 				     BNE     INICIO *DEBE DAR ERROR 8 salto lejano
+22 		 				 
+23 ERROR 009 				 JMP     SINBANDERA *DEBE DAR ERROR 9 Falta espacio relativo al margen
+24 		 				 
+25 B125 7EB130 				     JMP     SINBANDERA * Si debe jalar, pero es en post
+26 		 				     
+27 B128 9645 				     LDAA    $45
+28 B12A D60B 				     LDAB    11
+29 B12C 26D2 				     BNE     INICIO
+30 ERROR 005 				     LDAB    *DEBE DAR ERROR
+31 B12E 8680 				     LDAA    #$80
+32 		 				 
+33 B130	 				 SINBANDERA
+34 B130 DC17 				     ldd     $17
+35 B132 DE0F 				     LDX     15  * NO se que hace
+36 B134 9B7c 				     ADDA    $7C
+37 B136 94f0 				     ANDA    $F0
+38 		0123 				     ORG     $0123
+39 ERROR 008 				     BNE     SINBANDERA
+40 0123 7E8000 				     JMP     INICIO
+41 		 				 
+42 		 				     *END     * Fin del programa *DEBE DAR ERROR 10 no se encuentra end
+43 ERROR 010 				 
+
+=== Descripcion de errores ===
+001   CONSTANTE INEXISTENTE
+002   VARIABLE INEXISTENTE
+003   ETIQUETA INEXISTENTE
+004   MNEMÓNICO INEXISTENTE
+005   INSTRUCCIÓN CARECE DE  OPERANDO(S)
+006   INSTRUCCIÓN NO LLEVA OPERANDO(S)
+007   MAGNITUD DE  OPERANDO ERRONEA
+008   SALTO RELATIVO MUY LEJANO
+009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN
+010   NO SE ENCUENTRA END
+011   SINTAXIS INCORRECTA
+012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)

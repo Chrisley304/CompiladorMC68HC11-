@@ -30,7 +30,7 @@ def CheckHex(etiqueta: hex, origen: hex, flag: bool):
     if(flag):
         res_int = int(etiqueta, 16)
         origen_int = int(origen, 16)    
-        return True if (res_int - (origen_int + 1)) > -128 else False
+        return True if (res_int - (origen_int)) > -128 else False
     
     # Salto hacia adelante, si es mayor a 128 regresa falso
     else:
@@ -55,8 +55,6 @@ def ResHex(etiqueta: hex, origen: hex):
     return hex(res_hex & (2**8-1) )
 
 #Devuelve el hex en str ingresado en hex()
-
-
 def ConvertHex(hexa: str):
     return hex(int('0x' + hexa, 16))
 

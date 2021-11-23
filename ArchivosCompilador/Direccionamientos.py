@@ -39,7 +39,7 @@ def IMM(linea:dict,Variables:dict,Etiquetas:dict,ContMemoria:hex,mnemonico:dict)
             linea["operando"] = Etiquetas[variable]
         else:  # Variable no existe
             # Se deja pendiente por si es una etiqueta
-            linea["localidad"] = hex_op
+            linea["localidad"] = ContMemoria
             return SumHex(ContMemoria, int(float(mnemonico["IMM"][1])))
     # OPCODE HEXADECIMAL 
     if len(compilado)/2 == mnemonico["IMM"][1]:
@@ -266,7 +266,7 @@ def Especiales(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mn
     
     # Si llegas aqui, todo va chido
 
-    if primero == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+    if primero[0] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
         hex_op = primero[1:]
         linea["operando"] = hex_op.upper()
 
@@ -280,23 +280,24 @@ def Especiales(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mn
         hex_op = getHexStringInt(int(primero))
         linea["operando"] = hex_op.upper()
 
+    # Se esta rompiendo aca
     else:
         linea["compilado"] = "ERROR 007"
         linea["localidad"] = ContMemoria
         return ContMemoria
 
-    if segundo == "$":  # Si el operando lleva "$" ya esta en hexadecimal
-        hex_op2 = segundo[1:]
+    if segundo[1] == "$":  # Si el operando lleva "$" ya esta en hexadecimal
+        hex_op2 = segundo[2:]
         linea["operando"] += hex_op2.upper()
 
-    elif segundo[0] == "'":  # es un caracter ASCII
-        dec = ord(segundo[1])
+    elif segundo[1] == "'":  # es un caracter ASCII
+        dec = ord(segundo[2])
         hex_op2 = getHexStringInt(int(dec))
         linea["operando"] += hex_op2.upper()
 
-    elif segundo.isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
+    elif segundo[1:].isnumeric():  # Si son numeros Esta en dec y puede ser DIR o EXT
         # Obtiene el numero decimal para convertirlo a hexadecimal despues
-        hex_op2 = getHexStringInt(int(segundo))
+        hex_op2 = getHexStringInt(int(segundo[1:]))
         linea["operando"] += hex_op2.upper()
 
     else:
@@ -325,13 +326,15 @@ def Especiales(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mn
             hex_etiq = Etiquetas[etiqueta]
             origen = ContMemoria
 
-            if(CheckHex(etiqueta, origen, CheckSalto(hex_etiq, origen))):
-                salto = ResHex(hex_etiq,SumHex(origen,2))
-                opcode = mnemonico[direcc][0]
-                linea["operando"] += getHexString(salto)
-
-            else:
+            # if(CheckHex(etiqueta, origen, CheckSalto(hex_etiq, SumHex(origen, mnemonico[direcc][1])))): 
+            salto = ResHex(hex_etiq,SumHex(origen,mnemonico[direcc][1]))
+            opcode = mnemonico[direcc][0]
+            
+            if int(salto,16) > 128 and int(salto,16) < -127:
                 linea["compilado"] = "ERROR 008"
+                return ContMemoria
+            else:
+                linea["operando"] += getHexString(salto)
 
         else:  # Etiqueta puede aun no declararse (salto posterior, se deja pendiente, en el post se calculará)
             linea["localidad"] = ContMemoria
