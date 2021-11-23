@@ -16,7 +16,6 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
         # Si entra en la condicion sabemos que es una instruccion
         
         mnemoni = Mnemonicos[nombre_mnemo]
-        mnemoni["nombre"] = nombre_mnemo
         # {INH:OPCODE; NBYTES}
         if "INH" in mnemoni:  # Es una intruccion en INH
             if len(parametros) > 1:  # ["mnemonico","OPERANDOS"]
@@ -73,7 +72,10 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
             if len(parametros) > 1:
                 operando = parametros[1]
 
-                if operando[0] == "#":  # Si inicia con '#' es IMM
+                if nombre_mnemo == "BRCLR" or nombre_mnemo =="BRSET" or nombre_mnemo == "BCLR" or nombre_mnemo =="BSET":
+                    return Especiales(linea,Variables,Etiquetas,ContMemoria,mnemoni)
+                
+                elif operando[0] == "#":  # Si inicia con '#' es IMM
                     return IMM(linea,Variables,Etiquetas,ContMemoria,mnemoni) #Devuelve el ContMemoria
 
                 elif ",x" in operando:  # Es IND,X
@@ -82,9 +84,6 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
                 elif ",y" in operando:  # Es IND,Y
                     return INDY(linea,Variables,Etiquetas,ContMemoria,mnemoni)
 
-                elif nombre_mne == "BRCLR" or nombre_mne =="BRSET" or nombre_mne == "BCLR" or nombre_mne =="BSET":
-                    return Especiales(linea,Variables,Etiquetas,ContMemoria,mnemoni)
-                
                 else:  # Puede ser DIR o EXT
                     return DIR_EXT(linea,Variables,Etiquetas,ContMemoria,mnemoni)
 
@@ -121,6 +120,25 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
 
                 linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
             else: 
+                linea["compilado"] = "ERROR 008"
+        else:
+            linea["compilado"] = "ERROR 003"
+    
+    elif nombre_mnemo == "BRCLR" or nombre_mnemo =="BRSET" or nombre_mnemo == "BCLR" or nombre_mnemo =="BSET":
+        direcc = linea["direcc"]
+        
+        if parametros[2] in Etiquetas:
+            etiqueta = Etiquetas[parametros[2]]
+            origen = ContMemoria
+
+            if(CheckHex(etiqueta, origen, CheckSalto(etiqueta, origen))):
+                salto = ResHex(etiqueta,SumHex(origen,2))
+                opcode = mnemonico[direcc][0]
+                linea["OPCODE"] = opcode
+                linea["operando"] += getHexString(salto)
+
+                linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode,linea["operando"])
+            else:
                 linea["compilado"] = "ERROR 008"
         else:
             linea["compilado"] = "ERROR 003"

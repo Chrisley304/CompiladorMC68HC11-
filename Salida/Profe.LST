@@ -117,7 +117,7 @@
 117 8043 27F9 				         BEQ     CICLO
 118 		 				 
 119 8045 F6000E 				         LDAB    U1
-120 8048 260C 				         BNE     CHECA_U2
+120 8048 260A 				         BNE     CHECA_U2
 121 804A 8173 				         CMPA    #'s
 122 804C 26EB 				         BNE     OTRO
 123 804E B7000E 				         STAA    U1
@@ -127,9 +127,9 @@
 127 8054	 				 CHECA_U2
 128 		 				 
 129 8054 F6000F 				         LDAB    U2
-130 8057 2616 				         BNE     CHECA_U3
+130 8057 2614 				         BNE     CHECA_U3
 131 8059 8174 				         CMPA    #'T
-132 805B 270C 				         BEQ     ES_T
+132 805B 270A 				         BEQ     ES_T
 133 805D 8173 				         CMPA    #'S
 134 805F 27D8 				         BEQ     OTRO
 135 8061 7F000E 				         CLR     U1
@@ -140,9 +140,9 @@
 140 806D	 				 CHECA_U3
 141 		 				 
 142 806D F60010 				         LDAB    U3
-143 8070 2616 				         BNE     CHECA_U4
+143 8070 2614 				         BNE     CHECA_U4
 144 8072 8161 				         CMPA    #'A
-145 8074 270C 				         BEQ     ES_A
+145 8074 270A 				         BEQ     ES_A
 146 8076 8173 				         CMPA    #'S
 147 8078 26B9 				         BNE     NO_S
 148 807A 7F000F 				         CLR     U2
@@ -156,9 +156,9 @@
 156 8086	 				 CHECA_U4
 157 		 				 
 158 8086 F60011 				         LDAB    U4
-159 8089 2619 				         BNE     CHECA_T
+159 8089 2617 				         BNE     CHECA_T
 160 808B 8172 				         CMPA    #'R
-161 808D 270F 				         BEQ     ES_R
+161 808D 270D 				         BEQ     ES_R
 162 808F 8173 				         CMPA    #'S
 163 8091 269D 				         BNE     NO_S1
 164 8093 7F0010 				         CLR     U3
@@ -173,7 +173,7 @@
 173 80A2	 				 CHECA_T
 174 		 				 
 175 80A2 8174 				         CMPA    #'T
-176 80A4 2712 				         BEQ     EXITO
+176 80A4 2710 				         BEQ     EXITO
 177 80A6 8173 				         CMPA    #'S
 178 80A8 2683 				         BNE     INICIO
 179 80AA 7F0011 				         CLR     U4
@@ -497,7 +497,7 @@
 497 F112 CE1025 				       LDX #TFLG2
 498 ERROR 007 				       BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
 499 F115 7A0018 				       DEC TEMPO
-500 F118 2705 				       BEQ SEGUNDO
+500 F118 2703 				       BEQ SEGUNDO
 501 		 				       
 502 F11A 32   				       PULA
 503 F11B 38   				       PULX
