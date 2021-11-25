@@ -118,12 +118,12 @@
 </p><p>114: 803E	:CICLO
 </p><p>115: 803E (<span style="color: red;">B6</span><span style="color: blue;">0C</span>):        LDAA    ORDEN
 </p><p>116: 8041 (<span style="color: red;">81</span><span style="color: blue;">3F</span>):        CMPA    #'?
-</p><p>117: 8043 (<span style="color: red;">27</span><span style="color: blue;">F9</span>):        BEQ     CICLO
+</p><p>117: 8043 (<span style="color: red;">27</span><span style="color: blue;">FC</span>):        BEQ     CICLO
 </p><p>118: 		:
 </p><p>119: 8045 (<span style="color: red;">F6</span><span style="color: blue;">0E</span>):        LDAB    U1
-</p><p>120: 8048 260A:        BNE     CHECA_U2
+</p><p>120: 8048 2609:        BNE     CHECA_U2
 </p><p>121: 804A (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'s
-</p><p>122: 804C (<span style="color: red;">26</span><span style="color: blue;">EB</span>):        BNE     OTRO
+</p><p>122: 804C (<span style="color: red;">26</span><span style="color: blue;">EE</span>):        BNE     OTRO
 </p><p>123: 804E (<span style="color: red;">B7</span><span style="color: blue;">0E</span>):        STAA    U1
 </p><p>124: 8051 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>125: 		:
@@ -131,11 +131,11 @@
 </p><p>127: 8054	:CHECA_U2
 </p><p>128: 		:
 </p><p>129: 8054 (<span style="color: red;">F6</span><span style="color: blue;">0F</span>):        LDAB    U2
-</p><p>130: 8057 2614:        BNE     CHECA_U3
+</p><p>130: 8057 2613:        BNE     CHECA_U3
 </p><p>131: 8059 (<span style="color: red;">81</span><span style="color: blue;">74</span>):        CMPA    #'T
-</p><p>132: 805B 270A:        BEQ     ES_T
+</p><p>132: 805B 2709:        BEQ     ES_T
 </p><p>133: 805D (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>134: 805F (<span style="color: red;">27</span><span style="color: blue;">D8</span>):        BEQ     OTRO
+</p><p>134: 805F (<span style="color: red;">27</span><span style="color: blue;">DB</span>):        BEQ     OTRO
 </p><p>135: 8061 (<span style="color: red;">7F</span><span style="color: blue;">0E</span>):        CLR     U1
 </p><p>136: 8064 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>137: 8067 (<span style="color: red;">B7</span><span style="color: blue;">0F</span>):ES_T    STAA    U2
@@ -144,11 +144,11 @@
 </p><p>140: 806D	:CHECA_U3
 </p><p>141: 		:
 </p><p>142: 806D (<span style="color: red;">F6</span><span style="color: blue;">10</span>):        LDAB    U3
-</p><p>143: 8070 2614:        BNE     CHECA_U4
+</p><p>143: 8070 2613:        BNE     CHECA_U4
 </p><p>144: 8072 (<span style="color: red;">81</span><span style="color: blue;">61</span>):        CMPA    #'A
-</p><p>145: 8074 270A:        BEQ     ES_A
+</p><p>145: 8074 2709:        BEQ     ES_A
 </p><p>146: 8076 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>147: 8078 (<span style="color: red;">26</span><span style="color: blue;">B9</span>):        BNE     NO_S
+</p><p>147: 8078 (<span style="color: red;">26</span><span style="color: blue;">BC</span>):        BNE     NO_S
 </p><p>148: 807A (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
 </p><p>149: 807D (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
 </p><p>150: 		:
@@ -160,11 +160,11 @@
 </p><p>156: 8086	:CHECA_U4
 </p><p>157: 		:
 </p><p>158: 8086 (<span style="color: red;">F6</span><span style="color: blue;">11</span>):        LDAB    U4
-</p><p>159: 8089 2617:        BNE     CHECA_T
+</p><p>159: 8089 2616:        BNE     CHECA_T
 </p><p>160: 808B (<span style="color: red;">81</span><span style="color: blue;">72</span>):        CMPA    #'R
-</p><p>161: 808D 270D:        BEQ     ES_R
+</p><p>161: 808D 270C:        BEQ     ES_R
 </p><p>162: 808F (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>163: 8091 (<span style="color: red;">26</span><span style="color: blue;">9D</span>):        BNE     NO_S1
+</p><p>163: 8091 (<span style="color: red;">26</span><span style="color: blue;">A0</span>):        BNE     NO_S1
 </p><p>164: 8093 (<span style="color: red;">7F</span><span style="color: blue;">10</span>):        CLR     U3
 </p><p>165: 8096 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
 </p><p>166: 8099 (<span style="color: red;">7E</span><span style="color: blue;">8039</span>):        JMP     OTRO
@@ -177,9 +177,9 @@
 </p><p>173: 80A2	:CHECA_T
 </p><p>174: 		:
 </p><p>175: 80A2 (<span style="color: red;">81</span><span style="color: blue;">74</span>):        CMPA    #'T
-</p><p>176: 80A4 2710:        BEQ     EXITO
+</p><p>176: 80A4 270F:        BEQ     EXITO
 </p><p>177: 80A6 (<span style="color: red;">81</span><span style="color: blue;">73</span>):        CMPA    #'S
-</p><p>178: 80A8 (<span style="color: red;">26</span><span style="color: blue;">83</span>):        BNE     INICIO
+</p><p>178: 80A8 (<span style="color: red;">26</span><span style="color: blue;">86</span>):        BNE     INICIO
 </p><p>179: 80AA (<span style="color: red;">7F</span><span style="color: blue;">11</span>):        CLR     U4
 </p><p>180: 80AD (<span style="color: red;">7F</span><span style="color: blue;">10</span>):        CLR     U3
 </p><p>181: 80B0 (<span style="color: red;">7F</span><span style="color: blue;">0F</span>):        CLR     U2
@@ -305,14 +305,14 @@
 </p><p>301: 8180 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
 </p><p>302: 8183 (<span style="color: red;">86</span><span style="color: blue;">2C</span>):       LDAA  #$2C             * COMA
 </p><p>303: 8185 (<span style="color: red;">B7</span><span style="color: blue;">102F</span>):       STAA  SCDR
-</p><p>304: 8188	:C1
-</p><p>305: NONE (<span style="color: red;">1F</span><span style="color: blue;">0080FC</span>):       BRCLR $00,X,#$80 C1 
-</p><p>306: 818C (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
-</p><p>307: 		:***********************************
-</p><p>308: 		:* DESPLIEGA
-</p><p>309: 		:***********************************
-</p><p>310: 818D	:DISPLAY
-</p><p>311: 		:       
+</p><p>304: 8188 1F008001:       BRCLR $00,X,#$80 C1 
+</p><p>305: 818C (<span style="color: red;">39</span><span style="color: blue;"></span>):       RTS
+</p><p>306: 		:***********************************
+</p><p>307: 		:* DESPLIEGA
+</p><p>308: 		:***********************************
+</p><p>309: 818D	:DISPLAY
+</p><p>310: 818D	:C1
+</p><p>311: 		:
 </p><p>312: 818D (<span style="color: red;">CE</span><span style="color: blue;">0x102e</span>):       LDX   #SCSR 
 </p><p>313: 		:       
 </p><p>314: 8190 (<span style="color: red;">B6</span><span style="color: blue;">102E</span>):       LDAA  SCSR
@@ -501,7 +501,7 @@
 </p><p>497: F112 (<span style="color: red;">CE</span><span style="color: blue;">0x1025</span>):      LDX #TFLG2
 </p><p>498: NONE (<span style="color: red;">1C</span><span style="color: blue;">0040</span>):      BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
 </p><p>499: F118 (<span style="color: red;">7A</span><span style="color: blue;">18</span>):      DEC TEMPO
-</p><p>500: F11B 2703:      BEQ SEGUNDO
+</p><p>500: F11B 2702:      BEQ SEGUNDO
 </p><p>501: 		:      
 </p><p>502: F11D (<span style="color: red;">32</span><span style="color: blue;"></span>):      PULA
 </p><p>503: F11E (<span style="color: red;">38</span><span style="color: blue;"></span>):      PULX

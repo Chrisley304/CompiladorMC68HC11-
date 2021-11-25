@@ -1,0 +1,73 @@
+  ADDR B1 B2 B3 B4 C:\Users\chris\Documentos SSD\Proyectos Python\  PAGE       1
+
+                   *** VARIABLES ***
+
+                   V1   EQU   $1032
+                   PRUEBA   EQU   $1033
+                   ADR4   EQU   $1034
+                   OPTION EQU   $1039
+
+                   *** PRINCIPAL ***
+                       JMP     BANDERA *DEBE DAR ERROR Error 1 o 2 o 3, No
+.                  existe BANDERA
+E                              ^ Unknown identifier.
+                       BNE     BANDERA *DEBE DAR ERROR Error 3, No existe
+.                  BANDERA
+E                              ^ Unknown identifier.
+
+                       ORG    $8000
+                   INICIO
+                       ORG    $B123
+
+                       AB      *DEBE DAR ERROR Error 4, No existe mnemonico
+E                      ^ Unknown instruction or directive.
+                       BNE     *DEBE DAR ERROR 5 carece de operando
+E                              ^ Unexpected character.
+E                               ^ Unknown identifier.
+                       LDAA    *DEBE DAR ERROR 5 lo de arriba x2
+E                              ^ Unexpected character.
+E                               ^ Unknown identifier.
+  B123 1B              aba    $8000 *DEBE DAR ERROR 6 sobra de operando
+                       asr    $8000,y  *DEBE DAR ERROR 7 operando grande
+E                             ^ The value of this expression must fit in 8 bits.
+                       BNE     INICIO *DEBE DAR ERROR 8 salto lejano
+E                              ^ The offset must fit in 8 bits.
+
+                   JMP     SINBANDERA *DEBE DAR ERROR 9 Falta espacio relativo
+.                  al margen
+E                          ^ Unknown instruction or directive.
+
+  B124 7E B1 3C        JMP     SINBANDERA * Si debe jalar, pero es en post
+
+  B127 96 45           LDAA    $45
+  B129 D6 0B           LDAB    11
+                       BNE     INICIO
+E                              ^ The offset must fit in 8 bits.
+                       LDAB    *DEBE DAR ERROR
+E                              ^ Unexpected character.
+E                               ^ Unknown identifier.
+  B12B 86 80           LDAA    #$80
+
+                   SINBANDERA
+  B12D DC 17           ldd     $17
+  B12F DE 0F           LDX     15  * NO se que hace
+  B131 9B 7C           ADDA    $7C
+  B133 94 F0           ANDA    $F0
+                       ORG     $0123
+                       BNE     SINBANDERA
+E                              ^ The offset must fit in 8 bits.
+  0123 7E 80 00        JMP     INICIO
+
+                       *END     * Fin del programa *DEBE DAR ERROR 10 no se
+.                  encuentra end
+
+  Symbol Table 
+
+  V1                 1032
+  OPTION             1039
+  Symbol Table     C:\Users\chris\Documentos SSD\Proyectos Python\  PAGE       2
+
+  SINBANDERA         B12D
+  ADR4               1034
+  PRUEBA             1033
+  INICIO             8000

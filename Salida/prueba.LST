@@ -10,25 +10,28 @@
 10 		 				 
 11 8000	 				 INICIO
 12 8000 01   				     NOP
-13 8001 7E800F 				     JMP     SINBANDERA * Si debe jalar, pero es en post
+13 8001 7E8017 				     JMP     SINBANDERA
 14 8004 26FA 				     BNE     INICIO
-15 8006 2607 				     BNE     SINBANDERA
-16 8008 01   				     NOP
-17 8009 9645 				     LDAA    $45
-18 800B D60B 				     LDAB    11
-19 800D 8680 				     LDAA    #$80
-20 		 				 
-21 800F	 				 SINBANDERA
-22 800F DC17 				     ldd     $17
-23 8011 DE0F 				     LDX     15  
-24 8013 9B7c 				     ADDA    $7C
-25 8015 94f0 				     ANDA    $F0
-26 		0123 				     ORG     $0123
-27 ERROR 008 				     BNE     SINBANDERA
-28 0123 7E8000 				     JMP     INICIO
-29 		 				 
-30 			 				     END   
+15 8006 260F 				     BNE     SINBANDERA
+16 8008 1F0080F4 		     BRCLR   $00,X,#$80 INICIO   
+17 800C 1F008007 		     BRCLR   $00,X,#$80 SINBANDERA
+18 8010 01   				     NOP
+19 8011 9645 				     LDAA    $45
+20 8013 D60B 				     LDAB    11
+21 8015 8680 				     LDAA    #$80
+22 		 				 
+23 8017	 				 SINBANDERA
+24 8017 DC17 				     ldd     $17
+25 8019 DE0F 				     LDX     15  
+26 801B 9B7c 				     ADDA    $7C
+27 801D 94f0 				     ANDA    $F0
+28 801F 26F6 				     BNE     SINBANDERA
+29 8021 7E8000 				     JMP     INICIO
+30 		 				 
+31 			 				     END   
 
+
+=== Recuento de errores ===
 
 === Descripcion de errores ===
 001   CONSTANTE INEXISTENTE

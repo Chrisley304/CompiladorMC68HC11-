@@ -1,0 +1,42 @@
+  ADDR B1 B2 B3 B4 C:\Users\chris\Documentos SSD\Proyectos Python\  PAGE       1
+
+                   *** VARIABLES ***
+
+                   V1   EQU   $1032
+                   PRUEBA   EQU   $1033
+                   ADR4   EQU   $1034
+                   OPTION EQU   $1039
+
+                   *** PRINCIPAL ***
+                       ORG    $8000
+
+                   INICIO
+  8000 01              NOP
+  8001 7E 80 17        JMP     SINBANDERA
+  8004 26 FA           BNE     INICIO
+  8006 26 0F           BNE     SINBANDERA
+  8008 1F 00 80 F4     BRCLR   $00,X,#$80 INICIO
+  800C 1F 00 80 07     BRCLR   $00,X,#$80 SINBANDERA
+  8010 01              NOP
+  8011 96 45           LDAA    $45
+  8013 D6 0B           LDAB    11
+  8015 86 80           LDAA    #$80
+
+                   SINBANDERA
+  8017 DC 17           ldd     $17
+  8019 DE 0F           LDX     15
+  801B 9B 7C           ADDA    $7C
+  801D 94 F0           ANDA    $F0
+  801F 26 F6           BNE     SINBANDERA
+  8021 7E 80 00        JMP     INICIO
+
+                       END
+
+  Symbol Table 
+
+  V1                 1032
+  OPTION             1039
+  SINBANDERA         8017
+  ADR4               1034
+  PRUEBA             1033
+  INICIO             8000

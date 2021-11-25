@@ -321,7 +321,7 @@ M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
  298 A 8169                                                      
  299 A 8169 B6102E               LDAA      SCSR                  
  300 A 816C 862C                 LDAA      #$2C                  * COMA 
- 301 A 816E B7102F               STAA      SCDR                  
+ 301 A 816E B7102F               STAA     C1 SCDR                  
  302 A 8171            C1                                        
  303 A 8171 1F0080FC             BRCLR     $00,X,#$80 C1         
  304 A 8175 39                   RTS                             

@@ -19,8 +19,8 @@ def Main():
     
     Mnemonicos = getJSON()
     # filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    filename = "prueba_errores.txt" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    # filename = "Profe.ASC" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    # filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
+    filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
     lineas = getPrograma(filename)
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}

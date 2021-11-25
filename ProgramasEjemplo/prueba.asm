@@ -10,9 +10,11 @@ OPTION EQU   $1039
 
 INICIO
     NOP
-    JMP     SINBANDERA * Si debe jalar, pero es en post
+    JMP     SINBANDERA
     BNE     INICIO
     BNE     SINBANDERA
+    BRCLR   $00,X,#$80 INICIO   
+    BRCLR   $00,X,#$80 SINBANDERA
     NOP
     LDAA    $45
     LDAB    11
@@ -23,7 +25,6 @@ SINBANDERA
     LDX     15  
     ADDA    $7C
     ANDA    $F0
-    ORG     $0123
     BNE     SINBANDERA
     JMP     INICIO
 
