@@ -223,6 +223,8 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
 
 def EscrituraLST(lineas_comp:list,lineas_orig:list,filename):
     texto_final = ""
+    Errores = []  # ['ERROR 007 en linea 8']
+
     for i in range(len(lineas_comp)):
         if len(lineas_comp[i]["compilado"].strip()) <=8 and len(lineas_comp[i]["compilado"].strip()) >= 6:
             texto_final += "{} {}   \t\t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
@@ -231,9 +233,18 @@ def EscrituraLST(lineas_comp:list,lineas_orig:list,filename):
         else:
             texto_final += "{} {} \t\t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
 
-    texto_final += "\n\n=== Descripcion de errores ===\n001   CONSTANTE INEXISTENTE\n002   VARIABLE INEXISTENTE\n003   ETIQUETA INEXISTENTE\n004   MNEMÓNICO INEXISTENTE\n005   INSTRUCCIÓN CARECE DE  OPERANDO(S)\n006   INSTRUCCIÓN NO LLEVA OPERANDO(S)\n007   MAGNITUD DE  OPERANDO ERRONEA\n008   SALTO RELATIVO MUY LEJANO\n009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN\n010   NO SE ENCUENTRA END\n011   SINTAXIS INCORRECTA\n012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)"
+        if lineas_comp["compilado"][0:4] == "ERROR":
+            Errores.append(lineas_comp["compilado"] + " en la linea {}\n".format(i+1))
+
+    # Se coloca el recuento de los errores del programa:
+    texto_final += "\n\n === Recuento de errores ===\n"
     
-    filename = splitext(filename)[0]
+    for error in Errores:
+        texto_final += error
+
+    # Se coloca la descripcion de cada error:
+    texto_final += "\n=== Descripcion de errores ===\n001   CONSTANTE INEXISTENTE\n002   VARIABLE INEXISTENTE\n003   ETIQUETA INEXISTENTE\n004   MNEMÓNICO INEXISTENTE\n005   INSTRUCCIÓN CARECE DE  OPERANDO(S)\n006   INSTRUCCIÓN NO LLEVA OPERANDO(S)\n007   MAGNITUD DE  OPERANDO ERRONEA\n008   SALTO RELATIVO MUY LEJANO\n009   INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN\n010   NO SE ENCUENTRA END\n011   SINTAXIS INCORRECTA\n012   INSTRUCCIÓN CON EXCESO DE OPERANDO(S)"
+    
     with open("Salida/"+filename+".LST","w",encoding="UTF-8") as archivo:
         archivo.write(texto_final)
 

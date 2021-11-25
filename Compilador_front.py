@@ -25,8 +25,8 @@ def Main():
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
     Etiquetas = {}  # {'etiqueta' : direcciónDememoria}
+
     flagDeEnd = False
-    
     compilado_final = ""
     
     # Formateo de lineas
@@ -132,23 +132,25 @@ def Main():
         lineas_formateadas.append({"compilado":"ERROR 010"})
         lineas.append("")
     
+
+    nombre_arch_sinext = splitext(filename)[0]
     # Escritura del archivo .LST
     try:
-        EscrituraLST(lineas_formateadas,lineas,filename)
-        print("El archivo .LST se genero correctamente.")
+        EscrituraLST(lineas_formateadas,lineas,nombre_arch_sinext)
+        print("El archivo {}.LST se genero correctamente.".format(nombre_arch_sinext))
     except:
         print("Error al generar el archivo .LST")
     
     try:
-        EscrituraHTML(lineas_formateadas,lineas,filename)
-        print("El archivo HTML se genero correctamente.")
+        EscrituraHTML(lineas_formateadas,lineas,nombre_arch_sinext)
+        print("El archivo {}.HTML se genero correctamente.".format(nombre_arch_sinext))
     except Exception as e:
         print("Error al generar el archivo HTML")
         print(e)
 
     try:
-        EscrituraS19(lineas_formateadas,filename)
-        print("El archivo S19 se genero correctamente.")
+        EscrituraS19(lineas_formateadas,nombre_arch_sinext)
+        print("El archivo {}.S19 se genero correctamente.".format(nombre_arch_sinext))
     except Exception as e:
         print("Error al generar el archivo S19")
         print(e)
@@ -168,14 +170,13 @@ Main()
             [DIR,INDXoY de 8 bits][IMM] [Etiqueta] <- La etiqueta se calcula como relativa
             15,x,#12 Etiqueta
             15,y,#12 Etiqueta
-    
+
     Casos de 2:
     - BCLR (2 operandos)
     - BSET (2 operandos)
         ej. 15,#12 
             15,x,#12 
             15,y,#12
-
 
     Errores a buscar:
     001   CONSTANTE INEXISTENTE
@@ -192,5 +193,4 @@ Main()
     Errores nuestros:
     011 SINTAXIS INCORRECTA
     012 INSTRUCCIÓN CON EXCESO DE OPERANDO(S)
-
 """
