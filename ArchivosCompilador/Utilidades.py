@@ -51,8 +51,11 @@ def ResHex(etiqueta: hex, origen: hex):
     res_hex = int(etiqueta, 16)
     origen_int = int(origen, 16)
     res_hex = res_hex - origen_int
+
+    if(res_hex < 129 and res_hex > -128):
+        return hex(res_hex & (2**8-1))
     # Convierte el numero negativo a hexadecimal de 8 bits
-    return hex(res_hex & (2**8-1) )
+    return None
 
 #Devuelve el hex en str ingresado en hex()
 def ConvertHex(hexa: str):

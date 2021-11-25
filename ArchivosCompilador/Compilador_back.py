@@ -37,7 +37,7 @@ def Precompilado(linea: dict, Mnemonicos: dict, Variables: dict,Etiquetas:dict,C
                     origen = SumHex(ContMemoria,2)
                     salto = ResHex(etiqueta,origen)
 
-                    if(CheckHex(etiqueta, origen, CheckSalto(etiqueta, origen))):
+                    if salto != None:
                         opcode = mnemoni["REL"][0]
                         linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
                         linea["OPCODE"] = opcode
@@ -114,7 +114,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
             etiqueta = Etiquetas[parametros[1]]
             origen = ContMemoria
             salto = ResHex(etiqueta,SumHex(origen,2))
-            if int(salto,16) > 128 and int(salto,16) < -127:
+            if salto == None:
                 linea["compilado"] = "ERROR 008"
                 linea["OPCODE"] = opcode
             else:
@@ -142,7 +142,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
             salto = ResHex(etiqueta,SumHex(origen,mnemonico[direcc][1]))
             opcode = mnemonico[direcc][0]
 
-            if int(salto,16) > 128 and int(salto,16) < -127:
+            if salto == None:
                 linea["compilado"] = "ERROR 008"
             else:
                 linea["operando"] += getHexString(salto)

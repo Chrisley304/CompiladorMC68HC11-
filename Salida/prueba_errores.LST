@@ -18,23 +18,23 @@
 18 ERROR 005 				     LDAA    *DEBE DAR ERROR 5 lo de arriba x2
 19 ERROR 006 				     aba    $8000 *DEBE DAR ERROR 6 sobra de operando
 20 ERROR 007 				     asr    $8000,y  *DEBE DAR ERROR 7 operando grande
-21 B123 26DB 				     BNE     INICIO *DEBE DAR ERROR 8 salto lejano
+21 ERROR 008 				     BNE     INICIO *DEBE DAR ERROR 8 salto lejano
 22 		 				 
 23 ERROR 009 				 JMP     SINBANDERA *DEBE DAR ERROR 9 Falta espacio relativo al margen
 24 		 				 
-25 B125 7EB130 				     JMP     SINBANDERA * Si debe jalar, pero es en post
+25 B123 7EB12C 				     JMP     SINBANDERA * Si debe jalar, pero es en post
 26 		 				     
-27 B128 9645 				     LDAA    $45
-28 B12A D60B 				     LDAB    11
-29 B12C 26D2 				     BNE     INICIO
+27 B126 9645 				     LDAA    $45
+28 B128 D60B 				     LDAB    11
+29 ERROR 008 				     BNE     INICIO
 30 ERROR 005 				     LDAB    *DEBE DAR ERROR
-31 B12E 8680 				     LDAA    #$80
+31 B12A 8680 				     LDAA    #$80
 32 		 				 
-33 B130	 				 SINBANDERA
-34 B130 DC17 				     ldd     $17
-35 B132 DE0F 				     LDX     15  * NO se que hace
-36 B134 9B7c 				     ADDA    $7C
-37 B136 94f0 				     ANDA    $F0
+33 B12C	 				 SINBANDERA
+34 B12C DC17 				     ldd     $17
+35 B12E DE0F 				     LDX     15  * NO se que hace
+36 B130 9B7c 				     ADDA    $7C
+37 B132 94f0 				     ANDA    $F0
 38 		0123 				     ORG     $0123
 39 ERROR 008 				     BNE     SINBANDERA
 40 0123 7E8000 				     JMP     INICIO
@@ -50,7 +50,9 @@ ERROR 005 en la linea 17
 ERROR 005 en la linea 18
 ERROR 006 en la linea 19
 ERROR 007 en la linea 20
+ERROR 008 en la linea 21
 ERROR 009 en la linea 23
+ERROR 008 en la linea 29
 ERROR 005 en la linea 30
 ERROR 008 en la linea 39
 ERROR 010 en la linea 43

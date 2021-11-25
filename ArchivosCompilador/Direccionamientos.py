@@ -330,7 +330,7 @@ def Especiales(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mn
             salto = ResHex(hex_etiq,SumHex(origen,mnemonico[direcc][1]))
             opcode = mnemonico[direcc][0]
             
-            if int(salto,16) > 128 and int(salto,16) < -127:
+            if salto == None:
                 linea["compilado"] = "ERROR 008"
                 return ContMemoria
             else:
