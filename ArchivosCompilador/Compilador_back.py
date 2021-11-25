@@ -233,12 +233,12 @@ def EscrituraLST(lineas_comp:list,lineas_orig:list,filename):
         else:
             texto_final += "{} {} \t\t\t\t {}".format(i+1,lineas_comp[i]["compilado"],lineas_orig[i])
 
-        if lineas_comp["compilado"][0:4] == "ERROR":
-            Errores.append(lineas_comp["compilado"] + " en la linea {}\n".format(i+1))
+        if len(lineas_comp[i]["compilado"]) > 4:
+            if lineas_comp[i]["compilado"][0:5].strip() == "ERROR":
+                Errores.append(lineas_comp[i]["compilado"] + " en la linea {}\n".format(i+1))
 
     # Se coloca el recuento de los errores del programa:
-    texto_final += "\n\n === Recuento de errores ===\n"
-    
+    texto_final += "\n\n=== Recuento de errores ===\n" 
     for error in Errores:
         texto_final += error
 

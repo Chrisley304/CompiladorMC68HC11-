@@ -138,8 +138,9 @@ def Main():
     try:
         EscrituraLST(lineas_formateadas,lineas,nombre_arch_sinext)
         print("El archivo {}.LST se genero correctamente.".format(nombre_arch_sinext))
-    except:
+    except Exception as e:
         print("Error al generar el archivo .LST")
+        print(e)
     
     try:
         EscrituraHTML(lineas_formateadas,lineas,nombre_arch_sinext)
@@ -157,7 +158,6 @@ def Main():
 
 
 Main()
-
 
 """ 
     TODO:

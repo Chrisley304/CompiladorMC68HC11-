@@ -42,6 +42,19 @@
 42 		 				     *END     * Fin del programa *DEBE DAR ERROR 10 no se encuentra end
 43 ERROR 010 				 
 
+=== Recuento de errores ===
+ERROR 001/002/003 en la linea 9
+ERROR 003 en la linea 10
+ERROR 004 en la linea 16
+ERROR 005 en la linea 17
+ERROR 005 en la linea 18
+ERROR 006 en la linea 19
+ERROR 007 en la linea 20
+ERROR 009 en la linea 23
+ERROR 005 en la linea 30
+ERROR 008 en la linea 39
+ERROR 010 en la linea 43
+
 === Descripcion de errores ===
 001   CONSTANTE INEXISTENTE
 002   VARIABLE INEXISTENTE
