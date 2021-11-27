@@ -23,30 +23,7 @@ def SumHex(A: hex, B: int):
     sum_hex = sum_hex + B
     return hex(sum_hex)
 
-#Verifica si un salto es válido
-
-def CheckHex(etiqueta: hex, origen: hex, flag: bool):
-    # Salto hacia atras, si es menor a 127 regresa falso
-    if(flag):
-        res_int = int(etiqueta, 16)
-        origen_int = int(origen, 16)    
-        return True if (res_int - (origen_int)) > -128 else False
-    
-    # Salto hacia adelante, si es mayor a 128 regresa falso
-    else:
-        res_int = int(etiqueta, 16)
-        origen_int = int(origen, 16)    
-        return True if (res_int - origen_int) < 129 else False
-
-
-def CheckSalto(etiqueta: hex, origen: hex):
-    # Salto hacia atras, si es menor a 127 regresa falso
-
-    True if int(origen,16) > int(etiqueta,16) else False
-
 #Resta 2 hex
-
-
 def ResHex(etiqueta: hex, origen: hex):
     res_hex = int(etiqueta, 16)
     origen_int = int(origen, 16)
