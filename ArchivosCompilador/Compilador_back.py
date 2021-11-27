@@ -118,17 +118,9 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
                 linea["compilado"] = "ERROR 008"
                 linea["OPCODE"] = opcode
             else:
+                linea["OPCODE"] = opcode
+                linea["operando"] = getHexString(salto)
                 linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
-
-            # if(CheckHex(etiqueta, origen, CheckSalto(etiqueta, SumHex(origen,2)))):
-            #     salto = ResHex(etiqueta,SumHex(origen,2))
-            #     opcode = mnemonico["REL"][0]
-            #     linea["OPCODE"] = opcode
-            #     linea["operando"] = getHexString(salto)
-
-            #     linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode, getHexString(salto))
-            # else: 
-            #     linea["compilado"] = "ERROR 008"
         else:
             linea["compilado"] = "ERROR 003"
     
@@ -145,6 +137,7 @@ def PostCompilado(linea: dict, Mnemonicos: dict,Etiquetas:dict, Variables: dict)
             if salto == None:
                 linea["compilado"] = "ERROR 008"
             else:
+                linea["OPCODE"] = opcode
                 linea["operando"] += getHexString(salto)
                 linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria),opcode,linea["operando"])
             

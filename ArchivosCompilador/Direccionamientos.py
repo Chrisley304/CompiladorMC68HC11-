@@ -349,6 +349,7 @@ def Especiales(linea: dict, Variables: dict,Etiquetas:dict, ContMemoria: hex, mn
     if len(opcode + linea["operando"])/2 == mnemonico[direcc][1]:
             # Compila
             linea["OPCODE"] = opcode
+            linea["localidad"] = ContMemoria
             linea["compilado"] = "{} {}{}".format(getHexString(ContMemoria) , opcode ,linea["operando"])
             return SumHex(ContMemoria, int(float(mnemonico[direcc][1])))
     else:

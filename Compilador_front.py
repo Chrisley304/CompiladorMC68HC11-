@@ -162,25 +162,10 @@ def Main():
 
 Main()
 
+
+
+
 """ 
-    TODO:
-    
-    Instrucciones especiales:
-    Casos de 3: 
-    - BRCLR (3 operandos)
-    - BRSET (3 operandos)
-        ej. 15,#12 Etiqueta
-            [DIR,INDXoY de 8 bits][IMM] [Etiqueta] <- La etiqueta se calcula como relativa
-            15,x,#12 Etiqueta
-            15,y,#12 Etiqueta
-
-    Casos de 2:
-    - BCLR (2 operandos)
-    - BSET (2 operandos)
-        ej. 15,#12 
-            15,x,#12 
-            15,y,#12
-
     Errores a buscar:
     001   CONSTANTE INEXISTENTE
     002   VARIABLE INEXISTENTE
