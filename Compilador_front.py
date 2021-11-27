@@ -9,19 +9,22 @@ def getJSON():
     
     return mnemonicos
 
-def getPrograma(fileName):
+def getPrograma(ruta):
     lines = None
-    with open("ProgramasEjemplo/"+fileName, 'r') as input:
+    with open(ruta, 'r') as input:
         lines = input.readlines()
     return lines
 
 def Main():
     
     Mnemonicos = getJSON()
-    # filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    # filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    filename = "prueba.asm" # NOTA: debe de estar dentro de la carpeta "ProgramasEjemplo"
-    lineas = getPrograma(filename)
+    ruta_archivo = "ProgramasEjemplo/prueba.asm"
+    # ruta_archivo = "ProgramasEjemplo/Profe.asc"
+    lineas = getPrograma(ruta_archivo)
+    try:
+        filename = ruta_archivo.split("/")[1]
+    except: # Si el archivo no esta dentro de una carpeta
+        filename=ruta_archivo
     
     Variables = {}  # {'variable/constante' : direcciónDememoria}
     Etiquetas = {}  # {'etiqueta' : direcciónDememoria}
